@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Star Party" />
+  <title>Star Party — app prototype (draft)</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #141a2c;
+      --text: #f3f5f8;
+      --muted: #b7c0d1;
+      --line: #2a3348;
+      --amber: #e0893a;
+      --amber-text: #1a1208;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      padding: 16px 16px 108px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.35rem;
+      line-height: 1.25;
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+    .banner {
+      background: #1b2438;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+    .banner strong { color: var(--text); font-weight: 650; }
+    .step {
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+    }
+    h2 {
+      font-size: 1.15rem;
+      margin: 0 0 8px;
+    }
+    .caption {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+      margin: 0 0 14px;
+    }
+    .phone {
+      width: 100%;
+      max-width: 390px;
+      margin: 0 auto 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      touch-action: pan-y;
+    }
+    .phone img {
+      display: block;
+      width: 100%;
+      height: auto;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+    select {
+      width: 100%;
+      appearance: none;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 12px;
+      font-size: 1rem;
+    }
+    .bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(11,16,32,0.96);
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .bar button {
+      flex: 1 1 120px;
+      min-height: 48px;
+      border-radius: 12px;
+      border: 0;
+      font-size: 1rem;
+      font-weight: 650;
+    }
+    .bar button:disabled { opacity: 0.4; }
+    .back { background: var(--card); color: var(--text); }
+    .next { background: var(--amber); color: var(--amber-text); }
+  </style>
+</head>
+<body>
+  <h1>Star Party — app prototype (draft)</h1>
+  <p class="banner"><strong>Design prototype.</strong> This is a clickable walkthrough of the approved screens, not the working app yet. Nothing here is signed in, hosted, or connected to a live stack.</p>
+  <p class="step" id="step"></p>
+  <h2 id="title"></h2>
+  <p class="caption" id="caption"></p>
+  <div class="phone"><img id="screen" alt="" /></div>
+  <label for="list">Screen list</label>
+  <select id="list"></select>
+  <div class="bar">
+    <button class="back" id="back" type="button">Back</button>
+    <button class="next" id="next" type="button">Next</button>
+  </div>
+  <script>
+    const SCREENS = [
+      {"id": "01_welcome", "title": "Welcome", "step": "Account", "caption": "Get started is the one primary action. I already have an account is the quiet alternative."},
+      {"id": "02_create_account", "title": "Create account", "step": "Account", "caption": "Name, email, and password with show/hide and an 8+ character hint. The agreement checkbox is required; Create account stays disabled until it is checked. Privacy Policy and Terms sit below."},
+      {"id": "03_sky_before", "title": "Your sky", "step": "Step 1 of 6", "caption": "Location is not shared yet, with three short rows on how matching works. Use my location is primary; Enter a town instead is the alternative."},
+      {"id": "04_location_permission", "title": "Location permission", "step": "Step 1 of 6", "caption": "A pre-prompt before the system dialog, plus what others see: a fuzzy circle of about 80 km. Continue shows the system prompt; Not now is the alternative."},
+      {"id": "05_sky_matched", "title": "Sky matched", "step": "Step 1 of 6", "caption": "The matched area and 7 imagers under that sky. Continue is primary; Change area is the alternative."},
+      {"id": "06_join_party", "title": "Join a party", "step": "Step 2 of 6", "caption": "Tonight's party with host, members, sunset close, and a shared-master reminder. Join party is primary; Start a new party is the alternative."},
+      {"id": "07_name_party", "title": "Name a party", "step": "Step 2 of 6", "caption": "Start and name a party, including sky, voting close, host, and who can join. Create party is primary; Join an existing party is the alternative."},
+      {"id": "08_vote", "title": "Tonight's vote", "step": "Step 3 of 6", "caption": "Vote before it closes at sunset, with a Selected card. Vote for the target is primary; Suggest a target is the alternative."},
+      {"id": "09_voted", "title": "Voted", "step": "Step 3 of 6", "caption": "Confirmation that you voted for M42. Continue is primary; Change vote is the alternative."},
+      {"id": "10_rig", "title": "Your rig", "step": "Step 4 of 6 · Rig", "caption": "Pickers for the rig; image scale and field of view are computed. Save rig is primary; Skip for now is the alternative."},
+      {"id": "11_asiair_wifi", "title": "ASIAIR Wi-Fi", "step": "Step 4 of 6 · ASIAIR 1/3", "caption": "Join the ASIAIR Wi-Fi hotspot, with three numbered steps and a static preview of what to look for. Open Wi-Fi settings is primary; I've joined it is the alternative."},
+      {"id": "12_local_network", "title": "Local network", "step": "Step 4 of 6 · ASIAIR 2/3", "caption": "Local-network pre-prompt with a dashed, labelled preview of the system prompt (the preview has no buttons). Continue shows the system prompt; Not now is the alternative."},
+      {"id": "13_asiair_found", "title": "ASIAIR found", "step": "Step 4 of 6 · ASIAIR 3/3", "caption": "Files found: Wi-Fi, permission, 12 subs, and libraries. Connect ASIAIR is primary; Choose another ASIAIR is the alternative."},
+      {"id": "14_calibration", "title": "Calibration", "step": "Step 5 of 6", "caption": "Darks and bias are Ready; flats are Missing. Flats apply to the final master. Continue to live stack is primary; How to shoot flats is the alternative."},
+      {"id": "15_live_stack_chat", "title": "Live stack + chat", "step": "Step 6 of 6", "caption": "Master preview, your rig status, a Be kind line, a hold cue on the first member message, and the party menu. Send is primary; Before / after is the alternative."},
+      {"id": "16_message_actions", "title": "Message actions", "step": "Step 6 of 6", "caption": "Long-press sheet on a message: Report message, Block, Copy text, or Cancel."},
+      {"id": "17_party_menu", "title": "Party menu", "step": "Step 6 of 6", "caption": "The party menu sheet: Party members, Report a problem, Block a member, Leave party, or Cancel."},
+      {"id": "18_leave_party", "title": "Leave party", "step": "Step 6 of 6", "caption": "Confirm leaving: you stop contributing and leave chat. Subs already in the stack stay in, so you remain a participant and keep the final master. Leave party is the destructive action; Cancel returns."},
+      {"id": "19_settings", "title": "Account settings", "step": "Profile", "caption": "Default is Private, and changes apply instantly. Includes Public/Private, red-light mode, the agreement, Privacy Policy, Terms, Data and permissions, Sign out, and Delete account."},
+      {"id": "20_settings_saved", "title": "Settings saved", "step": "Profile", "caption": "The same settings screen right after switching to Public, with a Saved · Public confirmation pill."},
+      {"id": "21_delete_account", "title": "Delete account", "step": "Profile", "caption": "Confirm deletion: which account, what is deleted, what stays with parties, Download my data, and a web deletion link. Delete my account is destructive; Cancel returns."},
+      {"id": "22_red_mode_live", "title": "Red-light mode", "step": "Step 6 of 6 · Red-light", "caption": "The live stack + chat in red-light mode, with no status bar. Send is primary; Before / after is the alternative."},
+      {"id": "23_xl_create_account", "title": "Large text · Create account", "step": "Accessibility · 200% text", "caption": "The sign-up screen at 200% text as a full scrolling page. The checkbox, eye, pills, and captions are scaled."},
+      {"id": "24_xl_live", "title": "Large text · Live stack", "step": "Accessibility · 200% text", "caption": "Live stack + chat at 200% text as a full scrolling page. Tab icons, labels, the menu, dots, and captions are scaled."}
+    ];
+    let index = 0;
+    const title = document.getElementById("title");
+    const step = document.getElementById("step");
+    const caption = document.getElementById("caption");
+    const img = document.getElementById("screen");
+    const list = document.getElementById("list");
+    const back = document.getElementById("back");
+    const next = document.getElementById("next");
+    SCREENS.forEach((s, i) => {
+      const opt = document.createElement("option");
+      opt.value = String(i);
+      opt.textContent = (i + 1) + ". " + s.title;
+      list.appendChild(opt);
+    });
+    function render() {
+      const s = SCREENS[index];
+      title.textContent = s.title;
+      step.textContent = (index + 1) + " of " + SCREENS.length + " · " + s.step;
+      caption.textContent = s.caption;
+      img.src = "screens/" + s.id + ".webp";
+      img.alt = "Star Party screen: " + s.title;
+      list.value = String(index);
+      back.disabled = index === 0;
+      next.disabled = index === SCREENS.length - 1;
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+    function go(delta) {
+      const nextIndex = index + delta;
+      if (nextIndex < 0 || nextIndex >= SCREENS.length) return;
+      index = nextIndex;
+      render();
+    }
+    back.addEventListener("click", () => go(-1));
+    next.addEventListener("click", () => go(1));
+    list.addEventListener("change", () => { index = Number(list.value); render(); });
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const phone = document.querySelector(".phone");
+    phone.addEventListener("touchstart", (e) => {
+      const t = e.changedTouches[0];
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+    }, { passive: true });
+    phone.addEventListener("touchend", (e) => {
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        go(dx < 0 ? 1 : -1);
+      }
+    }, { passive: true });
+    render();
+  </script>
+</body>
+</html>
