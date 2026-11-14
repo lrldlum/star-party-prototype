@@ -32,7 +32,8 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 6px}
 .acts{display:flex;gap:16px;margin-top:4px}
 .linkb{background:none;border:0;color:#5CC9B5;font:600 15px Inter,-apple-system,sans-serif;height:44px;cursor:pointer;padding:0 2px}
 .linkb.del{color:#F08A8A}
-.lbt{font-size:13px;color:#8FA3B5;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin:12px 0 5px}
+.lbt{font-size:13px;color:#8FA3B5;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin:12px 0 5px;white-space:nowrap}
+.lbt .u,.k .u{text-transform:none;letter-spacing:0}
 .in{width:100%;height:48px;border-radius:12px;border:1px solid #1C2B3A;background:#0B141E;color:#E8EEF4;font:500 16px Inter,-apple-system,sans-serif;padding:0 12px}
 .in.err{border-color:#B65454}
 .grid{display:flex;gap:8px}.grid>div{flex:1;min-width:0}
@@ -84,11 +85,11 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 6px}
   <button class="in pick" id="pCam" type="button"><span id="pCamT"></span><em>Search</em></button>
   <div id="rCam" hidden></div>
   <div class="seg" id="color" role="radiogroup" aria-label="Camera type"><button type="button" data-c="osc">One-shot color</button><button type="button" data-c="mono">Mono</button></div>
-  <div class="grid" style="margin-top:2px"><div><div class="lbt">Pixel µm</div><input class="in" id="fPix" inputmode="decimal"></div><div><div class="lbt">Width px</div><input class="in" id="fW" inputmode="numeric"></div><div><div class="lbt">Height px</div><input class="in" id="fH" inputmode="numeric"></div></div>
+  <div class="grid" style="margin-top:2px"><div><div class="lbt">Pixel size <span class="u">(µm)</span></div><input class="in" id="fPix" inputmode="decimal"></div><div><div class="lbt">Width <span class="u">(px)</span></div><input class="in" id="fW" inputmode="numeric"></div><div><div class="lbt">Height <span class="u">(px)</span></div><input class="in" id="fH" inputmode="numeric"></div></div>
   <div class="lbt">Telescope</div>
   <button class="in pick" id="pTel" type="button"><span id="pTelT"></span><em>Search</em></button>
   <div id="rTel" hidden></div>
-  <div class="grid"><div><div class="lbt">Aperture mm</div><input class="in" id="fAp" inputmode="numeric"><div class="err-t" id="eAp"></div></div><div><div class="lbt">Focal length mm</div><input class="in" id="fFl" inputmode="numeric"><div class="err-t" id="eFl"></div></div></div>
+  <div class="grid"><div><div class="lbt">Aperture <span class="u">(mm)</span></div><input class="in" id="fAp" inputmode="numeric"><div class="err-t" id="eAp"></div></div><div><div class="lbt">Focal length <span class="u">(mm)</span></div><input class="in" id="fFl" inputmode="numeric"><div class="err-t" id="eFl"></div></div></div>
   <div class="grid"><div><div class="lbt">Mount</div><button class="in pick" id="pMount" type="button"><span id="pMountT"></span><em>›</em></button><div id="rMount" hidden></div></div></div>
   <div class="lbt">Reducer / flattener</div>
   <div class="seg" id="red" role="radiogroup" aria-label="Reducer"><button type="button" data-f="1">None</button><button type="button" data-f="0.8">0.8×</button><button type="button" data-f="0.75">0.75×</button><button type="button" data-f="0.63">0.63×</button></div>
@@ -142,7 +143,7 @@ function renderList() {
   $("cards").querySelectorAll("[data-dup]").forEach((b) => b.onclick = () => { const s = RIGS.find((r) => r.id === +b.dataset.dup); RIGS.push({ ...structuredClone(s), id: nextId++, def: false, name: "Copy of " + s.name }); renderList(); toast("Duplicated"); });
   $("cards").querySelectorAll("[data-del]").forEach((b) => b.onclick = () => askDelete(+b.dataset.del));
 }
-function askDelete(id) { const r = RIGS.find((x) => x.id === id); $("dT").textContent = `Delete ${r.name}?`; $("dlg").hidden = false; $("dYes").onclick = () => { const was = r.def; RIGS = RIGS.filter((x) => x.id !== id); if (was && RIGS[0]) RIGS[0].def = true; $("dlg").hidden = true; renderList(); toast("Rig deleted"); sync(); }; }
+function askDelete(id) { $("toast").classList.remove("show"); clearTimeout(toast.t); const r = RIGS.find((x) => x.id === id); $("dT").textContent = `Delete ${r.name}?`; $("dlg").hidden = false; $("dYes").onclick = () => { const was = r.def; RIGS = RIGS.filter((x) => x.id !== id); if (was && RIGS[0]) RIGS[0].def = true; $("dlg").hidden = true; renderList(); toast("Rig deleted"); sync(); }; }
 $("dNo").onclick = () => $("dlg").hidden = true;
 function results(kind, el) {
   const words = q.toLowerCase().split(/\s+/).filter(Boolean);
@@ -236,4 +237,5 @@ function fromHash() {
 window.addEventListener("hashchange", fromHash);
 fromHash();
 </script>
+<script src="scrollhint.js"></script>
 </body></html>

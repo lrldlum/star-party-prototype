@@ -30,8 +30,8 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 4px}
 .cov div{flex:1;background:#0E1A26;border:1px solid #1C2B3A;border-radius:12px;padding:8px 10px}
 .cov b{display:block;font-size:17px}.cov span{font-size:11px;color:#8FA3B5;font-weight:600;letter-spacing:.3px}
 .lbt{font-size:13px;color:#8FA3B5;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin:14px 0 4px}
-.mem{display:flex;align-items:center;gap:10px;width:100%;min-height:58px;background:#0E1A26;border:1px solid #1C2B3A;border-radius:14px;padding:8px 12px;margin-top:6px;color:#E8EEF4;text-align:left;cursor:pointer;font:inherit}
-.mem.on{border-width:2px;padding:7px 11px}
+.mem{display:flex;align-items:center;gap:10px;width:100%;min-height:50px;background:#0E1A26;border:1px solid #1C2B3A;border-radius:14px;padding:6px 12px;margin-top:5px;color:#E8EEF4;text-align:left;cursor:pointer;font:inherit}
+.mem.on{border-width:2px;padding:5px 11px}
 .mem .sw{width:16px;height:12px;border-radius:2px;border:2px solid;flex:none}
 .mem .sw.dash{border-style:dashed}
 .mem b{display:block;font-size:15px}.mem span{font-size:12px;color:#8FA3B5;line-height:16px}
@@ -40,6 +40,9 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 4px}
 .det b{font-size:17px}
 .det .g{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin-top:6px;font-size:13px}
 .det .g span:nth-child(odd){color:#8FA3B5}
+.fade{position:sticky;bottom:-16px;height:44px;margin-top:-44px;margin-bottom:-16px;pointer-events:none;background:linear-gradient(rgba(7,16,24,0),#071018 70%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;transition:opacity .2s}
+.fade span{font-size:12px;font-weight:600;color:#8FA3B5}
+.fade.off{opacity:0}
 .credit{font-size:11px;color:#6E8293;line-height:15px;margin-top:12px}
 .tabs{height:83px;margin:0 -20px;border-top:1px solid #1C2B3A;display:flex;justify-content:space-around;padding-top:8px;background:#09131C}
 .tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:#8FA3B5;width:96px;height:60px;padding-top:4px}
@@ -61,7 +64,7 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 4px}
   </div>
   <div class="cov" id="cov"></div>
   <div class="det" id="det" hidden></div>
-  <div class="lbt">Members</div>
+  <div class="lbt" id="memT">Members</div>
   <div id="mems"></div>
   <div class="lbt" id="ovT">Overlap</div>
   <p class="small" id="ov"></p>
@@ -70,22 +73,18 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 4px}
 <div class="tabs"><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</div></div>
 <div class="toast" id="toast"></div>
 </div>
+<script src="roster.js"></script>
 <script>
 // Prototype Sky view. Same geometry as backend/app/engine/sky.py: gnomonic projection, PA = image up, east of
 // north; image right = west. Frame size = scale x pixels (solved) or from the rig before a solve. Sample frames.
 const $ = (id) => document.getElementById(id);
 const RAD = Math.PI / 180, C0 = [83.8221, -5.3911];
-const COLORS = { justin: "#F2A541", amy: "#4FD1C5", bea: "#F472B6", dana: "#A78BFA" };
 const fovOf = (pix, wpx, hpx, efl) => [2 * Math.atan(wpx * pix / 1000 / (2 * efl)) / RAD, 2 * Math.atan(hpx * pix / 1000 / (2 * efl)) / RAD];
-const MEMBERS = [
-  { id: "justin", name: "Justin", rig: { name: "Backyard Newt", camera: "ZWO ASI2600MC Pro", telescope: "600 mm Newtonian (150 mm f/4)", scale: 1.293, px: [6248, 4176], efl: 600, pix: 3.76 },
-    solve: { source: "solved", via: "ASIAIR plate solve", ra: 83.835, dec: -5.42, pa: 0.4 } },
-  { id: "amy", name: "Amy", rig: { name: "80 mm refractor", camera: "ZWO ASI533MC Pro", telescope: "80 mm f/5 refractor", scale: 1.939, px: [3008, 3008], efl: 400, pix: 3.76 },
-    solve: { source: "solved", via: "astrometry.net (local)", ra: 83.74, dec: -5.17, pa: 37.0 } },
-  { id: "bea", name: "Bea", rig: { name: "EdgeHD 8 + 0.7×", camera: "ZWO ASI294MC Pro", telescope: "Celestron EdgeHD 8 · 0.7× reducer", scale: 0.671, px: [4144, 2822], efl: 1422, pix: 4.63 },
-    solve: { source: "estimated", via: "mount pointing + rig scale", ra: 83.86, dec: -5.36, pa: 0 } },
-  { id: "dana", name: "Dana", rig: null, solve: null },
-];
+// every frame is one member rig from the shared sample roster (roster.js), the same one the Master tabs credit
+const MEMBERS = SAMPLE_ROSTER.map((r) => ({ id: r.id, name: r.name, tag: r.tag || r.name, second: !!r.second,
+  rig: { ...r.rig, scale: 206.265 * r.rig.pix / r.rig.efl }, solve: r.solve ? { ...r.solve } : null, solved: r.solved }));
+const COLORS = Object.fromEntries(SAMPLE_ROSTER.map((r) => [r.id, r.color]));
+const PEOPLE = new Set(MEMBERS.map((m) => m.name)).size;
 let STARS = [], CREDIT = "", sel = null, phase = "start";
 function project(ra, dec) { const a = ra * RAD, d = dec * RAD, a0 = C0[0] * RAD, d0 = C0[1] * RAD;
   const c = Math.sin(d0) * Math.sin(d) + Math.cos(d0) * Math.cos(d) * Math.cos(a - a0);
@@ -114,7 +113,7 @@ function analyse(frames) {
   const pairs = [];
   for (let i = 0; i < frames.length; i++) for (let j = i + 1; j < frames.length; j++) {
     const a = frames[i], b = frames[j], inter = clip(a.pts, b.pts), ov = inter.length > 2 ? area(inter) : 0;
-    pairs.push({ a: a.m.name, b: b.m.name, pct: 100 * ov / Math.min(area(a.pts), area(b.pts)), sq: ov });
+    pairs.push({ a: a.m.id, b: b.m.id, pct: 100 * ov / Math.min(area(a.pts), area(b.pts)), sq: ov });
   }
   let un = 0, all = 0; const xs = frames.flatMap((f) => f.pts.map((p) => p[0])), ys = frames.flatMap((f) => f.pts.map((p) => p[1]));
   if (frames.length) { const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), n = 160, cell = (x1 - x0) * (y1 - y0) / n / n;
@@ -158,6 +157,7 @@ function draw() {
     if (hit(bx)) continue; boxes.push(bx); ctx.fillText(s[3], x + r + 3, y + 3); }
   // frames: pending (dashed) under solved
   const frames = MEMBERS.map(frameOf).filter(Boolean).sort((a, b) => (a.source === "solved") - (b.source === "solved"));
+  const tags = [];
   for (const f of frames) {
     const pts = f.pts.map(toScr), col = COLORS[f.m.id], on = sel === f.m.id;
     ctx.save(); ctx.setLineDash(f.source === "solved" ? [] : [6, 4]); ctx.lineWidth = on ? 3 : 2; ctx.strokeStyle = col;
@@ -166,9 +166,11 @@ function draw() {
     const t0 = pts[0], t1 = pts[1], mxp = [(t0[0] + t1[0]) / 2, (t0[1] + t1[1]) / 2], ux = (pts[0][0] - pts[3][0]), uy = (pts[0][1] - pts[3][1]), ul = Math.hypot(ux, uy);
     ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(mxp[0], mxp[1]); ctx.lineTo(mxp[0] + ux / ul * 7, mxp[1] + uy / ul * 7); ctx.stroke();
     const top = pts.reduce((a, p) => p[1] < a[1] ? p : a, pts[0]);
-    const label = f.m.name + (f.source === "solved" ? "" : " · pending solve");
+    const label = f.m.tag + (f.source === "solved" ? "" : " · pending solve");
     ctx.font = "700 12px Inter, sans-serif"; const tw = ctx.measureText(label).width;
-    const lx = Math.min(Wc - tw - 10, Math.max(4, top[0] - tw / 2)), ly = Math.max(14, top[1] - 6);
+    const lx = Math.min(Wc - tw - 10, Math.max(4, top[0] - tw / 2)); let ly = Math.max(14, top[1] - 6);
+    while (tags.some((o) => lx < o[0] + o[2] + 6 && o[0] < lx + tw + 6 && Math.abs(o[1] - ly) < 17) && ly < Hc - 20) ly += 17;
+    tags.push([lx, ly, tw]);
     ctx.fillStyle = "rgba(2,5,10,.78)"; ctx.fillRect(lx - 4, ly - 12, tw + 8, 16); ctx.fillStyle = col; ctx.fillText(label, lx, ly);
     ctx.restore();
   }
@@ -178,12 +180,18 @@ function draw() {
 function render() {
   const frames = draw(), solved = frames.filter((f) => f.source === "solved"), a = analyse(frames);
   $("cov").innerHTML = [[`${solved.length} of ${MEMBERS.length}`, "SOLVED"], [sq(a.union), "COVERED"], [sq(a.all), `ALL ${frames.length} OVERLAP`]].map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join("");
+  $("memT").textContent = `Members · ${PEOPLE} people, ${MEMBERS.length} rigs`;
   $("mems").innerHTML = MEMBERS.map((m) => { const f = frameOf(m), col = COLORS[m.id];
     const st = !m.solve ? "Waiting" : m.solve.source === "solved" ? "Solved" : "Pending solve";
     const line = m.rig ? `${m.rig.name} · ${f ? `${(f.w * 60).toFixed(0)}′×${(f.h * 60).toFixed(0)}′ · ${m.rig.scale.toFixed(2)}″/px` : ""}` : "No subs or rig yet";
-    return `<button class="mem${sel === m.id ? " on" : ""}" type="button" data-m="${m.id}" style="${sel === m.id ? `border-color:${col}` : ""}"><span class="sw${m.solve && m.solve.source === "solved" ? "" : " dash"}" style="border-color:${col}"></span><span><b>${m.name}</b><span>${line}</span></span><span class="st" style="color:${m.solve ? col : "#8FA3B5"}">${st}</span></button>`; }).join("");
+    return `<button class="mem${sel === m.id ? " on" : ""}" type="button" data-m="${m.id}" style="${sel === m.id ? `border-color:${col}` : ""}"><span class="sw${m.solve && m.solve.source === "solved" ? "" : " dash"}" style="border-color:${col}"></span><span><b>${m.tag}</b><span>${line}</span></span><span class="st" style="color:${m.solve ? col : "#8FA3B5"}">${st}</span></button>`; }).join("");
   $("mems").querySelectorAll("[data-m]").forEach((b) => b.onclick = () => pick(b.dataset.m));
-  $("ov").innerHTML = a.pairs.map((p) => `${p.a} ↔ ${p.b}: ${p.pct.toFixed(0)}% of the smaller frame (${sq(p.sq)})`).join("<br>");
+  const tagOf = (id) => (MEMBERS.find((x) => x.id === id) || {}).tag || id;
+  const mine = sel ? a.pairs.filter((p) => p.a === sel || p.b === sel) : [];
+  if (mine.length) $("ov").innerHTML = `${tagOf(sel)} overlaps:<br>` + mine.sort((x, y) => y.pct - x.pct).map((p) => `${tagOf(p.a === sel ? p.b : p.a)}: ${p.pct.toFixed(0)}% of the smaller frame (${sq(p.sq)})`).join("<br>");
+  else { const low = [...a.pairs].sort((x, y) => x.pct - y.pct).slice(0, 2);
+    $("ov").innerHTML = `${a.all > 0 ? `All ${frames.length} frames overlap on ${sq(a.all)}.` : `Not every frame overlaps.`} Least overlap: ` +
+      low.map((p) => `${tagOf(p.a)} ↔ ${tagOf(p.b)} ${p.pct.toFixed(0)}%`).join(", ") + ". Tap a frame for its overlaps."; }
   const m = MEMBERS.find((x) => x.id === sel), det = $("det");
   det.hidden = !m;
   if (m) { const f = frameOf(m);
@@ -191,7 +199,7 @@ function render() {
     det.innerHTML = `<b>${m.name}${m.rig ? " · " + m.rig.name : ""}</b><div class="g">` + (m.rig ? `<span>Camera</span><span>${m.rig.camera}</span><span>Scope</span><span>${m.rig.telescope}</span><span>Scale</span><span>${m.rig.scale.toFixed(2)}″/px</span>` : `<span>Rig</span><span>Not set yet</span>`) +
       (f ? `<span>Field</span><span>${(f.w * 60).toFixed(0)}′ × ${(f.h * 60).toFixed(0)}′</span><span>Rotation</span><span>${m.solve.source === "solved" ? `PA ${m.solve.pa.toFixed(1)}°` : "unknown until solved (shown 0°)"}</span><span>Frame</span><span>${m.solve.source === "solved" ? "Solved · " + m.solve.via : "Pending solve · " + m.solve.via}</span>` : `<span>Frame</span><span>Waiting for a first sub</span>`) + "</div>";
   }
-  $("credit").textContent = CREDIT + " Map drawn by Star Party; no third-party renderer code. Sample frames for 3 members.";
+  $("credit").textContent = CREDIT + ` Map drawn by Star Party; no third-party renderer code. Sample frames for ${PEOPLE} members, ${MEMBERS.length} rigs (the same roster as the Master tabs).`;
   sync();
 }
 function pick(id) { sel = sel === id ? null : id; render(); }
@@ -202,14 +210,14 @@ $("map").onclick = (e) => {
 };
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2200); }
 // live: after a few seconds Bea's first sub plate-solves and her dashed frame snaps to the solved one
-function solveBea() { const b = MEMBERS.find((m) => m.id === "bea"); b.solve = { source: "solved", via: "astrometry.net (local)", ra: 83.83, dec: -5.40, pa: 352.5 }; phase = "solved"; $("live").lastChild.textContent = "Live · updated 9:59 PM"; render(); }
+function solveBea() { const b = MEMBERS.find((m) => m.id === "bea"); b.solve = { ...b.solved }; phase = "solved"; $("live").lastChild.textContent = "Live · updated 9:59 PM"; render(); }
 function sync() {
   const p = new URLSearchParams(); if (sel) p.set("sel", sel); if (phase === "solved") p.set("state", "solved");
   history.replaceState(null, "", "#" + p.toString());
   if (window.parent !== window) window.parent.postMessage({ type: "st-master-tab", tab: "sky", hash: location.hash.slice(1), label: phase === "solved" ? "Sky view · all solved" : sel ? "Sky view · frame details" : "Sky view · M42",
     caption: phase === "solved" ? "Live update: Bea's first sub plate-solved, so her dashed rig-sized frame snapped to the solved position and rotation. Coverage and overlap update. Sample frames." :
       sel ? "Tap a frame (or a member) for that member's rig: camera, scope, scale, field, rotation and whether the frame is solved. Sample frames." :
-      "Sky view: a star map centered on M42 with each member's field of view, color-coded, rotated and sized from their plate solve. Bea hasn't solved yet, so her frame is dashed, sized from her rig at the mount's pointing. Sample frames for 3 members." }, "*");
+      "Sky view: a star map centered on M42 with each member's field of view, color-coded, rotated and sized from their plate solve. Bea hasn't solved yet, so her frame is dashed, sized from her rig at the mount's pointing. Sample frames: the same 6 members and 7 rigs the Master tabs credit." }, "*");
 }
 fetch("sky/stars_m42.json").then((r) => r.json()).then((d) => { STARS = d.stars; CREDIT = d.credit; init(); });
 function init() {
@@ -220,4 +228,5 @@ function init() {
 }
 window.addEventListener("hashchange", () => { const p = new URLSearchParams(location.hash.slice(1)); const s = MEMBERS.some((m) => m.id === p.get("sel")) ? p.get("sel") : null; if (s !== sel) { sel = s; render(); } });
 </script>
+<script src="scrollhint.js"></script>
 </body></html>

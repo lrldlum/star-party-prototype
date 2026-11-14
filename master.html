@@ -163,6 +163,9 @@ input[type=range]:disabled::-moz-range-thumb{opacity:0;width:0;border:0}
 .ib svg{width:20px;height:20px}
 .tr{gap:6px}
 .dll{height:44px;font-size:15px;margin-top:2px}
+.btns .dli{width:56px;height:56px;flex:none;padding:0;margin:0;display:flex;align-items:center;justify-content:center}
+.btns .ghostb{padding:0 16px}
+.btns:has(.dli){gap:8px}
 .dlc{padding:10px 14px}
 .dlrow{display:flex;align-items:center;gap:10px;min-height:52px}
 .dlrow .nm{flex:1;min-width:0}
@@ -190,11 +193,15 @@ a.primary{text-decoration:none}
 .res.ok{background:rgba(92,201,181,.10);border:1px solid #2A5A55;color:#BDEFE5}
 .res.err{background:rgba(232,106,106,.10);border:1px solid #5A2A2A;color:#F5B5B5}
 .res code{font-size:12px}
-.sheet .sample-pill{display:inline-block;font-size:11px;font-weight:700;color:#B4C0CC;border:1px solid #33404D;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
+#shT{padding-right:44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fmt .fb{flex:1;min-width:0}.fmt .fb>b{display:flex;justify-content:space-between;gap:8px}
+.fmt .fb>b>span{font-size:15px;color:inherit;line-height:inherit}
+.fmt b .sz{font-style:normal;font-weight:600;font-size:14px;color:#8FA3B5;white-space:nowrap}
+.sheet .sample-pill{flex:none;white-space:nowrap;display:inline-block;font-size:11px;font-weight:700;color:#B4C0CC;border:1px solid #33404D;border-radius:999px;padding:0 7px;margin-right:6px;vertical-align:1px}
 </style></head>
 <body><div class="ph" id="ph">
 <div class="sb"><span>9:58</span><span>●●● ▮</span></div>
-<div class="top"><span class="back">‹ Live stack</span><span class="tr"><a class="ib" id="skyBtn" style="text-decoration:none" href="sky.html" aria-label="Sky view: everyone's field of view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="6" width="11" height="8" rx="1" transform="rotate(-12 9.5 10)"/><rect x="9" y="10" width="11" height="8" rx="1" transform="rotate(8 14.5 14)"/></svg>Sky</a><button class="ib" id="allBtn" type="button" aria-label="Download all masters as a zip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>All</button><span class="menu" aria-label="Party menu" style="width:40px">•••</span></span></div>
+<div class="top"><span class="back">‹ Live stack</span><span class="tr"><a class="ib" id="skyBtn" style="text-decoration:none" href="sky.html" aria-label="Sky view: everyone's field of view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="6" width="11" height="8" rx="1" transform="rotate(-12 9.5 10)"/><rect x="9" y="10" width="11" height="8" rx="1" transform="rotate(8 14.5 14)"/></svg>Sky</a><button class="ib" id="allBtn" type="button" aria-label="Download all masters and saved products as a zip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>All</button><span class="menu" aria-label="Party menu" style="width:40px">•••</span></span></div>
 <div class="party">Penobscot Bay Star Party</div>
 <h1>Master · M42</h1>
 <div class="strip" id="strip" role="tablist" aria-label="Master filters"></div>
@@ -243,8 +250,7 @@ a.primary{text-decoration:none}
   <div class="lblrow" style="margin-top:2px"><span class="lbt">Mix mode</span><span class="small">Into the Color master</span></div>
   <div class="seg" id="cmodes"></div>
   <p class="hint" id="chint"></p>
-  <div class="btns"><button class="primary" id="csave" type="button">Save as Color + RGB</button><button class="ghostb" id="cshare" type="button">Share</button></div>
-  <button class="linkb dll" type="button" id="dlC">↓ Download Color + RGB · FITS, TIFF, PNG</button>
+  <div class="btns"><button class="primary" id="csave" type="button">Save as Color + RGB</button><button class="ghostb dli dll" type="button" id="dlC" aria-label="Download Color + RGB · FITS, TIFF, PNG" title="Download · FITS, TIFF, PNG"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></button><button class="ghostb" id="cshare" type="button">Share</button></div>
   <div class="card dlc comps" id="comps"></div>
 </div>
 
@@ -273,8 +279,7 @@ a.primary{text-decoration:none}
       <div class="lblrow" style="margin-top:4px"><span class="lbt">Ha in green</span><span class="val" id="pgv">20%</span></div>
       <input type="range" id="pg" min="0" max="50" step="10" value="20" aria-label="How much Ha goes into green" style="height:44px">
       <p class="hint" id="phint" style="margin-top:4px"></p>
-      <div class="btns"><button class="primary" id="psave" type="button">Save as HOO</button><button class="ghostb" id="pshare" type="button">Share</button></div>
-      <button class="linkb dll" type="button" id="dlP">↓ Download HOO · FITS, TIFF, PNG</button>
+      <div class="btns"><button class="primary" id="psave" type="button">Save as HOO</button><button class="ghostb dli dll" type="button" id="dlP" aria-label="Download HOO · FITS, TIFF, PNG" title="Download · FITS, TIFF, PNG"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></button><button class="ghostb" id="pshare" type="button">Share</button></div>
     </div>
     <div id="mBody">
       <div class="duo">
@@ -292,8 +297,7 @@ a.primary{text-decoration:none}
       <div class="lblrow" style="margin-top:2px"><span class="lbt">Blend mode</span><span class="small" id="base">Into the Color master</span></div>
       <div class="seg" id="modes"></div>
       <p class="hint" id="hint"></p>
-      <div class="btns"><button class="primary" id="save" type="button">Save as HaRGB</button><button class="ghostb" id="share2" type="button">Share</button></div>
-      <button class="linkb dll" type="button" id="dlB">↓ Download HaRGB · FITS, TIFF, PNG</button>
+      <div class="btns"><button class="primary" id="save" type="button">Save as HaRGB</button><button class="ghostb dli dll" type="button" id="dlB" aria-label="Download HaRGB · FITS, TIFF, PNG" title="Download · FITS, TIFF, PNG"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></button><button class="ghostb" id="share2" type="button">Share</button></div>
     </div>
   </div>
   <div id="auto" hidden>
@@ -335,17 +339,18 @@ a.primary{text-decoration:none}
 </div>
 <div class="toast" id="toast">Prototype · saves a new FITS; nothing is saved here</div>
 </div>
+<script src="roster.js"></script>
 <script>
 // Mock data for the prototype. Real counts come from the party stack (GET /api/stacks/{id}/masters).
 const BASE_TABS = [
-  {k:"color", label:"Color", accent:"#E8A05A", subs:15, sec:2700, rigs:["JB","AD","BA","CY","DM","EL"], note:"The same master as Live stack (6 rigs · 15 subs): one-shot-color subs, debayered and stacked. Mono filters have their own tabs."},
-  {k:"L", label:"L", accent:"#E8EEF4", subs:24, sec:4320, rigs:["DM"], note:"Mono subs shot through L (luminance) on Dana's second rig. Grouped by FILTER = L / Lum."},
-  {k:"R", label:"R", accent:"#F2555A", subs:10, sec:1800, rigs:["DM"], note:"Mono subs shot through the red filter."},
-  {k:"G", label:"G", accent:"#62C46B", subs:10, sec:1800, rigs:["DM"], note:"Mono subs shot through the green filter."},
-  {k:"B", label:"B", accent:"#6C7CFF", subs:9, sec:1620, rigs:["DM"], note:"Mono subs shot through the blue filter."},
-  {k:"Ha", label:"Ha", accent:"#D21F6E", subs:12, sec:3600, rigs:["AD","EL"], note:"Mono subs shot through Ha (7 nm and 3 nm). Picks up the faint outer hydrogen the color subs miss."},
-  {k:"OIII", label:"OIII", accent:"#1FC8F0", subs:8, sec:2400, rigs:["EL"], note:"Mono subs shot through OIII. Brightest in the core."},
-  {k:"SII", label:"SII", accent:"#F0B85A", subs:0, sec:0, rigs:[], note:""},
+  {k:"color", label:"Color", accent:"#E8A05A", subs:15, sec:2700, rigs:rosterRigs("color"), note:"The same master as Live stack (6 rigs · 15 subs): one-shot-color subs, debayered and stacked. Mono filters have their own tabs."},
+  {k:"L", label:"L", accent:"#E8EEF4", subs:24, sec:4320, rigs:rosterRigs("L"), note:"Mono subs shot through L (luminance) on Dana's second rig. Grouped by FILTER = L / Lum."},
+  {k:"R", label:"R", accent:"#F2555A", subs:10, sec:1800, rigs:rosterRigs("R"), note:"Mono subs shot through the red filter."},
+  {k:"G", label:"G", accent:"#62C46B", subs:10, sec:1800, rigs:rosterRigs("G"), note:"Mono subs shot through the green filter."},
+  {k:"B", label:"B", accent:"#6C7CFF", subs:9, sec:1620, rigs:rosterRigs("B"), note:"Mono subs shot through the blue filter."},
+  {k:"Ha", label:"Ha", accent:"#D21F6E", subs:12, sec:3600, rigs:rosterRigs("Ha"), note:"Subs shot through Ha filters (Amy's 7 nm clip-in, Eli's dual-band). Picks up the faint outer hydrogen the color subs miss."},
+  {k:"OIII", label:"OIII", accent:"#1FC8F0", subs:8, sec:2400, rigs:rosterRigs("OIII"), note:"Subs shot through OIII (Eli's dual-band). Brightest in the core."},
+  {k:"SII", label:"SII", accent:"#F0B85A", subs:0, sec:0, rigs:rosterRigs("SII"), note:""},
 ];
 // Sample sets (hash sample=...): full party, one without blue subs, OSC + Ha only, mono Ha + OIII only.
 const SAMPLES = { full: null, noB: ["B"], oscha: ["L","R","G","B","OIII"], nb: ["color","L","R","G","B"] };
@@ -422,7 +427,7 @@ function show(k, user) {
     $("tag").querySelector("i").style.background = t.accent;
     $("tag").querySelector("span").textContent = k === "color" ? "Color · OSC" : `${t.label} · mono`;
     $("sSubs").textContent = t.subs; $("sTime").textContent = fmt(t.sec); $("sRigs").textContent = t.rigs.length;
-    $("who").innerHTML = t.rigs.map((r) => `<span class="av">${r}</span>`).join("") + `<span class="small" style="margin-left:4px">${t.rigs.length === 1 ? "1 rig" : t.rigs.length + " rigs"} contributed</span>`;
+    $("who").innerHTML = t.rigs.map((r, i) => `<span class="av" title="${rosterRigTitles(t.k)[i] || r}">${r}</span>`).join("") + `<span class="small" style="margin-left:4px">${t.rigs.length === 1 ? "1 rig" : t.rigs.length + " rigs"} contributed</span>`;
     $("note").textContent = t.note; $("dl").textContent = `Download ${t.label}`;
   } else if (t) {
     $("eTitle").textContent = `No subs yet for ${t.label}`;
@@ -457,16 +462,16 @@ function notify() {
   else if (k === "blend") { label = `Blend · ${state.src} to ${state.target === "L" ? "Lum" : state.target}`; caption = CAPS.blend(); }
   else if (k === "rgb") { label = missingRGB().length ? "RGB combine · missing channel" : "RGB combine"; caption = missingRGB().length ? CAPS.rgbOff() : CAPS.rgb; }
   else { label = `Master tabs · ${t.label}`; caption = t.subs ? CAPS.chan(t) : CAPS.empty(t); }
-  if (dl.item) { const all = dl.item === "all"; label = dl.send && dl.send !== "progress" ? `Send to ASIAIR · ${{done:"sent",nospace:"no space",offline:"not on its Wi-Fi",nousb:"no USB drive",lost:"connection lost"}[dl.send]}` : all ? "Download all masters" : `Download · ${dlLabel(dl.item)}`;
+  if (dl.item) { const all = dl.item === "all"; label = dl.send && dl.send !== "progress" ? `Send to ASIAIR · ${{done:"sent",nospace:"no space",offline:"not on its Wi-Fi",nousb:"no USB drive",lost:"connection lost"}[dl.send]}` : all ? "Download all (zip)" : `Download · ${dlLabel(dl.item)}`;
     caption = CAPS.sheet(all); }
   window.parent.postMessage({ type: "st-master-tab", tab: k, hash: location.hash.slice(1), label, caption }, "*");
 }
 const CAPS = {
   sheet: (all) => dl.send === "done" ? "Send to ASIAIR (simulated): the FITS goes to StarParty/<party>/<target>/ on your own ASIAIR over its Wi-Fi. It never overwrites: Ha was already there, so the new one is _2. Sample data." :
     dl.send ? "Send to ASIAIR checks first and says what went wrong in plain words: not on the ASIAIR's Wi-Fi, not enough space, no USB drive, or a dropped connection. Nothing on the ASIAIR is overwritten or deleted. Simulated." :
-    all ? "Download all: every master, composite and saved product the party has, in one zip with a README listing what's included and what isn't yet (SII, SHO). FITS by default; TIFF, PNG or JPEG too. Sample files." :
+    all ? "Download all: 7 masters + the RGB composite + 4 saved products (12 files) in one zip, with a README listing what's included and what isn't yet (SII, SHO). FITS by default; TIFF, PNG or JPEG too. Sample files." :
     "Any party member can download any master: 32-bit float FITS (linear, default), 16-bit TIFF, or a stretched PNG / JPEG preview. FITS headers carry FILTER, EXPTIME, NCOMBINE, OBJECT and PARTY. Or send it to your own ASIAIR. Sample files.",
-  chan: (t) => `${t.label === "Color" ? "Color master (the same one Live stack shows)" : t.label + " master from the mono rigs"}: ${t.subs} subs, ${fmt(t.sec)} of integration, ${t.rigs.length} ${t.rigs.length === 1 ? "rig" : "rigs"}. Subs are grouped by the FITS FILTER header; one-shot-color subs go to Color. Sample data.`,
+  chan: (t) => `${t.label === "Color" ? "Color master (the same one Live stack shows)" : t.label + " master"}: ${t.subs} subs, ${fmt(t.sec)} of integration, ${t.rigs.length} ${t.rigs.length === 1 ? "rig" : "rigs"}. Subs are grouped by the FITS FILTER header; one-shot-color subs go to Color. Sample data.`,
   empty: (t) => `Nobody has shot ${t.label} yet, so the tab shows an empty state. Empty filter chips are dashed so they read at a glance.`,
   rgb: "RGB combine: the mono R, G and B masters are matched for background and brightness, weighted, and added to the Color master at the strength you pick (Weighted average or Lighten). Drag across the preview to compare; save it as its own FITS. Sample data.",
   rgbOff: () => `With no ${missingRGB().join(", ")} subs, RGB combine is off and says which channel is missing. The RGB chip is dashed like an empty filter. Sample data.`,
@@ -635,7 +640,7 @@ function updateControls() {
   const key = state.target === "L" ? { lighten: "lighten", add: "wadd", screen: "lscreen" }[state.mode] : state.mode;
   $("hint").textContent = MODE_HINT[key](state.src, TNAME[state.target]);
   $("base").textContent = `Into ${TNAME[state.target]} of the Color master`;
-  $("save").textContent = `Save as ${product(state.src, state.target)}`; $("dlB").textContent = `↓ Download ${product(state.src, state.target)} · FITS, TIFF, PNG`;
+  $("save").textContent = `Save as ${product(state.src, state.target)}`; $("dlB").setAttribute("aria-label", `Download ${product(state.src, state.target)} · FITS, TIFF, PNG`);
   $("sv").textContent = state.strength + "%"; $("str").value = state.strength; $("str").style.setProperty("--p", state.strength + "%");
 }
 $("str").addEventListener("input", (e) => { state.strength = Number(e.target.value); $("sv").textContent = state.strength + "%"; e.target.style.setProperty("--p", state.strength + "%"); schedule(renderBlend); });
@@ -697,7 +702,7 @@ function renderPalette() {
   $("pgv").textContent = hoo ? state.hig + "%" : "auto"; $("pgv").parentElement.classList.toggle("off", !hoo);
   $("pg").setAttribute("aria-valuetext", hoo ? state.hig + "%" : "auto (set per pixel by Foraxx)");
   $("phint").textContent = hoo ? "R = Ha, B = OIII, G = OIII with some Ha mixed in." : "Foraxx sets the mix per pixel from Ha and OIII brightness. SII is off: no SII subs yet.";
-  $("pAfter").textContent = pal; $("psave").textContent = `Save as ${pal}`; $("dlP").textContent = `↓ Download ${pal} · FITS, TIFF, PNG`;
+  $("pAfter").textContent = pal; $("psave").textContent = `Save as ${pal}`; $("dlP").setAttribute("aria-label", `Download ${pal} · FITS, TIFF, PNG`);
   const name = hoo ? `pal_${autoKey()}_HOO_${state.hig}` : `pal_${autoKey()}_Foraxx`;
   const show = () => { cmpP.before = PIMG.Ha; cmpP.after = PIMG[name]; cmpP.draw(); };
   const need = [];
@@ -725,7 +730,17 @@ const ON_ASIAIR = new Set(["M42_Ha_masters_20261114.fits"]); // already on the s
 const dl = { item: null, fmt: "fits", store: "emmc", send: null, pct: 0, timer: 0 };
 const dlLabel = (id) => DL_LABEL[id] || (id.startsWith("blend-") ? product(id.slice(6).split("_")[0], id.split("_")[1]) : id.startsWith("palette-") ? id.slice(8) : id);
 const avail = (id) => id === "SHO" ? (has("SII") && has("Ha") && has("OIII")) : id === "RGB" ? !missingRGB().length : TABS.some((t) => t.k === id) ? has(id) : true;
-const allItems = () => [...TABS.filter((t) => t.subs).map((t) => t.k), ...(avail("RGB") ? ["RGB"] : []), ...(avail("SHO") ? ["SHO"] : [])];
+// saved products the party has (sample): each is its own FITS and goes in Download all / Send all with the masters
+const SAVED = () => [["blend-Ha_R", has("color") && has("Ha")], ["combine-color", has("color") && avail("RGB")], ["palette-HOO", has("Ha") && has("OIII")], ["auto", has("color") && has("Ha")]].filter((x) => x[1]).map((x) => x[0]);
+const allItems = () => [...TABS.filter((t) => t.subs).map((t) => t.k), ...(avail("RGB") ? ["RGB"] : []), ...(avail("SHO") ? ["SHO"] : []), ...SAVED()];
+// what the zip holds, counted the way its README lists it: "7 masters + RGB composite + 4 saved products"
+function allSummary() { const it = allItems(), m = it.filter((id) => TABS.some((t) => t.k === id)).length, c = it.filter((id) => id === "RGB" || id === "SHO"), p = it.length - m - c.length;
+  return { n: it.length, text: [`${m} master${m === 1 ? "" : "s"}`, ...(c.length ? [c.length === 1 ? `${c[0]} composite` : `${c.length} composites`] : []), ...(p ? [`${p} saved product${p === 1 ? "" : "s"}`] : [])].join(" + ") }; }
+// typical full-size file sizes for this party's masters (6248 × 4176 px, the reference frame): mono 1 channel, color 3
+const MONO = new Set(["L", "R", "G", "B", "Ha", "OIII", "SII"]);
+const BYTES = (id, fmt) => 6248 * 4176 * (MONO.has(id) ? 1 : 3) * (fmt === "fits" ? 4 : 2);
+const human = (b) => b >= 1e9 ? `${(b / 1e9).toFixed(1)} GB` : `${Math.round(b / 1e6)} MB`;
+const sizeOf = (ids, fmt) => human(ids.reduce((a, id) => a + BYTES(id, fmt), 0));
 const astName = (id, n) => `M42_${(DL_FILE[id] || dlLabel(id)).replace(/[^A-Za-z0-9-]+/g, "_").replace(/_+$/, "")}_masters_20261114${n > 1 ? "_" + n : ""}.fits`;
 function comps(el) {
   el.innerHTML = '<div class="k">Composites · linear FITS</div>' + ["RGB", "SHO"].map((id) => {
@@ -745,19 +760,21 @@ function closeSheet() { dl.item = null; dl.send = null; clearInterval(dl.timer);
 function paintSheet() {
   const all = dl.item === "all", f = FORMATS.find((x) => x.k === dl.fmt);
   const items = all ? allItems() : [dl.item];
-  $("shT").innerHTML = (all ? "Download all masters" : `Download ${dlLabel(dl.item)}`) + '<span class="sample-pill">Sample data</span>';
+  $("shT").textContent = all ? "Download all" : `Download ${dlLabel(dl.item)}`;
   const t = TABS.find((x) => x.k === dl.item);
-  $("shS").textContent = all ? `${items.length} masters · one zip with a README of what's in it (SII and SHO not included yet)` :
+  const sum = all ? allSummary() : null;
+  $("shS").innerHTML = '<span class="sample-pill">Sample data</span>' + (all ? `${sum.text} · ${sum.n} files + README (SII, SHO not yet)` :
     t ? `${t.subs} subs · ${fmt(t.sec)} · ${t.rigs.length} ${t.rigs.length === 1 ? "rig" : "rigs"} · M42 · Penobscot Bay Star Party` :
-    dl.item === "RGB" ? "R, G and B masters combined · linear · M42" : "Saved product · its own file · M42";
-  $("fmts").innerHTML = FORMATS.map((x) => `<button type="button" class="fmt${x.k === dl.fmt ? " on" : ""}" role="radio" aria-checked="${x.k === dl.fmt}" data-f="${x.k}"><span class="rd"></span><span><b>${x.label}${x.def ? " · default" : ""}</b><span>${x.hint}</span></span></button>`).join("");
+    dl.item === "RGB" ? "R, G and B masters combined · linear · M42" : "Saved product · its own file · M42");
+  const sized = (x) => x.k === "fits" || x.k === "tiff" ? `~${sizeOf(items, x.k)}` : "";
+  $("fmts").innerHTML = FORMATS.map((x) => `<button type="button" class="fmt${x.k === dl.fmt ? " on" : ""}" role="radio" aria-checked="${x.k === dl.fmt}" data-f="${x.k}"><span class="rd"></span><span class="fb"><b><span>${x.label}${x.def ? " · default" : ""}</span>${sized(x) ? `<em class="sz" aria-label="typical size ${sized(x)}${all ? " in total" : ""}">${sized(x)}</em>` : ""}</b><span>${x.hint}</span></span></button>`).join("");
   $("fmts").querySelectorAll(".fmt").forEach((b) => b.onclick = () => { dl.fmt = b.dataset.f; paintSheet(); syncHash(); });
   const file = all ? `SAMPLE_M42_masters_${dl.fmt}.zip` : DL_FILE[dl.item] ? `SAMPLE_M42_${DL_FILE[dl.item]}_master.${f.ext}` : null;
   const a = $("shDl");
   if (file) { a.href = `master/dl/${encodeURIComponent(file)}`; a.setAttribute("download", file); a.removeAttribute("aria-disabled"); a.style.opacity = ""; a.textContent = all ? "Download all (zip)" : `Download ${f.k.toUpperCase()}`; }
   else { a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); a.style.opacity = ".5"; a.textContent = "Download"; }
   $("shNote").textContent = file ? `${file} · tiny sample file, not a real master` : `No sample file for ${dlLabel(dl.item)} in the prototype; the app saves it on the party stack.`;
-  $("sendWhere").innerHTML = `${all ? "Every FITS master" : "The FITS master"} → <code>StarParty/Penobscot_Bay/M42/</code> on your own ASIAIR. Never overwrites: a taken name gets _2. Phone must be on your ASIAIR's Wi-Fi.`;
+  $("sendWhere").innerHTML = `${all ? `All ${sum.n} FITS (masters, composite and saved products)` : "The FITS master"} → <code>StarParty/Penobscot_Bay/M42/</code> on your own ASIAIR. Never overwrites: a taken name gets _2. Phone must be on your ASIAIR's Wi-Fi.`;
   [...$("store").children].forEach((b) => b.classList.toggle("on", b.dataset.s === dl.store));
   const s = dl.send, btn = $("sendBtn"), bar = $("sendBar"), res = $("sendRes");
   bar.hidden = s !== "progress"; bar.firstElementChild.style.width = dl.pct + "%";
@@ -768,7 +785,7 @@ function paintSheet() {
     const names = items.map((id) => { const n = ON_ASIAIR.has(astName(id, 1)) ? 2 : 1; return { id, n, name: astName(id, n) }; });
     res.innerHTML = `✓ Sent ${names.length} file${names.length > 1 ? "s" : ""} to ${dl.store === "usb" ? "USB Images" : "EMMC Images"}/StarParty/Penobscot_Bay/M42/` +
       names.slice(0, 3).map((x) => `<br><code>${x.name}</code>${x.n > 1 ? " · a file with that name was already there, kept as is" : ""}`).join("") + (names.length > 3 ? `<br>+ ${names.length - 3} more` : "");
-  } else if (s === "nospace") res.innerHTML = "Not enough space on your ASIAIR: needs 412 MB, 180 MB free. Nothing was written. Free some space in the ASIAIR app, or send to USB / SD.";
+  } else if (s === "nospace") res.innerHTML = `Not enough space on your ASIAIR: needs ${sizeOf(items, "fits")}, ${all ? "1.1 GB" : "48 MB"} free. Nothing was written. Free some space in the ASIAIR app, or send to USB / SD.`;
   else if (s === "offline") res.innerHTML = "Join your ASIAIR's Wi-Fi (ASIAIR_…) to send masters to it. Nothing was sent.";
   else if (s === "nousb") res.innerHTML = "No USB drive or SD card in your ASIAIR. Plug one in, or send to Internal (eMMC).";
   else if (s === "lost") res.innerHTML = "Lost the connection to your ASIAIR at 63%. The half-written file was removed; nothing else changed. Check the Wi-Fi and try again.";
@@ -826,4 +843,5 @@ function fromHash() {
 window.addEventListener("hashchange", fromHash);
 fromHash();
 </script>
+<script src="scrollhint.js"></script>
 </body></html>
