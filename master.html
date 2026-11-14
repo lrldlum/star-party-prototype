@@ -114,6 +114,40 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
 .cands button em{font-style:normal;color:#8FA3B5;margin-left:6px}
 .linkb{background:none;border:0;color:#5CC9B5;font:600 16px Inter,-apple-system,sans-serif;height:48px;cursor:pointer;align-self:flex-start;padding:0 2px}
 .btns .primary.sm{font-size:16px}
+.panel>*{flex-shrink:0}
+/* Blend manual: tighter rhythm (about 8px less per section) so Save + Share clear the tab bar */
+#mBody .cmp{margin-top:6px}
+#mBody .lblrow{margin-top:4px !important}
+#mBody input[type=range]{height:34px}
+#mBody .seg{margin-top:4px}
+#mBody .hint{margin-top:4px}
+#mBody .btns,#pBody .btns{margin-top:8px}
+.duo{margin-top:6px}
+.duo .seg{padding:4px 4px}
+.duo .seg button{min-width:0;overflow:hidden}
+#tgts{padding-right:4px}
+/* Auto card */
+.card .why{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.card .score{align-items:center}
+.band{font:700 14px Inter,-apple-system,sans-serif;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.band.Good{background:rgba(92,201,181,.14);color:#5CC9B5;border:1px solid #2A5A55}
+.band.Close{background:rgba(232,160,90,.12);color:#E8A05A;border:1px solid #5A4126}
+.band.Weak{background:rgba(232,106,106,.12);color:#F08A8A;border:1px solid #5A2A2A}
+.card .mock{margin-top:6px;font-size:12px;color:#8FA3B5;border-top:1px solid #1C2B3A;padding-top:6px}
+.cands{justify-content:center}
+.cands button .b{font-size:12px;margin-left:6px;font-weight:700}
+.cands button .b.Good{color:#5CC9B5}.cands button .b.Close{color:#E8A05A}.cands button .b.Weak{color:#F08A8A}
+.cands button.on{border-color:#E8A05A;color:#E8EEF4;background:#1A1408}
+#auto .btns{margin-top:10px}
+#rgb .hint{margin-top:4px}
+#rgb .wrow{height:32px}
+#rgb input[type=range]{height:34px}
+#rgb .lblrow{margin-top:6px}
+#rgb .seg{margin-top:4px}
+#rgb .btns{margin-top:8px}
+.cands button{flex:1 1 0;min-width:0;height:52px;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:17px}
+.cands button .b{margin-left:0}
+.strip .tail{flex:none;width:72px;height:1px}
 </style></head>
 <body><div class="ph" id="ph">
 <div class="sb"><span>9:58</span><span>●●● ▮</span></div>
@@ -165,7 +199,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
   <div class="lblrow" style="margin-top:2px"><span class="lbt">Mix mode</span><span class="small">Into the Color master</span></div>
   <div class="seg" id="cmodes"></div>
   <p class="hint" id="chint"></p>
-  <div class="btns"><button class="primary" id="csave" type="button">Save as OSC+RGB</button><button class="ghostb" id="cshare" type="button">Share</button></div>
+  <div class="btns"><button class="primary" id="csave" type="button">Save as Color + RGB</button><button class="ghostb" id="cshare" type="button">Share</button></div>
 </div>
 
 <!-- blend -->
@@ -181,6 +215,19 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
         <p class="muted" id="mEmptyBody"></p>
         <button class="linkb" type="button" id="toAuto">Open Auto ›</button>
       </div>
+    </div>
+    <div id="pBody" hidden>
+      <div class="lblrow" style="margin-top:6px"><span class="lbt">Palette</span><span class="small">From mono Ha + OIII</span></div>
+      <div class="seg" id="pals" role="radiogroup" aria-label="Palette"></div>
+      <div class="cmp" id="cmpP" aria-label="Before and after. Drag to compare." style="margin-top:6px">
+        <canvas width="700" height="400"></canvas>
+        <span class="lbl l">Ha</span><span class="lbl r" id="pAfter">HOO</span><span class="sample">Sample data</span>
+        <span class="div"></span><span class="knob">‹›</span>
+      </div>
+      <div class="lblrow" style="margin-top:4px"><span class="lbt">Ha in green</span><span class="val" id="pgv">20%</span></div>
+      <input type="range" id="pg" min="0" max="50" step="10" value="20" aria-label="How much Ha goes into green" style="height:34px">
+      <p class="hint" id="phint" style="margin-top:4px"></p>
+      <div class="btns"><button class="primary" id="psave" type="button">Save as HOO</button><button class="ghostb" id="pshare" type="button">Share</button></div>
     </div>
     <div id="mBody">
       <div class="duo">
@@ -205,8 +252,9 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
     <div class="card" id="acard">
       <div class="k">✦ Auto · <b id="aKick">HaRGB</b></div>
       <h3 id="aTitle"></h3>
-      <p class="small" id="aWhy" style="margin-top:2px"></p>
-      <div class="score"><b id="aScore">0</b><span class="small" id="aRefs"></span></div>
+      <p class="small why" id="aWhy"></p>
+      <div class="score"><span class="band Good" id="aBand">Good match</span><span class="small" id="aRefs"></span></div>
+      <p class="mock" id="aMock">Mock comparison · AstroBin images never stored</p>
     </div>
     <div class="cands" id="cands" role="radiogroup" aria-label="Auto candidates"></div>
     <div class="cmp" id="cmpA" aria-label="Before and after. Drag to compare.">
@@ -215,7 +263,6 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
       <span class="div"></span><span class="knob">‹›</span>
     </div>
     <div class="btns"><button class="primary sm" id="apply" type="button">Apply · save as HaRGB</button><button class="ghostb" id="tweak" type="button">Tweak</button></div>
-    <p class="hint" id="aNote">Mock stats until an AstroBin API key is added. Only numbers are compared; AstroBin images are never stored or shown.</p>
   </div>
 </div>
 
@@ -251,16 +298,16 @@ const MODES = { R: CH_MODES, G: CH_MODES, B: CH_MODES,
   L: [{k:"lighten",label:"Lighten"},{k:"add",label:"Weighted"},{k:"screen",label:"Screen"}] };
 const TNAME = { R: "red", G: "green", B: "blue", L: "luminance" };
 const NATURAL = { Ha: "R", SII: "R", OIII: "G" };
-const product = (s, t) => t === "L" ? `${s}LRGB` : (s === "Ha" && t === "R" ? "HaRGB" : `RGB+${s}→${t}`);
-const CMODES = [{k:"average",label:"Weighted",hint:"Weighted average of the Color master and the mono RGB composite. More signal, lower noise; brightness stays the same."},
-                {k:"lighten",label:"Lighten",hint:"Lighten keeps the brighter of Color and the RGB composite, channel by channel. Lifts faint color without darkening anything."}];
+const product = (s, t) => t === "L" ? `${s}LRGB` : (s === "Ha" && t === "R" ? "HaRGB" : `RGB + ${s}`);
+const CMODES = [{k:"average",label:"Weighted",hint:"Averages Color and the RGB composite: more signal, same brightness."},
+                {k:"lighten",label:"Lighten",hint:"Keeps the brighter of Color and RGB per channel; never darkens."}];
 const $ = (id) => document.getElementById(id);
 const fmt = (s) => { const t = Math.round(s/60), h = Math.floor(t/60), m = t%60; return h ? `${h}h ${String(m).padStart(2,"0")}m` : `${m}m`; };
 const has = (k) => !!TABS.find((t) => t.k === k && t.subs);
 const strip = $("strip");
 const BLEND_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>';
 const state = { tab: "color", sample: "full", src: "Ha", target: "R", mode: "screen", strength: 50, view: "manual",
-                w: [1, 1, 1], cmode: "average", cstr: 50, pick: null };
+                w: [1, 1, 1], cmode: "average", cstr: 50, pick: null, pal: null, hig: 20 };
 const missingRGB = () => ["R","G","B"].filter((k) => !has(k));
 function buildStrip() {
   strip.innerHTML = "";
@@ -274,13 +321,27 @@ function buildStrip() {
     b.onclick = () => show(t.k, true);
     strip.appendChild(b);
   });
+  const tail = document.createElement("span"); tail.className = "tail"; tail.setAttribute("aria-hidden", "true"); strip.appendChild(tail); // room to scroll so no chip is left as a sliver
 }
 function show(k, user) {
   state.tab = k;
-  [...strip.children].forEach((c) => {
+  [...strip.querySelectorAll(".chip")].forEach((c) => {
     const on = c.dataset.k === k; c.classList.toggle("on", on); c.setAttribute("aria-selected", on);
-    if (on) { const PEEK = 44; const l = c.offsetLeft - PEEK, r = c.offsetLeft + c.offsetWidth + PEEK - strip.clientWidth;
-      const want = strip.scrollLeft > l ? l : (strip.scrollLeft < r ? r : strip.scrollLeft);
+    if (on) { // keep the active chip in view with a readable peek (>= 56px) of its neighbours; never a sliver
+      const PEEK = 56, kids = [...strip.querySelectorAll(".chip")], i = kids.indexOf(c), sr = strip.getBoundingClientRect();
+      const L = (el) => el.getBoundingClientRect().left - sr.left + strip.scrollLeft, Wd = (el) => el.getBoundingClientRect().width;
+      const prev = kids[i - 1], next = kids[i + 1], vw = strip.clientWidth, maxS = strip.scrollWidth - vw;
+      const lo = prev ? L(prev) + Wd(prev) - PEEK : L(c) - 20;          // scroll no further right than this
+      const hi = (next ? L(next) + PEEK : L(c) + Wd(c) + 20) - vw;       // and at least this far
+      let want = Math.min(Math.max(strip.scrollLeft, hi), lo);
+      const cut = kids.find((k) => L(k) < want && L(k) + Wd(k) > want);
+      if (cut && L(cut) + Wd(cut) - want < PEEK) { // left edge cuts a chip to a sliver: show it whole, or a full peek
+        const whole = L(cut) - 8, peek = L(cut) + Wd(cut) - PEEK;
+        want = (L(c) + Wd(c) - whole <= vw - 8) ? whole : Math.max(peek, hi);
+        const vis = L(cut) + Wd(cut) - want;
+        if (vis > 0 && vis < PEEK) want = L(cut) + Wd(cut) + 2; // no room for a peek: hide it completely
+      }
+      want = Math.max(0, Math.min(maxS, want));
       strip.scrollTo({ left: Math.max(0, want), behavior: user ? "smooth" : "auto" }); }
   });
   const t = TABS.find((x) => x.k === k);
@@ -315,7 +376,7 @@ function show(k, user) {
 function syncHash() {
   const q = new URLSearchParams({ tab: state.tab });
   if (state.sample !== "full") q.set("sample", state.sample);
-  if (state.tab === "blend") { q.set("view", state.view); if (state.view === "manual") { q.set("src", state.src); q.set("target", state.target); q.set("mode", state.mode); q.set("strength", state.strength); } else if (state.pick != null) q.set("pick", state.pick); }
+  if (state.tab === "blend") { q.set("view", state.view); if (state.view === "manual" && (state.pal || !baseAvailable())) { q.set("pal", state.pal || "HOO"); q.set("hig", state.hig); } else if (state.view === "manual") { q.set("src", state.src); q.set("target", state.target); q.set("mode", state.mode); q.set("strength", state.strength); } else if (state.pick != null) q.set("pick", state.pick); }
   if (state.tab === "rgb") { q.set("w", state.w.join(",")); q.set("cmode", state.cmode); q.set("cstr", state.cstr); }
   history.replaceState(null, "", "#" + q.toString().replace(/%2C/g, ","));
 }
@@ -324,6 +385,7 @@ function notify() {
   const k = state.tab, t = TABS.find((x) => x.k === k);
   let label, caption;
   if (k === "blend" && state.view === "auto") { const a = AUTO && AUTO[autoKey()]; label = `Auto · ${a ? a.recipe : ""}`; caption = CAPS.auto(a); }
+  else if (k === "blend" && (state.pal || !baseAvailable())) { label = `Blend · ${state.pal || "HOO"} palette`; caption = CAPS.pal(); }
   else if (k === "blend") { label = `Blend · ${state.src} to ${state.target === "L" ? "Lum" : state.target}`; caption = CAPS.blend(); }
   else if (k === "rgb") { label = missingRGB().length ? "RGB combine · missing channel" : "RGB combine"; caption = missingRGB().length ? CAPS.rgbOff() : CAPS.rgb; }
   else { label = `Master tabs · ${t.label}`; caption = t.subs ? CAPS.chan(t) : CAPS.empty(t); }
@@ -334,8 +396,9 @@ const CAPS = {
   empty: (t) => `Nobody has shot ${t.label} yet, so the tab shows an empty state. Empty filter chips are dashed so they read at a glance.`,
   rgb: "RGB combine: the mono R, G and B masters are matched for background and brightness, weighted, and added to the Color master at the strength you pick (Weighted average or Lighten). Drag across the preview to compare; save it as its own FITS. Sample data.",
   rgbOff: () => `With no ${missingRGB().join(", ")} subs, RGB combine is off and says which channel is missing. The RGB chip is dashed like an empty filter. Sample data.`,
-  blend: () => `Add ${state.src} into ${TNAME[state.target]}${state.target === "L" ? "" : " of the Color master"}. Pick Ha, OIII or SII (SII is off until someone shoots it), the channel, strength and mode; it saves as ${product(state.src, state.target)}. Sample data.`,
-  auto: (a) => a ? `Auto picks a recipe from the masters you have (${a.summary.replace(/\.$/, "")}) and scores a few strengths against reference stats of ${a.target}: ${a.recipe}, match ${a.score}/100. Apply saves it; Tweak opens Manual pre-filled. Reference stats are mock until an AstroBin API key is added. Sample data.` : "Auto",
+  blend: () => `Add ${state.src} into ${TNAME[state.target]}${state.target === "L" ? "" : " of the Color master"}. Pick Ha, OIII or SII (SII is off until someone shoots it), the channel, strength and mode; it saves as ${product(state.src, state.target)}${state.target === "L" || (state.src === "Ha" && state.target === "R") ? "" : ` (into ${TNAME[state.target]})`}. Sample data.`,
+  pal: () => `Manual palette editor: with only mono Ha and OIII, Manual builds HOO (set how much Ha goes into green) or Foraxx. Tweak from an Auto HOO pick opens it preloaded. SII palettes stay off until someone shoots SII. Sample data.`,
+  auto: (a) => a ? `Auto tries every recipe your masters allow, searches each one's strength, and compares the look with reference stats of ${a.target}. Here: ${a.recipe} (${a.band} match), shown between a weaker and a stronger variant. Apply saves it; Tweak opens Manual preloaded. The comparison is mock until an AstroBin API key is added. Sample data.` : "Auto",
 };
 // ---------------------------------------------------------------- image data (mock, canvas)
 const W = 700, H = 400, N = W * H;
@@ -398,7 +461,7 @@ function mix(base, nb, s, mode, medBase, medNb, gain) {
 // ---------------------------------------------------------------- compare widget
 function Compare(el) {
   const cv = el.querySelector("canvas"), ctx = cv.getContext("2d"), div = el.querySelector(".div"), knob = el.querySelector(".knob");
-  const me = { split: 0.5, before: null, after: null };
+  const me = { split: 0.32, before: null, after: null }; // After covers the nebula core by default
   me.draw = () => {
     if (!me.after) return;
     ctx.drawImage(me.after, 0, 0); const x = Math.round(W * me.split);
@@ -410,7 +473,7 @@ function Compare(el) {
   el.addEventListener("pointermove", (e) => { if (el.hasPointerCapture(e.pointerId)) drag(e); });
   return me;
 }
-const cmpB = Compare($("cmpB")), cmpC = Compare($("cmpC")), cmpA = Compare($("cmpA"));
+const cmpB = Compare($("cmpB")), cmpC = Compare($("cmpC")), cmpA = Compare($("cmpA")), cmpP = Compare($("cmpP"));
 // ---------------------------------------------------------------- RGB combine
 function renderCombine() {
   updateCombineControls();
@@ -459,9 +522,11 @@ function renderBlendPanel() {
   if (state.view === "auto") renderAuto(); else renderBlend();
 }
 function renderBlend() {
-  const ok = baseAvailable();
-  $("mEmpty").hidden = ok; $("mBody").hidden = !ok;
-  if (!ok) { $("mEmptyBody").textContent = "Manual adds Ha, OIII or SII into the R, G, B or luminance of a Color, RGB or L master. This party has only narrowband (Ha + OIII) so far; Auto builds HOO and Foraxx palettes from them."; return; }
+  const ok = baseAvailable(), palOk = has("Ha") && has("OIII");
+  const palette = !ok || (state.pal && palOk);
+  $("mEmpty").hidden = !(palette && !palOk); $("pBody").hidden = !(palette && palOk); $("mBody").hidden = palette;
+  if (palette && palOk) { renderPalette(); return; }
+  if (palette) { $("mEmptyBody").textContent = "Manual adds Ha, OIII or SII into the R, G, B or luminance of a Color, RGB or L master, or builds HOO from Ha + OIII. Nothing to blend yet."; return; }
   if (!has(state.src)) state.src = ["Ha","OIII"].find(has) || "Ha";
   updateControls();
   if (!IM.before) { prep().then(renderBlend); return; }
@@ -508,37 +573,66 @@ let AUTO = null; const AIMG = {};
 const autoKey = () => state.sample;
 function renderAuto() {
   if (!AUTO) { fetch("master/auto.json").then((r) => r.json()).then((d) => { AUTO = d; renderAuto(); notify(); }); return; }
-  const a = AUTO[autoKey()], pick = state.pick ?? a.best, c = a.candidates[pick];
+  // three variants: the recommended one in the middle (k = 1) with a weaker and a stronger neighbour
+  const a = AUTO[autoKey()], pick = state.pick ?? 1, c = a.chips[pick];
   $("aKick").textContent = a.recipe;
   $("aTitle").textContent = c.label;
-  $("aWhy").textContent = a.summary;
-  $("aScore").innerHTML = `${c.score}<span class="small" style="font-weight:700;color:#5CC9B5">/100 match</span>`;
-  $("aRefs").textContent = `compared to ${a.compared} sample reference images of ${a.target} (mock)`;
+  $("aWhy").textContent = a.summary; $("aWhy").title = a.reason;
+  const band = $("aBand"); band.className = "band " + c.band; band.textContent = `${c.band} match`;
+  $("aRefs").textContent = `${c.score}/100 · vs ${a.compared} images of ${a.target}`;
   const cands = $("cands"); cands.innerHTML = "";
-  a.candidates.forEach((x, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", i === pick);
-    b.className = i === pick ? "on" : ""; b.innerHTML = `${x.label.replace(a.recipe + " · scale ", "Ha ×").replace(a.recipe + " · ", "")}${i === a.best ? " ✦" : ""}<em>${x.score}</em>`;
+  a.chips.forEach((x, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", i === pick);
+    b.className = i === pick ? "on" : "";
+    const name = x.label.replace(/^.* · scale /, "Ha ×").replace(/^HOO · Ha (\d+)% in green$/, "Ha $1% in G").replace(/^Foraxx.*$/, "Foraxx");
+    b.innerHTML = `<span>${i === 1 ? "✦ " : ""}${name}</span><span class="b ${x.band}">${x.band}</span>`;
+    b.setAttribute("aria-label", `${x.label}, ${x.band} match${i === 1 ? ", recommended" : ""}`);
     b.onclick = () => { state.pick = i; renderAuto(); syncHash(); }; cands.appendChild(b); });
   $("apply").textContent = `Apply · save as ${c.recipe}`;
-  const palette = /^(HOO|SHO|Foraxx)/.test(c.recipe);
-  $("tweak").textContent = palette ? "Variants" : "Tweak";
+  $("tweak").textContent = "Tweak";
   $("aBefore").textContent = has("color") ? "Color" : "Ha";
-  const show = () => { cmpA.before = AIMG.before; cmpA.after = AIMG[autoKey() + pick]; cmpA.draw(); };
+  const key = autoKey() + pick, bk = has("color") ? "color" : "Ha";
+  const show = () => { cmpA.before = AIMG[bk]; cmpA.after = AIMG[key]; cmpA.draw(); };
   const need = [];
-  if (!AIMG[autoKey() + pick]) need.push(load(`auto_${autoKey()}_${pick}`).then((im) => { AIMG[autoKey() + pick] = toCanvasImg(im); }));
-  if (!AIMG.before || AIMG.beforeKey !== (has("color") ? "color" : "Ha")) need.push(load(has("color") ? "color" : "Ha").then((im) => { AIMG.before = toCanvasImg(im); AIMG.beforeKey = has("color") ? "color" : "Ha"; }));
+  if (!AIMG[key]) need.push(load(`auto_${autoKey()}_${pick}`).then((im) => { AIMG[key] = toCanvasImg(im); }));
+  if (!AIMG[bk]) need.push(load(bk).then((im) => { AIMG[bk] = toCanvasImg(im); }));
   if (need.length) Promise.all(need).then(show); else show();
 }
 function toCanvasImg(im) { const c = document.createElement("canvas"); c.width = W; c.height = H; c.getContext("2d").drawImage(im, 0, 0, W, H); return c; }
+// Tweak: open Manual with the recipe preloaded (channel blend for HaRGB-style picks, the palette editor for HOO / Foraxx)
 $("tweak").onclick = () => {
-  const a = AUTO[autoKey()], c = a.candidates[state.pick ?? a.best];
-  if (/^(HOO|SHO|Foraxx)/.test(c.recipe) || !baseAvailable()) { $("cands").scrollIntoView({ block: "nearest" }); $("cands").animate([{ outline: "2px solid #5CC9B5" }, { outline: "0 solid transparent" }], { duration: 900 }); return; }
-  const scale = c.params.scale || 0.5, pct = Math.min(100, Math.round(scale / 1.4 * 100 / 5) * 5);
-  const m = /(Ha|OIII|SII)/.exec(c.recipe.replace(/^RGB\+/, "")); const src = m ? m[1] : "Ha";
-  state.src = src; state.target = c.recipe === "HaLRGB" ? "L" : NATURAL[src]; state.mode = MODES[state.target][0].k; state.strength = pct;
+  const a = AUTO[autoKey()], c = a.chips[state.pick ?? 1];
+  if (c.recipe === "HOO" || c.recipe === "Foraxx" || c.recipe === "SHO") {
+    state.pal = c.recipe === "HOO" ? "HOO" : c.recipe; state.hig = Math.round((c.params.ha_in_green || 0) * 100);
+  } else {
+    const scale = c.params.scale || 0.5, pct = Math.min(100, Math.round(scale / 1.4 * 100 / 5) * 5);
+    const m = /(Ha|OIII|SII)/.exec(c.recipe.replace(/^RGB\+/, "")); const src = m ? m[1] : "Ha";
+    state.src = src; state.target = c.recipe === "HaLRGB" ? "L" : NATURAL[src]; state.mode = MODES[state.target][0].k; state.strength = pct;
+    state.pal = null;
+  }
   state.view = "manual"; renderBlendPanel(); syncHash(); notify();
 };
+// ---------------------------------------------------------------- palette editor (Manual, narrowband-only parties)
+const PIMG = {};
+function renderPalette() {
+  const pal = state.pal || "HOO";
+  segButtons($("pals"), [{k:"HOO",label:"HOO"},{k:"Foraxx",label:"Foraxx"},{k:"SHO",label:"SHO",disabled:!has("SII")}], pal,
+    (k) => { state.pal = k; renderPalette(); syncHash(); notify(); });
+  const hoo = pal === "HOO";
+  $("pg").disabled = !hoo; $("pg").value = state.hig; $("pg").style.setProperty("--p", (state.hig * 2) + "%");
+  $("pgv").textContent = hoo ? state.hig + "%" : "auto";
+  $("phint").textContent = hoo ? "R = Ha, B = OIII, G = OIII with some Ha mixed in." : "Foraxx sets the mix per pixel from Ha and OIII brightness. SII is off: no SII subs yet.";
+  $("pAfter").textContent = pal; $("psave").textContent = `Save as ${pal}`;
+  const name = hoo ? `pal_${autoKey()}_HOO_${state.hig}` : `pal_${autoKey()}_Foraxx`;
+  const show = () => { cmpP.before = PIMG.Ha; cmpP.after = PIMG[name]; cmpP.draw(); };
+  const need = [];
+  if (!PIMG[name]) need.push(load(name).then((im) => { PIMG[name] = toCanvasImg(im); }));
+  if (!PIMG.Ha) need.push(load("Ha").then((im) => { PIMG.Ha = toCanvasImg(im); }));
+  if (need.length) Promise.all(need).then(show); else show();
+}
+$("pg").addEventListener("input", (e) => { state.hig = Number(e.target.value); renderPalette(); });
+$("pg").addEventListener("change", syncHash);
 function toast(msg) { const t = $("toast"); t.textContent = msg || "Prototype · saves a new FITS; nothing is saved here"; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1800); }
-["dl","share","save","share2","csave","cshare","apply"].forEach((id) => $(id).onclick = () => toast());
+["dl","share","save","share2","csave","cshare","apply","psave","pshare"].forEach((id) => $(id).onclick = () => toast());
 // ---------------------------------------------------------------- deep links
 // #tab=Ha · #tab=rgb&w=1,1,1.2&cmode=lighten&cstr=60 · #tab=blend&src=OIII&target=G&mode=max&strength=70
 // #tab=blend&view=auto&sample=oscha|nb · sample=noB (no blue subs: RGB combine disabled)
@@ -555,11 +649,13 @@ function fromHash() {
   state.mode = MODES[state.target].some((m) => m.k === q.get("mode")) ? q.get("mode") : MODES[state.target][0].k;
   state.strength = q.get("strength") ? Math.min(100, Math.max(0, Number(q.get("strength")) || 0)) : 50;
   state.view = q.get("view") === "auto" ? "auto" : "manual";
-  state.pick = q.get("pick") != null && q.get("pick") !== "" ? Number(q.get("pick")) : null;
+  state.pick = ["0","1","2"].includes(q.get("pick")) ? Number(q.get("pick")) : null;
+  state.pal = ["HOO","Foraxx","SHO"].includes(q.get("pal")) ? q.get("pal") : null;
+  state.hig = [0,10,20,30,40,50].includes(Number(q.get("hig"))) && q.get("hig") !== null ? Number(q.get("hig")) : 20;
   const w = (q.get("w") || "").split(",").map(Number); state.w = w.length === 3 && w.every((x) => x >= 0 && x <= 2) ? w : [1, 1, 1];
   state.cmode = q.get("cmode") === "lighten" ? "lighten" : "average";
   state.cstr = q.get("cstr") ? Math.min(100, Math.max(0, Number(q.get("cstr")) || 0)) : 50;
-  const sp = Number(q.get("split")); if (q.get("split") != null && sp >= 0 && sp <= 1) [cmpB, cmpC, cmpA].forEach((c) => c.split = sp);
+  const sp = Number(q.get("split")); if (q.get("split") != null && sp >= 0 && sp <= 1) [cmpB, cmpC, cmpA, cmpP].forEach((c) => c.split = sp);
   const start = q.get("tab");
   show([...TABS.map((t) => t.k), "rgb", "blend"].includes(start) ? start : "color", false);
 }
