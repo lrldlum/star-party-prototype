@@ -1,0 +1,277 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=390">
+<meta name="robots" content="noindex, nofollow">
+<title>Star Party · Master tabs (prototype)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#071018}
+body{width:390px;height:844px;color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.ph{position:relative;width:390px;height:844px;display:flex;flex-direction:column;padding:0 20px}
+.ph>*{flex-shrink:0}
+.sb{height:47px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;padding:0 8px}
+.top{height:52px;display:flex;align-items:center;justify-content:space-between;color:#8FA3B5;font-size:17px}
+.back{height:52px;min-width:88px;margin-left:-8px;padding:0 8px;display:flex;align-items:center;color:#8FA3B5;font-size:17px;font-weight:600}
+.stepn{font-size:13px;letter-spacing:1px;color:#8FA3B5;font-weight:700;text-transform:uppercase;white-space:nowrap}
+.menu{width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:#E8EEF4;font-size:22px;font-weight:700}
+.tr{display:flex;align-items:center;gap:4px}
+.party{font-size:15px;font-weight:600;color:#8FA3B5;line-height:21px}
+h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 10px}
+.muted{color:#8FA3B5;font-size:15px;line-height:21px}
+.small{font-size:13px;color:#8FA3B5;line-height:18px}
+/* filter tab strip: 48px glove targets, scrolls sideways */
+.strip{display:flex;gap:8px;overflow-x:auto;margin:0 -20px;padding:0 20px 2px;scrollbar-width:none;scroll-padding:0 20px}
+.strip::-webkit-scrollbar{display:none}
+.chip{flex:none;height:48px;min-width:52px;padding:0 14px;border-radius:24px;border:1px solid #1C2B3A;background:#0E1A26;color:#E8EEF4;font:600 16px Inter,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.chip i{width:8px;height:8px;border-radius:50%;flex:none}
+.chip.empty{background:transparent;border-style:dashed;color:#8FA3B5}
+.chip.empty i{opacity:.35}
+.chip.on{background:#E8A05A;border-color:#E8A05A;color:#1A1006}
+.chip.on i{background:#1A1006 !important;opacity:1}
+.chip.blend{border-color:#3A2C1C}
+.chip.blend svg{width:16px;height:16px}
+.panel{margin-top:12px;display:flex;flex-direction:column}
+.sky{height:210px;border-radius:16px;overflow:hidden;position:relative;background:#000 center/cover;box-shadow:0 0 28px rgba(200,110,150,.16)}
+.sky.mono{box-shadow:0 0 24px rgba(180,190,210,.10)}
+.sky .tag{position:absolute;left:10px;top:10px;font-size:12px;font-weight:700;color:#E8EEF4;background:rgba(7,16,24,.72);padding:3px 9px;border-radius:999px;display:flex;gap:6px;align-items:center}
+.sky .tag i{width:8px;height:8px;border-radius:50%}
+.sky .upd{position:absolute;right:10px;top:10px;font-size:12px;font-weight:700;color:#E8EEF4;background:rgba(7,16,24,.72);padding:3px 8px;border-radius:999px}
+.stats{display:flex;gap:8px;margin-top:12px}
+.stat{flex:1;background:#0E1A26;border:1px solid #1C2B3A;border-radius:14px;padding:10px 12px}
+.stat b{display:block;font-size:22px;line-height:28px;font-weight:700}
+.stat span{font-size:12px;color:#8FA3B5;font-weight:600;letter-spacing:.3px}
+.who{margin-top:12px;display:flex;align-items:center;gap:8px}
+.av{width:28px;height:28px;border-radius:50%;background:#13283A;color:#5CC9B5;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #071018;margin-left:-8px}
+.av:first-child{margin-left:0}
+.note{margin-top:10px}
+.empty-card{height:210px;border:1px dashed #33404D;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 24px;gap:8px}
+.empty-card svg{width:40px;height:40px;color:#33404D}
+.empty-card h2{font-size:19px;line-height:24px}
+.btns{display:flex;gap:10px;margin-top:14px}
+.primary{height:56px;border-radius:28px;background:#E8A05A;color:#1A1006;font:700 17px Inter,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;flex:1}
+.ghostb{height:56px;border-radius:28px;background:transparent;border:1px solid #1C2B3A;color:#5CC9B5;font:600 17px Inter,-apple-system,sans-serif;cursor:pointer;padding:0 18px}
+.seg{display:flex;background:#0B141E;border:1px solid #1C2B3A;border-radius:14px;padding:4px;margin-top:8px}
+.seg button{flex:1;height:48px;border:0;border-radius:10px;font:600 16px Inter,-apple-system,sans-serif;color:#8FA3B5;background:transparent;cursor:pointer}
+.seg button.on{background:#E8A05A;color:#1A1006}
+.cmp{position:relative;height:200px;border-radius:16px;overflow:hidden;margin-top:10px;background:#000;touch-action:none;cursor:ew-resize;box-shadow:0 0 28px rgba(200,110,150,.16)}
+.cmp canvas{position:absolute;inset:0;width:100%;height:100%}
+.cmp .lbl{position:absolute;top:10px;font-size:12px;font-weight:700;background:rgba(7,16,24,.72);padding:3px 9px;border-radius:999px;pointer-events:none}
+.cmp .lbl.l{left:10px}.cmp .lbl.r{right:10px}
+.cmp .sample{position:absolute;right:10px;bottom:10px;font-size:11px;font-weight:600;color:#B4C0CC;background:rgba(7,16,24,.72);padding:2px 8px;border-radius:999px;pointer-events:none}
+.cmp .div{position:absolute;top:0;bottom:0;width:2px;background:#E8EEF4;pointer-events:none;box-shadow:0 0 6px rgba(0,0,0,.6)}
+.cmp .knob{position:absolute;top:50%;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;background:#E8EEF4;color:#071018;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.lblrow{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}
+.lbt{font-size:13px;color:#8FA3B5;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
+.val{font-size:17px;font-weight:700;color:#E8A05A}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;margin-top:2px;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#E8A05A var(--p,50%),#1C2B3A var(--p,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;border-radius:50%;background:#E8EEF4;border:3px solid #E8A05A;margin-top:-12px;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:#1C2B3A}
+input[type=range]::-moz-range-progress{height:8px;border-radius:4px;background:#E8A05A}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#E8EEF4;border:3px solid #E8A05A}
+.hint{margin-top:8px;font-size:13px;color:#8FA3B5;line-height:18px;min-height:36px}
+.spacer{flex:1 1 auto}
+.tabs{height:83px;margin:0 -20px;border-top:1px solid #1C2B3A;display:flex;justify-content:space-around;padding-top:8px;background:#09131C}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:#8FA3B5;width:96px;height:60px;padding-top:4px}
+.tab svg{width:26px;height:26px}.tab.on{color:#E8A05A}
+.toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+[hidden]{display:none !important}
+</style></head>
+<body><div class="ph" id="ph">
+<div class="sb"><span>9:58</span><span>●●● ▮</span></div>
+<div class="top"><span class="back">‹ Live stack</span><span class="tr"><span class="stepn">Master</span><span class="menu" aria-label="Party menu">•••</span></span></div>
+<div class="party">Penobscot Bay Star Party</div>
+<h1>Master · M42</h1>
+<div class="strip" id="strip" role="tablist" aria-label="Master filters"></div>
+
+<!-- channel view -->
+<div class="panel" id="chan">
+  <div class="sky" id="sky" role="img"><span class="tag" id="tag"><i></i><span></span></span><span class="upd">Updated 9:57 PM</span></div>
+  <div class="stats">
+    <div class="stat"><b id="sSubs">0</b><span>SUBS</span></div>
+    <div class="stat"><b id="sTime">0m</b><span>INTEGRATION</span></div>
+    <div class="stat"><b id="sRigs">0</b><span>RIGS</span></div>
+  </div>
+  <div class="who" id="who"></div>
+  <p class="small note" id="note"></p>
+  <div class="btns"><button class="primary" id="dl" type="button">Download FITS</button><button class="ghostb" id="share" type="button">Share</button></div>
+</div>
+
+<!-- empty filter -->
+<div class="panel" id="empty" hidden>
+  <div class="empty-card">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18" opacity=".5"/></svg>
+    <h2 id="eTitle">No subs yet for this filter</h2>
+    <p class="muted" id="eBody"></p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>0</b><span>SUBS</span></div>
+    <div class="stat"><b>0m</b><span>INTEGRATION</span></div>
+    <div class="stat"><b>0</b><span>RIGS</span></div>
+  </div>
+  <p class="small note">Subs are grouped by the FILTER card in their FITS header. One-shot-color subs go to Color.</p>
+</div>
+
+<!-- blend -->
+<div class="panel" id="blend" hidden>
+  <div class="seg" role="tablist" aria-label="Blend target" style="margin-top:0">
+    <button type="button" data-target="R" class="on">Ha → Red</button>
+    <button type="button" data-target="L">Ha → Lum</button>
+  </div>
+  <div class="cmp" id="cmp" aria-label="Before and after. Drag to compare.">
+    <canvas id="cv" width="700" height="400"></canvas>
+    <span class="lbl l">Before</span><span class="lbl r">After</span><span class="sample">Sample data</span>
+    <span class="div" id="div"></span><span class="knob" id="knob">‹›</span>
+  </div>
+  <div class="lblrow"><span class="lbt">Strength</span><span class="val" id="sv">50%</span></div>
+  <input type="range" id="str" min="0" max="100" step="1" value="50" aria-label="Blend strength">
+  <div class="lblrow" style="margin-top:2px"><span class="lbt">Blend mode</span><span class="small" id="base">Into the Color master</span></div>
+  <div class="seg" id="modes"></div>
+  <p class="hint" id="hint"></p>
+</div>
+
+<div class="spacer"></div>
+<div class="tabs"><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</div></div>
+<div class="toast" id="toast">Prototype · nothing is saved or downloaded</div>
+</div>
+<script>
+// Mock data for the prototype. Real counts come from the party stack (GET /api/stacks/{id}/masters).
+const TABS = [
+  {k:"color", label:"Color", accent:"#E8A05A", subs:15, sec:2700, rigs:["JB","AD","BA","CY"], note:"One-shot-color subs (ASI2600MC and friends), debayered and stacked. Linear 32-bit FITS on the shared grid."},
+  {k:"L", label:"L", accent:"#E8EEF4", subs:24, sec:4320, rigs:["DM"], note:"Mono subs shot through L (luminance). Grouped by FILTER = L / Lum."},
+  {k:"R", label:"R", accent:"#F2555A", subs:10, sec:1800, rigs:["DM"], note:"Mono subs shot through the red filter."},
+  {k:"G", label:"G", accent:"#5CC9B5", subs:10, sec:1800, rigs:["DM"], note:"Mono subs shot through the green filter."},
+  {k:"B", label:"B", accent:"#7FB8FF", subs:9, sec:1620, rigs:["DM"], note:"Mono subs shot through the blue filter."},
+  {k:"Ha", label:"Ha", accent:"#FF6B6B", subs:12, sec:3600, rigs:["AD","EL"], note:"Mono subs shot through Ha (7 nm and 3 nm). Picks up the faint outer hydrogen the color subs miss."},
+  {k:"OIII", label:"OIII", accent:"#4FD1E0", subs:8, sec:2400, rigs:["EL"], note:"Mono subs shot through OIII. Brightest in the core."},
+  {k:"SII", label:"SII", accent:"#F0B85A", subs:0, sec:0, rigs:[], note:""},
+];
+const MODES = {
+  R:[{k:"screen",label:"Screen",hint:"Screen lifts red where Ha is bright and never clips. Good default for HaRGB."},
+     {k:"max",label:"Max",hint:"Max keeps whichever is brighter, red or Ha. Strongest nebula, can look punchy."},
+     {k:"add",label:"Add",hint:"Add puts strength × Ha signal on top of red (sky removed first). Like R + k·Ha in PixelMath."}],
+  L:[{k:"lighten",label:"Lighten",hint:"Lighten keeps the brighter of luminance and Ha. Color stays the same; detail comes from Ha."},
+     {k:"add",label:"Weighted add",hint:"Weighted add puts strength × Ha signal into luminance (sky removed first). Hue is kept."},
+     {k:"screen",label:"Screen",hint:"Screen lifts luminance softly where Ha is bright and never clips."}],
+};
+const $ = (id) => document.getElementById(id);
+const fmt = (s) => { const t = Math.round(s/60), h = Math.floor(t/60), m = t%60; return h ? `${h}h ${String(m).padStart(2,"0")}m` : `${m}m`; };
+const strip = $("strip");
+const BLEND_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>';
+[...TABS, {k:"blend", label:"Blend"}].forEach((t) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip" + (t.k === "blend" ? " blend" : "") + (t.subs === 0 ? " empty" : "");
+  b.dataset.k = t.k; b.setAttribute("role", "tab");
+  b.setAttribute("aria-label", t.k === "blend" ? "Blend Ha into red or luminance" : `${t.label} master, ${t.subs ? t.subs + " subs" : "no subs yet"}`);
+  b.innerHTML = (t.k === "blend" ? BLEND_ICON : `<i style="background:${t.accent}"></i>`) + `<span>${t.label}</span>`;
+  b.onclick = () => show(t.k, true);
+  strip.appendChild(b);
+});
+function show(k, user) {
+  [...strip.children].forEach((c) => {
+    const on = c.dataset.k === k; c.classList.toggle("on", on); c.setAttribute("aria-selected", on);
+    if (on) { // keep the active chip in view without scrolling the page
+      const l = c.offsetLeft - 20, r = c.offsetLeft + c.offsetWidth + 20 - strip.clientWidth;
+      const want = strip.scrollLeft > l ? l : (strip.scrollLeft < r ? r : strip.scrollLeft);
+      strip.scrollTo({ left: Math.max(0, want), behavior: user ? "smooth" : "auto" });
+    }
+  });
+  const t = TABS.find((x) => x.k === k);
+  $("chan").hidden = !(t && t.subs); $("empty").hidden = !(t && !t.subs); $("blend").hidden = k !== "blend";
+  if (t && t.subs) {
+    const sky = $("sky");
+    sky.style.backgroundImage = `url(master/${k}.jpg)`; sky.classList.toggle("mono", k !== "color");
+    sky.setAttribute("aria-label", `${t.label} master preview, M42`);
+    $("tag").querySelector("i").style.background = t.accent;
+    $("tag").querySelector("span").textContent = k === "color" ? "Color · OSC" : `${t.label} · mono`;
+    $("sSubs").textContent = t.subs; $("sTime").textContent = fmt(t.sec); $("sRigs").textContent = t.rigs.length;
+    $("who").innerHTML = t.rigs.map((r) => `<span class="av">${r}</span>`).join("") + `<span class="small" style="margin-left:4px">${t.rigs.length === 1 ? "1 rig" : t.rigs.length + " rigs"} contributed</span>`;
+    $("note").textContent = t.note;
+    $("dl").textContent = `Download ${t.label} FITS`;
+  } else if (t) {
+    $("eTitle").textContent = `No subs yet for ${t.label}`;
+    $("eBody").textContent = `Nobody at this party has shot ${t.label} yet. Mono subs with FILTER = ${t.label} will stack here.`;
+  }
+  if (k === "blend") renderBlend();
+  history.replaceState(null, "", "#tab=" + k + (k === "blend" ? "&target=" + state.target : ""));
+}
+// ---------------------------------------------------------------- blend (mock data, canvas)
+const state = { target: "R", mode: "screen", strength: 50, split: 0.5 };
+const imgs = {};
+let pix = null;
+function load(name) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = `master/${name}.jpg`; }); }
+function read(im) { const c = document.createElement("canvas"); c.width = 700; c.height = 400; const x = c.getContext("2d"); x.drawImage(im, 0, 0); return x.getImageData(0, 0, 700, 400).data; }
+function median(a, stride, off) { const h = new Uint32Array(256); let n = 0; for (let i = off; i < a.length; i += stride) { h[a[i]]++; n++; } let c = 0; for (let v = 0; v < 256; v++) { c += h[v]; if (c >= n/2) return v/255; } return 0; }
+async function prep() {
+  const [color, ha, L] = await Promise.all([load("color"), load("Ha"), load("L")]);
+  const c = read(color), h = read(ha), l = read(L);
+  pix = { c, h, l, medR: median(c, 4, 0), medHa: median(h, 4, 0), medL: median(l, 4, 0) };
+}
+function mix(base, ha, s, mode, medBase, medHa) {
+  if (mode === "add") return base + s * Math.max(0, ha - medHa);
+  const adj = ha - medHa + medBase;
+  let b;
+  if (mode === "max" || mode === "lighten") b = Math.max(base, adj);
+  else { const x = Math.min(1, Math.max(0, base)), y = Math.min(1, Math.max(0, adj)); b = 1 - (1 - x) * (1 - y); }
+  return (1 - s) * base + s * b;
+}
+const cv = $("cv"), ctx = cv.getContext("2d");
+let outData = null;
+function renderBlend() {
+  updateControls();
+  if (!pix) { prep().then(renderBlend); return; }
+  const { c, h, medR, medHa } = pix, s = state.strength / 100;
+  const out = ctx.createImageData(700, 400), o = out.data;
+  const medLum = (medR + median(c, 4, 1) + median(c, 4, 2)) / 3;
+  for (let i = 0; i < c.length; i += 4) {
+    const r = c[i]/255, g = c[i+1]/255, b = c[i+2]/255, ha = h[i]/255;
+    let R = r, G = g, B = b;
+    if (state.target === "R") R = mix(r, ha, s, state.mode, medR, medHa);
+    else {
+      const L = (r + g + b) / 3, L2 = mix(L, ha, s, state.mode, medLum, medHa);
+      if (L > 0.004) { const k = L2 / L; R = r*k; G = g*k; B = b*k; } else { R = G = B = L2; }
+      const m = Math.max(R, G, B); if (m > 1) { R /= m; G /= m; B /= m; } // keep hue when it would clip
+    }
+    o[i] = Math.min(255, R*255); o[i+1] = Math.min(255, G*255); o[i+2] = Math.min(255, B*255); o[i+3] = 255;
+  }
+  outData = out; draw();
+}
+function draw() {
+  if (!outData) return;
+  ctx.putImageData(outData, 0, 0);
+  const x = Math.round(700 * state.split);
+  ctx.drawImage(imgs.before || (imgs.before = toCanvas(pix.c)), 0, 0, x, 400, 0, 0, x, 400);
+  const px = $("cmp").clientWidth * state.split;
+  $("div").style.left = (px - 1) + "px"; $("knob").style.left = px + "px";
+}
+function toCanvas(d) { const c = document.createElement("canvas"); c.width = 700; c.height = 400; const x = c.getContext("2d"); const id = x.createImageData(700, 400); id.data.set(d); x.putImageData(id, 0, 0); return c; }
+function updateControls() {
+  document.querySelectorAll("[data-target]").forEach((b) => b.classList.toggle("on", b.dataset.target === state.target));
+  const modes = $("modes"); modes.innerHTML = "";
+  MODES[state.target].forEach((m) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = m.label; b.className = m.k === state.mode ? "on" : "";
+    b.onclick = () => { state.mode = m.k; renderBlend(); }; modes.appendChild(b);
+  });
+  $("hint").textContent = MODES[state.target].find((m) => m.k === state.mode).hint;
+  $("base").textContent = state.target === "R" ? "Into red of the Color master" : "Into luminance of the Color master";
+  $("sv").textContent = state.strength + "%";
+  $("str").value = state.strength; $("str").style.setProperty("--p", state.strength + "%");
+}
+document.querySelectorAll("[data-target]").forEach((b) => b.onclick = () => { state.target = b.dataset.target; state.mode = MODES[state.target][0].k; renderBlend(); history.replaceState(null, "", "#tab=blend&target=" + state.target); });
+let raf = 0;
+$("str").addEventListener("input", (e) => { state.strength = Number(e.target.value); $("sv").textContent = state.strength + "%"; e.target.style.setProperty("--p", state.strength + "%"); cancelAnimationFrame(raf); raf = requestAnimationFrame(renderBlend); });
+const cmp = $("cmp");
+function drag(e) { const r = cmp.getBoundingClientRect(); state.split = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); draw(); }
+cmp.addEventListener("pointerdown", (e) => { cmp.setPointerCapture(e.pointerId); drag(e); });
+cmp.addEventListener("pointermove", (e) => { if (cmp.hasPointerCapture(e.pointerId)) drag(e); });
+function toast() { const t = $("toast"); t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1600); }
+$("dl").onclick = toast; $("share").onclick = toast;
+// deep links: #tab=Ha, #tab=blend&target=L&mode=add&strength=70
+const q = new URLSearchParams(location.hash.slice(1));
+if (q.get("target") === "L") { state.target = "L"; state.mode = "lighten"; }
+if (q.get("mode") && MODES[state.target].some((m) => m.k === q.get("mode"))) state.mode = q.get("mode");
+if (q.get("strength")) state.strength = Math.min(100, Math.max(0, Number(q.get("strength")) || 0));
+const start = q.get("tab");
+show([...TABS.map((t) => t.k), "blend"].includes(start) ? start : "color", false);
+</script>
+</body></html>

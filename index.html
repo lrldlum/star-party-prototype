@@ -74,6 +74,14 @@
       background: #000;
       touch-action: pan-y;
     }
+    .phone.live { position: relative; }
+    .phone iframe {
+      display: block;
+      border: 0;
+      width: 390px;
+      height: 844px;
+      transform-origin: 0 0;
+    }
     .phone img {
       display: block;
       width: 100%;
@@ -128,7 +136,7 @@
   <p class="step" id="step"></p>
   <h2 id="title"></h2>
   <p class="caption" id="caption"></p>
-  <div class="phone"><img id="screen" alt="" /></div>
+  <div class="phone" id="phone"><img id="screen" alt="" /><iframe id="live" title="Interactive screen" hidden></iframe></div>
   <label for="list">Screen list</label>
   <select id="list"></select>
   <div class="bar">
@@ -152,6 +160,11 @@
       {"id": "13_asiair_found", "title": "ASIAIR found", "step": "Step 4 of 6 · ASIAIR 3/3", "caption": "Files found: Wi-Fi, permission, 12 subs, and libraries. Connect ASIAIR is primary; Choose another ASIAIR is the alternative."},
       {"id": "14_calibration", "title": "Calibration", "step": "Step 5 of 6", "caption": "Darks and bias are Ready; flats are Missing. Flats apply to the final master. Continue to live stack is primary; How to shoot flats is the alternative."},
       {"id": "15_live_stack_chat", "title": "Live stack + chat", "step": "Step 6 of 6", "caption": "Master preview, your rig status, a Be kind line, a hold cue on the first member message, and the party menu. Send is primary; Before / after is the alternative."},
+      {"id": "15a_master_color", "live": "master.html#tab=color", "title": "Master tabs · Color", "step": "Master · Interactive", "caption": "Interactive. Tap the filter tabs: Color, L, R, G, B, Ha, OIII, SII, then Blend. Each tab shows that filter's master with its sub count, integration time and rigs. Subs are grouped by the FITS FILTER header; one-shot-color subs go to Color. Sample data."},
+      {"id": "15b_master_ha", "live": "master.html#tab=Ha", "title": "Master tabs · Ha", "step": "Master · Interactive", "caption": "The Ha master from the mono rigs: 12 subs, 1 h of integration, 2 rigs. It shows the faint outer hydrogen the color subs miss. Sample data."},
+      {"id": "15c_master_empty", "live": "master.html#tab=SII", "title": "Master tabs · No subs yet", "step": "Master · Interactive", "caption": "A filter nobody has shot yet (SII here) shows an empty state: no subs yet for that filter. The tab chip is dashed so empty filters read at a glance."},
+      {"id": "15d_blend_red", "live": "master.html#tab=blend&target=R", "title": "Blend · Ha to Red", "step": "Master · Interactive", "caption": "Blend Ha into the red channel of the Color master. Drag the strength slider (0–100%) and pick Screen, Max or Add; drag across the preview to compare before and after. The preview runs live on sample data."},
+      {"id": "15e_blend_lum", "live": "master.html#tab=blend&target=L", "title": "Blend · Ha to Lum", "step": "Master · Interactive", "caption": "Blend Ha into luminance with Lighten, Weighted add or Screen. Hue is kept; only brightness and detail come from Ha. The masters themselves are never changed; a blend is saved as its own FITS. Sample data."},
       {"id": "16_message_actions", "title": "Message actions", "step": "Step 6 of 6", "caption": "Long-press sheet on a message: Report message, Block, Copy text, or Cancel."},
       {"id": "17_party_menu", "title": "Party menu", "step": "Step 6 of 6", "caption": "The party menu sheet: Party members, Report a problem, Block a member, Leave party, or Cancel."},
       {"id": "18_leave_party", "title": "Leave party", "step": "Step 6 of 6", "caption": "Confirm leaving: you stop contributing and leave chat. Subs already in the stack stay in, so you remain a participant and keep the final master. Leave party is the destructive action; Cancel returns."},
@@ -167,6 +180,14 @@
     const step = document.getElementById("step");
     const caption = document.getElementById("caption");
     const img = document.getElementById("screen");
+    const live = document.getElementById("live");
+    const phoneBox = document.getElementById("phone");
+    function fitLive() {
+      const scale = Math.min(1, phoneBox.clientWidth / 390);
+      live.style.transform = "scale(" + scale + ")";
+      phoneBox.style.height = live.hidden ? "" : Math.round(844 * scale) + "px";
+    }
+    window.addEventListener("resize", fitLive);
     const list = document.getElementById("list");
     const back = document.getElementById("back");
     const next = document.getElementById("next");
@@ -181,8 +202,19 @@
       title.textContent = s.title;
       step.textContent = (index + 1) + " of " + SCREENS.length + " · " + s.step;
       caption.textContent = s.caption;
-      img.src = "screens/" + s.id + ".webp";
-      img.alt = "Star Party screen: " + s.title;
+      if (s.live) {
+        img.hidden = true;
+        img.removeAttribute("src");
+        live.hidden = false;
+        if (live.dataset.src !== s.live) { live.src = s.live; live.dataset.src = s.live; }
+        live.title = "Interactive Star Party screen: " + s.title;
+      } else {
+        live.hidden = true;
+        img.hidden = false;
+        img.src = "screens/" + s.id + ".webp";
+        img.alt = "Star Party screen: " + s.title;
+      }
+      fitLive();
       list.value = String(index);
       back.disabled = index === 0;
       next.disabled = index === SCREENS.length - 1;
@@ -209,10 +241,14 @@
       const t = e.changedTouches[0];
       const dx = t.clientX - touchStartX;
       const dy = t.clientY - touchStartY;
+      if (!live.hidden) return;
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
         go(dx < 0 ? 1 : -1);
       }
     }, { passive: true });
+    const hashId = location.hash.slice(1);
+    const hashIndex = SCREENS.findIndex((s) => s.id === hashId || (hashId === "master" && s.id === "15a_master_color"));
+    if (hashIndex >= 0) index = hashIndex;
     render();
   </script>
 </body>
