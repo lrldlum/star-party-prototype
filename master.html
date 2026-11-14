@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=390">
 <meta name="robots" content="noindex, nofollow">
-<title>Star Party · Master tabs (prototype)</title>
+<title>Star Party · Master tabs, RGB combine, Blend and Auto (prototype)</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#071018}
@@ -29,7 +29,8 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 10px}
 .chip.on i{background:#1A1006 !important;opacity:1}
 .chip.blend{border-color:#3A2C1C}
 .chip.blend svg{width:16px;height:16px}
-.panel{margin-top:12px;display:flex;flex-direction:column}
+.panel{margin-top:12px;display:flex;flex-direction:column;flex:1 1 auto !important;min-height:0;overflow-y:auto;scrollbar-width:none;padding-bottom:12px}
+.panel::-webkit-scrollbar{display:none}
 .sky{height:210px;border-radius:16px;overflow:hidden;position:relative;background:#000 center/cover;box-shadow:0 0 28px rgba(200,110,150,.16)}
 .sky.mono{box-shadow:0 0 24px rgba(180,190,210,.10)}
 .sky .tag{position:absolute;left:10px;top:10px;font-size:12px;font-weight:700;color:#E8EEF4;background:rgba(7,16,24,.72);padding:3px 9px;border-radius:999px;display:flex;gap:6px;align-items:center}
@@ -77,6 +78,42 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
 .toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
 [hidden]{display:none !important}
+
+.cmp{height:140px}
+.cmp canvas{object-fit:cover}
+#auto .cmp{height:132px}
+.card .k b{text-transform:none;letter-spacing:0;font-weight:800}
+.chip .tri{display:flex}.chip .tri i{margin-right:-2px}
+.chip.on .tri i{background:#1A1006 !important}
+.seg button:disabled{color:#4A5866;border:1px dashed #33404D;cursor:not-allowed}
+.seg button i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.seg button.on i{background:#1A1006 !important}
+.seg button:disabled i{opacity:.35}
+.duo{display:flex;align-items:center;gap:6px;margin-top:8px}
+.duo .seg{margin-top:0;flex:1 1 0}
+.duo .seg button{padding:0 2px;font-size:15px}
+.duo .arw{color:#8FA3B5;font-size:15px;font-weight:700;flex:none}
+.wrow{display:flex;align-items:center;gap:10px;height:40px}
+.wrow b{width:20px;font-size:15px}
+.wrow .wv{width:40px;text-align:right;font-size:15px;font-weight:700;color:#E8EEF4}
+.wrow input{flex:1;height:40px}
+.wrow i{width:8px;height:8px;border-radius:50%;flex:none}
+.need{display:flex;gap:8px;margin-top:4px}
+.need span{font:600 14px Inter,-apple-system,sans-serif;padding:4px 10px;border-radius:999px;border:1px solid #1C2B3A;display:flex;align-items:center;gap:6px}
+.need span.miss{border-style:dashed;color:#8FA3B5}
+.need span i{width:8px;height:8px;border-radius:50%}
+.card{background:#0E1A26;border:1px solid #1C2B3A;border-radius:16px;padding:12px 14px;margin-top:10px}
+.card .k{font-size:12px;font-weight:700;letter-spacing:.8px;color:#E8A05A;text-transform:uppercase}
+.card h3{font-size:19px;line-height:24px;margin-top:2px}
+.card .score{display:flex;align-items:baseline;gap:10px;margin-top:4px}
+.card .score b{white-space:nowrap}
+.card .score b{font-size:22px;color:#5CC9B5}
+.cands{display:flex;gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
+.cands button{flex:none;height:44px;padding:0 12px;border-radius:22px;border:1px solid #1C2B3A;background:#0B141E;color:#E8EEF4;font:600 14px Inter,-apple-system,sans-serif;cursor:pointer}
+.cands button.on{border-color:#5CC9B5;color:#5CC9B5}
+.cands button em{font-style:normal;color:#8FA3B5;margin-left:6px}
+.linkb{background:none;border:0;color:#5CC9B5;font:600 16px Inter,-apple-system,sans-serif;height:48px;cursor:pointer;align-self:flex-start;padding:0 2px}
+.btns .primary.sm{font-size:16px}
 </style></head>
 <body><div class="ph" id="ph">
 <div class="sb"><span>9:58</span><span>●●● ▮</span></div>
@@ -98,47 +135,96 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
   <div class="btns"><button class="primary" id="dl" type="button">Download FITS</button><button class="ghostb" id="share" type="button">Share</button></div>
 </div>
 
-<!-- empty filter -->
+<!-- empty filter / disabled RGB combine -->
 <div class="panel" id="empty" hidden>
   <div class="empty-card">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18" opacity=".5"/></svg>
     <h2 id="eTitle">No subs yet for this filter</h2>
     <p class="muted" id="eBody"></p>
+    <div class="need" id="eNeed" hidden></div>
   </div>
-  <div class="stats">
+  <div class="stats" id="eStats">
     <div class="stat"><b>0</b><span>SUBS</span></div>
     <div class="stat"><b>0m</b><span>INTEGRATION</span></div>
     <div class="stat"><b>0</b><span>RIGS</span></div>
   </div>
-  <p class="small note">Subs are grouped by the <code>FILTER</code> card in their FITS header. One-shot-color subs go to Color.</p>
+  <p class="small note" id="eNote">Subs are grouped by the <code>FILTER</code> card in their FITS header. One-shot-color subs go to Color.</p>
+</div>
+
+<!-- RGB combine -->
+<div class="panel" id="rgb" hidden>
+  <div class="cmp" id="cmpC" aria-label="Before and after. Drag to compare.">
+    <canvas width="700" height="400"></canvas>
+    <span class="lbl l">Color</span><span class="lbl r">Color + RGB</span><span class="sample">Sample data</span>
+    <span class="div"></span><span class="knob">‹›</span>
+  </div>
+  <div class="lblrow"><span class="lbt">Channel weights</span><span class="small" id="cInfo">29 subs · 1h 27m mono RGB</span></div>
+  <div id="weights"></div>
+  <div class="lblrow" style="margin-top:4px"><span class="lbt">Strength</span><span class="val" id="csv">50%</span></div>
+  <input type="range" id="cstr" min="0" max="100" step="1" value="50" aria-label="How much of the RGB composite goes into the Color master">
+  <div class="lblrow" style="margin-top:2px"><span class="lbt">Mix mode</span><span class="small">Into the Color master</span></div>
+  <div class="seg" id="cmodes"></div>
+  <p class="hint" id="chint"></p>
+  <div class="btns"><button class="primary" id="csave" type="button">Save as OSC+RGB</button><button class="ghostb" id="cshare" type="button">Share</button></div>
 </div>
 
 <!-- blend -->
 <div class="panel" id="blend" hidden>
-  <div class="seg" role="tablist" aria-label="Blend target" style="margin-top:0">
-    <button type="button" data-target="R" class="on">Ha → Red</button>
-    <button type="button" data-target="L">Ha → Lum</button>
+  <div class="seg" role="tablist" aria-label="Blend mode" style="margin-top:0" id="view">
+    <button type="button" data-view="manual" class="on">Manual</button>
+    <button type="button" data-view="auto" aria-label="Auto: pick a recipe for me">✦ Auto</button>
   </div>
-  <div class="cmp" id="cmp" aria-label="Before and after. Drag to compare.">
-    <canvas id="cv" width="700" height="400"></canvas>
-    <span class="lbl l">Before</span><span class="lbl r">After</span><span class="sample">Sample data</span>
-    <span class="div" id="div"></span><span class="knob" id="knob">‹›</span>
+  <div id="manual">
+    <div id="mEmpty" hidden>
+      <div class="empty-card" style="height:auto;min-height:170px;margin-top:10px">
+        <h2>Manual blend needs a broadband master</h2>
+        <p class="muted" id="mEmptyBody"></p>
+        <button class="linkb" type="button" id="toAuto">Open Auto ›</button>
+      </div>
+    </div>
+    <div id="mBody">
+      <div class="duo">
+        <div class="seg" id="srcs" role="radiogroup" aria-label="Narrowband to add"></div>
+        <span class="arw" aria-hidden="true">→</span>
+        <div class="seg" id="tgts" role="radiogroup" aria-label="Channel to add it to"></div>
+      </div>
+      <div class="cmp" id="cmpB" aria-label="Before and after. Drag to compare.">
+        <canvas width="700" height="400"></canvas>
+        <span class="lbl l">Before</span><span class="lbl r">After</span><span class="sample">Sample data</span>
+        <span class="div"></span><span class="knob">‹›</span>
+      </div>
+      <div class="lblrow" style="margin-top:10px"><span class="lbt">Strength</span><span class="val" id="sv">50%</span></div>
+      <input type="range" id="str" min="0" max="100" step="1" value="50" aria-label="Blend strength">
+      <div class="lblrow" style="margin-top:2px"><span class="lbt">Blend mode</span><span class="small" id="base">Into the Color master</span></div>
+      <div class="seg" id="modes"></div>
+      <p class="hint" id="hint"></p>
+      <div class="btns"><button class="primary" id="save" type="button">Save as HaRGB</button><button class="ghostb" id="share2" type="button">Share</button></div>
+    </div>
   </div>
-  <div class="lblrow" style="margin-top:10px"><span class="lbt">Strength</span><span class="val" id="sv">50%</span></div>
-  <input type="range" id="str" min="0" max="100" step="1" value="50" aria-label="Blend strength">
-  <div class="lblrow" style="margin-top:2px"><span class="lbt">Blend mode</span><span class="small" id="base">Into the Color master</span></div>
-  <div class="seg" id="modes"></div>
-  <p class="hint" id="hint"></p>
-  <div class="btns"><button class="primary" id="save" type="button">Save as HaRGB</button><button class="ghostb" id="share2" type="button">Share</button></div>
+  <div id="auto" hidden>
+    <div class="card" id="acard">
+      <div class="k">✦ Auto · <b id="aKick">HaRGB</b></div>
+      <h3 id="aTitle"></h3>
+      <p class="small" id="aWhy" style="margin-top:2px"></p>
+      <div class="score"><b id="aScore">0</b><span class="small" id="aRefs"></span></div>
+    </div>
+    <div class="cands" id="cands" role="radiogroup" aria-label="Auto candidates"></div>
+    <div class="cmp" id="cmpA" aria-label="Before and after. Drag to compare.">
+      <canvas width="700" height="400"></canvas>
+      <span class="lbl l" id="aBefore">Before</span><span class="lbl r">Auto</span><span class="sample">Sample data</span>
+      <span class="div"></span><span class="knob">‹›</span>
+    </div>
+    <div class="btns"><button class="primary sm" id="apply" type="button">Apply · save as HaRGB</button><button class="ghostb" id="tweak" type="button">Tweak</button></div>
+    <p class="hint" id="aNote">Mock stats until an AstroBin API key is added. Only numbers are compared; AstroBin images are never stored or shown.</p>
+  </div>
 </div>
 
-<div class="spacer"></div>
 <div class="tabs"><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</div></div>
 <div class="toast" id="toast">Prototype · saves a new FITS; nothing is saved here</div>
 </div>
 <script>
 // Mock data for the prototype. Real counts come from the party stack (GET /api/stacks/{id}/masters).
-const TABS = [
+const BASE_TABS = [
   {k:"color", label:"Color", accent:"#E8A05A", subs:15, sec:2700, rigs:["JB","AD","BA","CY","DM","EL"], note:"The same master as Live stack (6 rigs · 15 subs): one-shot-color subs, debayered and stacked. Mono filters have their own tabs."},
   {k:"L", label:"L", accent:"#E8EEF4", subs:24, sec:4320, rigs:["DM"], note:"Mono subs shot through L (luminance) on Dana's second rig. Grouped by FILTER = L / Lum."},
   {k:"R", label:"R", accent:"#F2555A", subs:10, sec:1800, rigs:["DM"], note:"Mono subs shot through the red filter."},
@@ -148,39 +234,60 @@ const TABS = [
   {k:"OIII", label:"OIII", accent:"#1FC8F0", subs:8, sec:2400, rigs:["EL"], note:"Mono subs shot through OIII. Brightest in the core."},
   {k:"SII", label:"SII", accent:"#F0B85A", subs:0, sec:0, rigs:[], note:""},
 ];
-const MODES = {
-  R:[{k:"screen",label:"Screen",hint:"Screen lifts red where Ha is bright and never clips. Good default for HaRGB."},
-     {k:"max",label:"Max",hint:"Max keeps whichever is brighter, red or Ha. Strongest nebula, can look punchy."},
-     {k:"add",label:"Add",hint:"Add puts strength × Ha signal on top of red (sky removed first). Like R + k·Ha in PixelMath."}],
-  L:[{k:"lighten",label:"Lighten",hint:"Lighten keeps the brighter of luminance and Ha. Color stays the same; detail comes from Ha."},
-     {k:"add",label:"Weighted",hint:"Weighted add puts strength × Ha signal into luminance (sky removed first). Hue is kept."},
-     {k:"screen",label:"Screen",hint:"Screen lifts luminance softly where Ha is bright and never clips."}],
+// Sample sets (hash sample=...): full party, one without blue subs, OSC + Ha only, mono Ha + OIII only.
+const SAMPLES = { full: null, noB: ["B"], oscha: ["L","R","G","B","OIII"], nb: ["color","L","R","G","B"] };
+let TABS = BASE_TABS;
+const ACC = Object.fromEntries(BASE_TABS.map((t) => [t.k, t.accent]));
+const MODE_HINT = {
+  screen: (s, t) => `Screen lifts ${t} where ${s} is bright; never clips.`,
+  max: (s, t) => `Max keeps the brighter of ${t} and ${s}. Punchiest.`,
+  add: (s, t) => `Adds strength × ${s} signal to ${t}, like ${t[0].toUpperCase()} + k·${s}.`,
+  lighten: (s) => `Keeps the brighter of luminance and ${s}; hue is kept.`,
+  wadd: (s) => `Adds strength × ${s} signal to luminance; hue is kept.`,
+  lscreen: (s) => `Screen lifts luminance where ${s} is bright; never clips.`,
 };
+const CH_MODES = [{k:"screen",label:"Screen"},{k:"max",label:"Max"},{k:"add",label:"Add"}];
+const MODES = { R: CH_MODES, G: CH_MODES, B: CH_MODES,
+  L: [{k:"lighten",label:"Lighten"},{k:"add",label:"Weighted"},{k:"screen",label:"Screen"}] };
+const TNAME = { R: "red", G: "green", B: "blue", L: "luminance" };
+const NATURAL = { Ha: "R", SII: "R", OIII: "G" };
+const product = (s, t) => t === "L" ? `${s}LRGB` : (s === "Ha" && t === "R" ? "HaRGB" : `RGB+${s}→${t}`);
+const CMODES = [{k:"average",label:"Weighted",hint:"Weighted average of the Color master and the mono RGB composite. More signal, lower noise; brightness stays the same."},
+                {k:"lighten",label:"Lighten",hint:"Lighten keeps the brighter of Color and the RGB composite, channel by channel. Lifts faint color without darkening anything."}];
 const $ = (id) => document.getElementById(id);
 const fmt = (s) => { const t = Math.round(s/60), h = Math.floor(t/60), m = t%60; return h ? `${h}h ${String(m).padStart(2,"0")}m` : `${m}m`; };
+const has = (k) => !!TABS.find((t) => t.k === k && t.subs);
 const strip = $("strip");
 const BLEND_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>';
-[...TABS, {k:"blend", label:"Blend"}].forEach((t) => {
-  const b = document.createElement("button");
-  b.type = "button"; b.className = "chip" + (t.k === "blend" ? " blend" : "") + (t.subs === 0 ? " empty" : "");
-  b.dataset.k = t.k; b.setAttribute("role", "tab");
-  b.setAttribute("aria-label", t.k === "blend" ? "Blend Ha into red or luminance" : `${t.label} master, ${t.subs ? t.subs + " subs" : "no subs yet"}`);
-  b.innerHTML = (t.k === "blend" ? BLEND_ICON : `<i style="background:${t.accent}"></i>`) + `<span>${t.label}</span>`;
-  b.onclick = () => show(t.k, true);
-  strip.appendChild(b);
-});
+const state = { tab: "color", sample: "full", src: "Ha", target: "R", mode: "screen", strength: 50, view: "manual",
+                w: [1, 1, 1], cmode: "average", cstr: 50, pick: null };
+const missingRGB = () => ["R","G","B"].filter((k) => !has(k));
+function buildStrip() {
+  strip.innerHTML = "";
+  const rgbMissing = missingRGB();
+  [...TABS, {k:"rgb", label:"RGB", subs: rgbMissing.length ? 0 : 1}, {k:"blend", label:"Blend", subs: 1}].forEach((t) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip" + (t.k === "blend" ? " blend" : "") + (t.subs === 0 ? " empty" : "");
+    b.dataset.k = t.k; b.setAttribute("role", "tab");
+    b.setAttribute("aria-label", t.k === "blend" ? "Blend narrowband into a channel, or Auto" : t.k === "rgb" ? (rgbMissing.length ? `RGB combine, missing ${rgbMissing.join(", ")}` : "RGB combine into Color") : `${t.label} master, ${t.subs ? t.subs + " subs" : "no subs yet"}`);
+    b.innerHTML = (t.k === "blend" ? BLEND_ICON : t.k === "rgb" ? `<span class="tri"><i style="background:${ACC.R}"></i><i style="background:${ACC.G}"></i><i style="background:${ACC.B}"></i></span>` : `<i style="background:${t.accent}"></i>`) + `<span>${t.label}</span>`;
+    b.onclick = () => show(t.k, true);
+    strip.appendChild(b);
+  });
+}
 function show(k, user) {
+  state.tab = k;
   [...strip.children].forEach((c) => {
     const on = c.dataset.k === k; c.classList.toggle("on", on); c.setAttribute("aria-selected", on);
-    if (on) { // keep the active chip in view without scrolling the page
-      const PEEK = 44; // keep a peek of the neighbouring chips
-      const l = c.offsetLeft - PEEK, r = c.offsetLeft + c.offsetWidth + PEEK - strip.clientWidth;
+    if (on) { const PEEK = 44; const l = c.offsetLeft - PEEK, r = c.offsetLeft + c.offsetWidth + PEEK - strip.clientWidth;
       const want = strip.scrollLeft > l ? l : (strip.scrollLeft < r ? r : strip.scrollLeft);
-      strip.scrollTo({ left: Math.max(0, want), behavior: user ? "smooth" : "auto" });
-    }
+      strip.scrollTo({ left: Math.max(0, want), behavior: user ? "smooth" : "auto" }); }
   });
   const t = TABS.find((x) => x.k === k);
-  $("chan").hidden = !(t && t.subs); $("empty").hidden = !(t && !t.subs); $("blend").hidden = k !== "blend";
+  const rgbOff = k === "rgb" && missingRGB().length > 0;
+  $("chan").hidden = !(t && t.subs); $("empty").hidden = !((t && !t.subs) || rgbOff);
+  $("rgb").hidden = k !== "rgb" || rgbOff; $("blend").hidden = k !== "blend";
+  $("eNeed").hidden = !rgbOff; $("eStats").hidden = rgbOff;
   if (t && t.subs) {
     const sky = $("sky");
     sky.style.backgroundImage = `url(master/${k}.jpg)`; sky.classList.toggle("mono", k !== "color");
@@ -189,115 +296,272 @@ function show(k, user) {
     $("tag").querySelector("span").textContent = k === "color" ? "Color · OSC" : `${t.label} · mono`;
     $("sSubs").textContent = t.subs; $("sTime").textContent = fmt(t.sec); $("sRigs").textContent = t.rigs.length;
     $("who").innerHTML = t.rigs.map((r) => `<span class="av">${r}</span>`).join("") + `<span class="small" style="margin-left:4px">${t.rigs.length === 1 ? "1 rig" : t.rigs.length + " rigs"} contributed</span>`;
-    $("note").textContent = t.note;
-    $("dl").textContent = `Download ${t.label} FITS`;
+    $("note").textContent = t.note; $("dl").textContent = `Download ${t.label} FITS`;
   } else if (t) {
     $("eTitle").textContent = `No subs yet for ${t.label}`;
     $("eBody").innerHTML = `Nobody at this party has shot ${t.label} yet. Mono subs with <code>FILTER = ${t.label}</code> will stack here.`;
+    $("eNote").innerHTML = "Subs are grouped by the <code>FILTER</code> card in their FITS header. One-shot-color subs go to Color.";
+  } else if (rgbOff) {
+    const m = missingRGB(), names = m.length === 1 ? m[0] : m.slice(0, -1).join(", ") + " and " + m.at(-1);
+    $("eTitle").textContent = `RGB combine needs ${m.length === 1 ? "a " : ""}${names} master${m.length === 1 ? "" : "s"}`;
+    $("eBody").innerHTML = `No ${names} subs yet. When someone shoots ${names}, the mono R, G and B masters combine here and blend into Color.`;
+    $("eNeed").innerHTML = ["R","G","B"].map((c) => `<span class="${has(c) ? "" : "miss"}"><i style="background:${ACC[c]}"></i>${c} ${has(c) ? "✓" : "missing"}</span>`).join("");
+    $("eNote").innerHTML = "Mono subs with <code>FILTER = B</code> (or Blue) count toward B.";
   }
-  if (k === "blend") renderBlend();
-  syncHash(k);
-  notify(k);
+  if (k === "rgb" && !rgbOff) renderCombine();
+  if (k === "blend") renderBlendPanel();
+  syncHash(); notify();
 }
-function syncHash(k) {
-  history.replaceState(null, "", "#tab=" + k + (k === "blend" ? `&target=${state.target}&mode=${state.mode}&strength=${state.strength}` : ""));
+function syncHash() {
+  const q = new URLSearchParams({ tab: state.tab });
+  if (state.sample !== "full") q.set("sample", state.sample);
+  if (state.tab === "blend") { q.set("view", state.view); if (state.view === "manual") { q.set("src", state.src); q.set("target", state.target); q.set("mode", state.mode); q.set("strength", state.strength); } else if (state.pick != null) q.set("pick", state.pick); }
+  if (state.tab === "rgb") { q.set("w", state.w.join(",")); q.set("cmode", state.cmode); q.set("cstr", state.cstr); }
+  history.replaceState(null, "", "#" + q.toString().replace(/%2C/g, ","));
 }
-function notify(k) {
+function notify() {
   if (window.parent === window) return;
-  const t = TABS.find((x) => x.k === k);
-  window.parent.postMessage({ type: "st-master-tab", tab: k, target: state.target,
-    label: k === "blend" ? (state.target === "R" ? "Blend · Ha to Red" : "Blend · Ha to Lum") : `Master tabs · ${t.label}`,
-    caption: k === "blend" ? CAPS.blend[state.target] : (t.subs ? CAPS.chan(t) : CAPS.empty(t)) }, "*");
+  const k = state.tab, t = TABS.find((x) => x.k === k);
+  let label, caption;
+  if (k === "blend" && state.view === "auto") { const a = AUTO && AUTO[autoKey()]; label = `Auto · ${a ? a.recipe : ""}`; caption = CAPS.auto(a); }
+  else if (k === "blend") { label = `Blend · ${state.src} to ${state.target === "L" ? "Lum" : state.target}`; caption = CAPS.blend(); }
+  else if (k === "rgb") { label = missingRGB().length ? "RGB combine · missing channel" : "RGB combine"; caption = missingRGB().length ? CAPS.rgbOff() : CAPS.rgb; }
+  else { label = `Master tabs · ${t.label}`; caption = t.subs ? CAPS.chan(t) : CAPS.empty(t); }
+  window.parent.postMessage({ type: "st-master-tab", tab: k, hash: location.hash.slice(1), label, caption }, "*");
 }
 const CAPS = {
   chan: (t) => `${t.label === "Color" ? "Color master (the same one Live stack shows)" : t.label + " master from the mono rigs"}: ${t.subs} subs, ${fmt(t.sec)} of integration, ${t.rigs.length} ${t.rigs.length === 1 ? "rig" : "rigs"}. Subs are grouped by the FITS FILTER header; one-shot-color subs go to Color. Sample data.`,
   empty: (t) => `Nobody has shot ${t.label} yet, so the tab shows an empty state. Empty filter chips are dashed so they read at a glance.`,
-  blend: { R: "Blend Ha into the red channel of the Color master. Set the strength (0–100%), pick Screen, Max or Add, drag across the preview to compare, then save it as a new HaRGB FITS. Sample data.",
-           L: "Blend Ha into luminance with Lighten, Weighted add or Screen. Hue is kept; only brightness and detail come from Ha. The masters are never changed; the blend is saved as its own FITS. Sample data." },
+  rgb: "RGB combine: the mono R, G and B masters are matched for background and brightness, weighted, and added to the Color master at the strength you pick (Weighted average or Lighten). Drag across the preview to compare; save it as its own FITS. Sample data.",
+  rgbOff: () => `With no ${missingRGB().join(", ")} subs, RGB combine is off and says which channel is missing. The RGB chip is dashed like an empty filter. Sample data.`,
+  blend: () => `Add ${state.src} into ${TNAME[state.target]}${state.target === "L" ? "" : " of the Color master"}. Pick Ha, OIII or SII (SII is off until someone shoots it), the channel, strength and mode; it saves as ${product(state.src, state.target)}. Sample data.`,
+  auto: (a) => a ? `Auto picks a recipe from the masters you have (${a.summary.replace(/\.$/, "")}) and scores a few strengths against reference stats of ${a.target}: ${a.recipe}, match ${a.score}/100. Apply saves it; Tweak opens Manual pre-filled. Reference stats are mock until an AstroBin API key is added. Sample data.` : "Auto",
 };
-// ---------------------------------------------------------------- blend (mock data, canvas)
-const state = { target: "R", mode: "screen", strength: 50, split: 0.5 };
-const imgs = {};
-let pix = null;
+// ---------------------------------------------------------------- image data (mock, canvas)
+const W = 700, H = 400, N = W * H;
+const IM = {};
 function load(name) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = `master/${name}.jpg`; }); }
-function read(im) { const c = document.createElement("canvas"); c.width = 700; c.height = 400; const x = c.getContext("2d"); x.drawImage(im, 0, 0); return x.getImageData(0, 0, 700, 400).data; }
-function median(a, stride, off) { const h = new Uint32Array(256); let n = 0; for (let i = off; i < a.length; i += stride) { h[a[i]]++; n++; } let c = 0; for (let v = 0; v < 256; v++) { c += h[v]; if (c >= n/2) return v/255; } return 0; }
-async function prep() {
-  const [color, ha, L] = await Promise.all([load("color"), load("Ha"), load("L")]);
-  const c = read(color), h = read(ha), l = read(L);
-  pix = { c, h, l, medR: median(c, 4, 0), medHa: median(h, 4, 0), medL: median(l, 4, 0) };
+function read(im) { const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"); x.drawImage(im, 0, 0, W, H); return x.getImageData(0, 0, W, H).data; }
+function plane(d, off) { const p = new Float32Array(N); for (let i = 0, j = off; i < N; i++, j += 4) p[i] = d[j] / 255; return p; }
+function stats(p) { // median and 99.5th percentile via a 1024-bin histogram
+  const h = new Uint32Array(1024); for (let i = 0; i < p.length; i++) h[Math.min(1023, Math.max(0, (p[i] * 1023) | 0))]++;
+  let c = 0, med = 0, top = 1; const n = p.length;
+  for (let v = 0; v < 1024; v++) { c += h[v]; if (!med && c >= n / 2) med = v / 1023; if (c >= n * 0.995) { top = v / 1023; break; } }
+  return { med, scale: Math.max(1e-3, top - med) };
 }
-function mix(base, ha, s, mode, medBase, medHa) {
-  if (mode === "add") return base + s * Math.max(0, ha - medHa);
-  const adj = ha - medHa + medBase;
+function blur(p) { // 5x5 box, twice: smooths the blotchy sample narrowband before blending
+  const t = new Float32Array(N), o = new Float32Array(N), R = 2;
+  for (let pass = 0; pass < 2; pass++) {
+    const src = pass ? o.slice() : p;
+    for (let y = 0; y < H; y++) { let s = 0; for (let x = -R; x <= R; x++) s += src[y * W + Math.min(W - 1, Math.max(0, x))];
+      for (let x = 0; x < W; x++) { t[y * W + x] = s / (2 * R + 1); s += src[y * W + Math.min(W - 1, x + R + 1)] - src[y * W + Math.max(0, x - R)]; } }
+    for (let x = 0; x < W; x++) { let s = 0; for (let y = -R; y <= R; y++) s += t[Math.min(H - 1, Math.max(0, y)) * W + x];
+      for (let y = 0; y < H; y++) { o[y * W + x] = s / (2 * R + 1); s += t[Math.min(H - 1, y + R + 1) * W + x] - t[Math.max(0, y - R) * W + x]; } }
+  }
+  return o;
+}
+let ready = null;
+function prep() {
+  if (ready) return ready;
+  ready = Promise.all(["color","L","R","G","B","Ha","OIII"].map(load)).then((ims) => {
+    const [c, L, R, G, B, Ha, O] = ims.map(read);
+    IM.color = [plane(c, 0), plane(c, 1), plane(c, 2)];
+    IM.L = plane(L, 0); IM.R = plane(R, 0); IM.G = plane(G, 0); IM.B = plane(B, 0);
+    IM.Ha = plane(Ha, 0); IM.OIII = plane(O, 0);
+    // narrowband as the blend sees it: lightly smoothed and blended with the sharp version (keeps stars, drops blotches)
+    for (const k of ["Ha", "OIII"]) { const b = blur(IM[k]); IM[k + "s"] = IM[k].map((v, i) => 0.35 * v + 0.65 * b[i]); }
+    for (const k of ["L","R","G","B","Ha","OIII","Has","OIIIs"]) IM[k + "st"] = stats(IM[k]);
+    IM.colorSt = IM.color.map(stats);
+    const lum = new Float32Array(N); for (let i = 0; i < N; i++) lum[i] = (IM.color[0][i] + IM.color[1][i] + IM.color[2][i]) / 3;
+    IM.colorLum = lum; IM.colorLumSt = stats(lum);
+    IM.before = toCanvas(IM.color);
+  });
+  return ready;
+}
+function toCanvas(planes) {
+  const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"); const id = x.createImageData(W, H), o = id.data;
+  const [r, g, b] = planes.length === 3 ? planes : [planes[0], planes[0], planes[0]];
+  for (let i = 0, j = 0; i < N; i++, j += 4) { o[j] = Math.min(255, Math.max(0, r[i] * 255)); o[j+1] = Math.min(255, Math.max(0, g[i] * 255)); o[j+2] = Math.min(255, Math.max(0, b[i] * 255)); o[j+3] = 255; }
+  x.putImageData(id, 0, 0); return c;
+}
+// soft shoulder so 100% Screen/Max does not run hot: the line signal approaches 0.75 smoothly instead of clipping
+const shoulder = (v) => 0.75 * (1 - Math.exp(-v / 0.75));
+function mix(base, nb, s, mode, medBase, medNb, gain) {
+  const sig = Math.max(0, nb - medNb) * gain;
+  if (mode === "add") return base + s * sig;
+  const y = shoulder(sig);
   let b;
-  if (mode === "max" || mode === "lighten") b = Math.max(base, adj);
-  else { const x = Math.min(1, Math.max(0, base)), y = Math.min(1, Math.max(0, adj)); b = 1 - (1 - x) * (1 - y); }
+  if (mode === "max" || mode === "lighten") b = Math.max(base, medBase + y);
+  else { const x = Math.min(1, Math.max(0, base)); b = 1 - (1 - x) * (1 - y); } // screen of the signal only: sky stays put
   return (1 - s) * base + s * b;
 }
-const cv = $("cv"), ctx = cv.getContext("2d");
-let outData = null;
-function renderBlend() {
-  updateControls();
-  if (!pix) { prep().then(renderBlend); return; }
-  const { c, h, medR, medHa } = pix, s = state.strength / 100;
-  const HA_GAIN = 2.0; // sample data: the Ha master is stretched harder than the OSC, like a real Ha master
-  const out = ctx.createImageData(700, 400), o = out.data;
-  const medLum = (medR + median(c, 4, 1) + median(c, 4, 2)) / 3;
-  for (let i = 0; i < c.length; i += 4) {
-    const r = c[i]/255, g = c[i+1]/255, b = c[i+2]/255, ha = medHa + Math.max(0, h[i]/255 - medHa) * HA_GAIN;
-    let R = r, G = g, B = b;
-    if (state.target === "R") R = mix(r, ha, s, state.mode, medR, medHa);
-    else {
-      const L = (r + g + b) / 3, L2 = mix(L, ha, s, state.mode, medLum, medHa);
-      if (L > 0.004) { const k = L2 / L; R = r*k; G = g*k; B = b*k; } else { R = G = B = L2; }
-      const m = Math.max(R, G, B); if (m > 1) { R /= m; G /= m; B /= m; } // keep hue when it would clip
-    }
-    o[i] = Math.min(255, R*255); o[i+1] = Math.min(255, G*255); o[i+2] = Math.min(255, B*255); o[i+3] = 255;
+// ---------------------------------------------------------------- compare widget
+function Compare(el) {
+  const cv = el.querySelector("canvas"), ctx = cv.getContext("2d"), div = el.querySelector(".div"), knob = el.querySelector(".knob");
+  const me = { split: 0.5, before: null, after: null };
+  me.draw = () => {
+    if (!me.after) return;
+    ctx.drawImage(me.after, 0, 0); const x = Math.round(W * me.split);
+    if (me.before && x > 0) ctx.drawImage(me.before, 0, 0, x, H, 0, 0, x, H);
+    const px = el.clientWidth * me.split; div.style.left = (px - 1) + "px"; knob.style.left = px + "px";
+  };
+  const drag = (e) => { const r = el.getBoundingClientRect(); me.split = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); me.draw(); };
+  el.addEventListener("pointerdown", (e) => { el.setPointerCapture(e.pointerId); drag(e); });
+  el.addEventListener("pointermove", (e) => { if (el.hasPointerCapture(e.pointerId)) drag(e); });
+  return me;
+}
+const cmpB = Compare($("cmpB")), cmpC = Compare($("cmpC")), cmpA = Compare($("cmpA"));
+// ---------------------------------------------------------------- RGB combine
+function renderCombine() {
+  updateCombineControls();
+  if (!IM.before) { prep().then(renderCombine); return; }
+  const P = ["R","G","B"].map((k) => IM[k]), S = ["R","G","B"].map((k) => IM[k + "st"]);
+  const mean = (S[0].scale + S[1].scale + S[2].scale) / 3, s = state.cstr / 100;
+  const comp = P.map((p, c) => { const o = new Float32Array(N), f = mean / S[c].scale * state.w[c]; for (let i = 0; i < N; i++) o[i] = (p[i] - S[c].med) * f; return o; });
+  const lum = new Float32Array(N); for (let i = 0; i < N; i++) lum[i] = (comp[0][i] + comp[1][i] + comp[2][i]) / 3;
+  const ls = stats(lum.map((v) => Math.max(0, v)));
+  const k = IM.colorLumSt.scale / Math.max(1e-3, ls.scale);
+  const out = IM.color.map((cp, c) => { const o = new Float32Array(N), bg = IM.colorSt[c].med;
+    for (let i = 0; i < N; i++) { const m = comp[c][i] * k + bg, other = state.cmode === "average" ? m : Math.max(cp[i], m); o[i] = (1 - s) * cp[i] + s * other; }
+    return o; });
+  cmpC.before = IM.before; cmpC.after = toCanvas(out); cmpC.draw();
+}
+function updateCombineControls() {
+  const box = $("weights");
+  if (!box.children.length) {
+    ["R","G","B"].forEach((c, i) => {
+      const row = document.createElement("div"); row.className = "wrow";
+      row.innerHTML = `<i style="background:${ACC[c]}"></i><b>${c}</b><input type="range" min="0" max="200" step="5" aria-label="${c} weight"><span class="wv"></span>`;
+      const inp = row.querySelector("input");
+      inp.addEventListener("input", () => { state.w[i] = Number(inp.value) / 100; paintW(); schedule(renderCombine); });
+      inp.addEventListener("change", syncHash);
+      box.appendChild(row);
+    });
   }
-  outData = out; draw();
+  paintW();
+  const m = $("cmodes"); m.innerHTML = "";
+  CMODES.forEach((md) => { const b = document.createElement("button"); b.type = "button"; b.textContent = md.label; b.className = md.k === state.cmode ? "on" : "";
+    b.onclick = () => { state.cmode = md.k; renderCombine(); syncHash(); }; m.appendChild(b); });
+  $("chint").textContent = CMODES.find((x) => x.k === state.cmode).hint;
+  $("csv").textContent = state.cstr + "%"; $("cstr").value = state.cstr; $("cstr").style.setProperty("--p", state.cstr + "%");
+  const rgbSubs = ["R","G","B"].reduce((n, k) => n + TABS.find((t) => t.k === k).subs, 0), rgbSec = ["R","G","B"].reduce((n, k) => n + TABS.find((t) => t.k === k).sec, 0);
+  $("cInfo").textContent = `${rgbSubs} subs · ${fmt(rgbSec)} mono RGB`;
 }
-function draw() {
-  if (!outData) return;
-  ctx.putImageData(outData, 0, 0);
-  const x = Math.round(700 * state.split);
-  ctx.drawImage(imgs.before || (imgs.before = toCanvas(pix.c)), 0, 0, x, 400, 0, 0, x, 400);
-  const px = $("cmp").clientWidth * state.split;
-  $("div").style.left = (px - 1) + "px"; $("knob").style.left = px + "px";
+function paintW() { [...$("weights").children].forEach((row, i) => { const inp = row.querySelector("input"); inp.value = Math.round(state.w[i] * 100); inp.style.setProperty("--p", (state.w[i] * 50) + "%"); row.querySelector(".wv").textContent = state.w[i].toFixed(2); }); }
+let raf = 0; function schedule(fn) { cancelAnimationFrame(raf); raf = requestAnimationFrame(fn); }
+$("cstr").addEventListener("input", (e) => { state.cstr = Number(e.target.value); $("csv").textContent = state.cstr + "%"; e.target.style.setProperty("--p", state.cstr + "%"); schedule(renderCombine); });
+$("cstr").addEventListener("change", syncHash);
+// ---------------------------------------------------------------- manual blend
+const baseAvailable = () => has("color") || has("L") || (has("R") && has("G") && has("B"));
+function renderBlendPanel() {
+  [...$("view").children].forEach((b) => b.classList.toggle("on", b.dataset.view === state.view));
+  $("manual").hidden = state.view !== "manual"; $("auto").hidden = state.view !== "auto";
+  if (state.view === "auto") renderAuto(); else renderBlend();
 }
-function toCanvas(d) { const c = document.createElement("canvas"); c.width = 700; c.height = 400; const x = c.getContext("2d"); const id = x.createImageData(700, 400); id.data.set(d); x.putImageData(id, 0, 0); return c; }
+function renderBlend() {
+  const ok = baseAvailable();
+  $("mEmpty").hidden = ok; $("mBody").hidden = !ok;
+  if (!ok) { $("mEmptyBody").textContent = "Manual adds Ha, OIII or SII into the R, G, B or luminance of a Color, RGB or L master. This party has only narrowband (Ha + OIII) so far; Auto builds HOO and Foraxx palettes from them."; return; }
+  if (!has(state.src)) state.src = ["Ha","OIII"].find(has) || "Ha";
+  updateControls();
+  if (!IM.before) { prep().then(renderBlend); return; }
+  const s = state.strength / 100, nb = IM[state.src + "s"], nst = IM[state.src + "sst"];
+  const GAIN = 1.35; // sample data: the narrowband master is stretched harder than the OSC, like a real one
+  const out = IM.color.map((p) => p.slice());
+  if (state.target === "L") {
+    const L = IM.colorLum, med = IM.colorLumSt.med;
+    for (let i = 0; i < N; i++) { const l = L[i], l2 = mix(l, nb[i], s, state.mode, med, nst.med, GAIN);
+      if (l > 0.004) { const k = l2 / l; let r = out[0][i] * k, g = out[1][i] * k, b = out[2][i] * k; const m = Math.max(r, g, b); if (m > 1) { r /= m; g /= m; b /= m; } out[0][i] = r; out[1][i] = g; out[2][i] = b; }
+      else out[0][i] = out[1][i] = out[2][i] = l2; }
+  } else {
+    const c = { R: 0, G: 1, B: 2 }[state.target], p = out[c], med = IM.colorSt[c].med;
+    for (let i = 0; i < N; i++) p[i] = mix(p[i], nb[i], s, state.mode, med, nst.med, GAIN);
+  }
+  cmpB.before = IM.before; cmpB.after = toCanvas(out); cmpB.draw();
+}
+function segButtons(el, items, value, onPick) {
+  el.innerHTML = "";
+  items.forEach((it) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "radio");
+    b.innerHTML = (it.dot ? `<i style="background:${it.dot}"></i>` : "") + it.label; b.className = it.k === value ? "on" : "";
+    b.setAttribute("aria-checked", it.k === value);
+    if (it.disabled) { b.disabled = true; b.setAttribute("aria-label", `${it.label}, no subs yet`); b.title = `No ${it.label} subs yet`; }
+    b.onclick = () => onPick(it.k); el.appendChild(b); });
+}
 function updateControls() {
-  document.querySelectorAll("[data-target]").forEach((b) => b.classList.toggle("on", b.dataset.target === state.target));
-  const modes = $("modes"); modes.innerHTML = "";
-  MODES[state.target].forEach((m) => {
-    const b = document.createElement("button"); b.type = "button"; b.textContent = m.label; b.className = m.k === state.mode ? "on" : "";
-    b.onclick = () => { state.mode = m.k; renderBlend(); syncHash("blend"); }; modes.appendChild(b);
-  });
-  $("hint").textContent = MODES[state.target].find((m) => m.k === state.mode).hint;
-  $("base").textContent = state.target === "R" ? "Into red of the Color master" : "Into luminance of the Color master";
-  $("save").textContent = state.target === "R" ? "Save as HaRGB" : "Save as Ha-L RGB";
-  $("sv").textContent = state.strength + "%";
-  $("str").value = state.strength; $("str").style.setProperty("--p", state.strength + "%");
+  segButtons($("srcs"), ["Ha","OIII","SII"].map((k) => ({ k, label: k, dot: ACC[k], disabled: !has(k) })), state.src,
+    (k) => { state.src = k; state.target = NATURAL[k]; state.mode = MODES[state.target][0].k; renderBlend(); syncHash(); notify(); });
+  segButtons($("tgts"), ["R","G","B","L"].map((k) => ({ k, label: k === "L" ? "Lum" : k })), state.target,
+    (k) => { state.target = k; state.mode = MODES[k][0].k; renderBlend(); syncHash(); notify(); });
+  segButtons($("modes"), MODES[state.target], state.mode, (k) => { state.mode = k; renderBlend(); syncHash(); });
+  const key = state.target === "L" ? { lighten: "lighten", add: "wadd", screen: "lscreen" }[state.mode] : state.mode;
+  $("hint").textContent = MODE_HINT[key](state.src, TNAME[state.target]);
+  $("base").textContent = `Into ${TNAME[state.target]} of the Color master`;
+  $("save").textContent = `Save as ${product(state.src, state.target)}`;
+  $("sv").textContent = state.strength + "%"; $("str").value = state.strength; $("str").style.setProperty("--p", state.strength + "%");
 }
-document.querySelectorAll("[data-target]").forEach((b) => b.onclick = () => { state.target = b.dataset.target; state.mode = MODES[state.target][0].k; renderBlend(); syncHash("blend"); notify("blend"); });
-let raf = 0;
-$("str").addEventListener("input", (e) => { state.strength = Number(e.target.value); $("sv").textContent = state.strength + "%"; e.target.style.setProperty("--p", state.strength + "%"); cancelAnimationFrame(raf); raf = requestAnimationFrame(renderBlend); });
-$("str").addEventListener("change", () => syncHash("blend"));
-const cmp = $("cmp");
-function drag(e) { const r = cmp.getBoundingClientRect(); state.split = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); draw(); }
-cmp.addEventListener("pointerdown", (e) => { cmp.setPointerCapture(e.pointerId); drag(e); });
-cmp.addEventListener("pointermove", (e) => { if (cmp.hasPointerCapture(e.pointerId)) drag(e); });
-function toast() { const t = $("toast"); t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1600); }
-$("dl").onclick = toast; $("share").onclick = toast; $("save").onclick = toast; $("share2").onclick = toast;
-// deep links: #tab=Ha, #tab=blend&target=L&mode=add&strength=70
+$("str").addEventListener("input", (e) => { state.strength = Number(e.target.value); $("sv").textContent = state.strength + "%"; e.target.style.setProperty("--p", state.strength + "%"); schedule(renderBlend); });
+$("str").addEventListener("change", syncHash);
+[...$("view").children].forEach((b) => b.onclick = () => { state.view = b.dataset.view; renderBlendPanel(); syncHash(); notify(); });
+$("toAuto").onclick = () => { state.view = "auto"; renderBlendPanel(); syncHash(); notify(); };
+// ---------------------------------------------------------------- Auto (engine output on sample data, mock reference stats)
+let AUTO = null; const AIMG = {};
+const autoKey = () => state.sample;
+function renderAuto() {
+  if (!AUTO) { fetch("master/auto.json").then((r) => r.json()).then((d) => { AUTO = d; renderAuto(); notify(); }); return; }
+  const a = AUTO[autoKey()], pick = state.pick ?? a.best, c = a.candidates[pick];
+  $("aKick").textContent = a.recipe;
+  $("aTitle").textContent = c.label;
+  $("aWhy").textContent = a.summary;
+  $("aScore").innerHTML = `${c.score}<span class="small" style="font-weight:700;color:#5CC9B5">/100 match</span>`;
+  $("aRefs").textContent = `compared to ${a.compared} sample reference images of ${a.target} (mock)`;
+  const cands = $("cands"); cands.innerHTML = "";
+  a.candidates.forEach((x, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", i === pick);
+    b.className = i === pick ? "on" : ""; b.innerHTML = `${x.label.replace(a.recipe + " · scale ", "Ha ×").replace(a.recipe + " · ", "")}${i === a.best ? " ✦" : ""}<em>${x.score}</em>`;
+    b.onclick = () => { state.pick = i; renderAuto(); syncHash(); }; cands.appendChild(b); });
+  $("apply").textContent = `Apply · save as ${c.recipe}`;
+  const palette = /^(HOO|SHO|Foraxx)/.test(c.recipe);
+  $("tweak").textContent = palette ? "Variants" : "Tweak";
+  $("aBefore").textContent = has("color") ? "Color" : "Ha";
+  const show = () => { cmpA.before = AIMG.before; cmpA.after = AIMG[autoKey() + pick]; cmpA.draw(); };
+  const need = [];
+  if (!AIMG[autoKey() + pick]) need.push(load(`auto_${autoKey()}_${pick}`).then((im) => { AIMG[autoKey() + pick] = toCanvasImg(im); }));
+  if (!AIMG.before || AIMG.beforeKey !== (has("color") ? "color" : "Ha")) need.push(load(has("color") ? "color" : "Ha").then((im) => { AIMG.before = toCanvasImg(im); AIMG.beforeKey = has("color") ? "color" : "Ha"; }));
+  if (need.length) Promise.all(need).then(show); else show();
+}
+function toCanvasImg(im) { const c = document.createElement("canvas"); c.width = W; c.height = H; c.getContext("2d").drawImage(im, 0, 0, W, H); return c; }
+$("tweak").onclick = () => {
+  const a = AUTO[autoKey()], c = a.candidates[state.pick ?? a.best];
+  if (/^(HOO|SHO|Foraxx)/.test(c.recipe) || !baseAvailable()) { $("cands").scrollIntoView({ block: "nearest" }); $("cands").animate([{ outline: "2px solid #5CC9B5" }, { outline: "0 solid transparent" }], { duration: 900 }); return; }
+  const scale = c.params.scale || 0.5, pct = Math.min(100, Math.round(scale / 1.4 * 100 / 5) * 5);
+  const m = /(Ha|OIII|SII)/.exec(c.recipe.replace(/^RGB\+/, "")); const src = m ? m[1] : "Ha";
+  state.src = src; state.target = c.recipe === "HaLRGB" ? "L" : NATURAL[src]; state.mode = MODES[state.target][0].k; state.strength = pct;
+  state.view = "manual"; renderBlendPanel(); syncHash(); notify();
+};
+function toast(msg) { const t = $("toast"); t.textContent = msg || "Prototype · saves a new FITS; nothing is saved here"; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1800); }
+["dl","share","save","share2","csave","cshare","apply"].forEach((id) => $(id).onclick = () => toast());
+// ---------------------------------------------------------------- deep links
+// #tab=Ha · #tab=rgb&w=1,1,1.2&cmode=lighten&cstr=60 · #tab=blend&src=OIII&target=G&mode=max&strength=70
+// #tab=blend&view=auto&sample=oscha|nb · sample=noB (no blue subs: RGB combine disabled)
 function fromHash() {
   const q = new URLSearchParams(location.hash.slice(1));
-  state.target = q.get("target") === "L" ? "L" : "R";
-  state.mode = MODES[state.target][0].k;
-  if (q.get("mode") && MODES[state.target].some((m) => m.k === q.get("mode"))) state.mode = q.get("mode");
+  const sample = SAMPLES.hasOwnProperty(q.get("sample")) ? q.get("sample") : "full";
+  if (sample !== state.sample || !strip.children.length) {
+    state.sample = sample; const drop = SAMPLES[sample] || [];
+    TABS = BASE_TABS.map((t) => drop.includes(t.k) ? { ...t, subs: 0, sec: 0, rigs: [] } : t);
+    state.pick = null; buildStrip();
+  }
+  state.src = ["Ha","OIII","SII"].includes(q.get("src")) && has(q.get("src")) ? q.get("src") : "Ha";
+  state.target = ["R","G","B","L"].includes(q.get("target")) ? q.get("target") : NATURAL[state.src];
+  state.mode = MODES[state.target].some((m) => m.k === q.get("mode")) ? q.get("mode") : MODES[state.target][0].k;
   state.strength = q.get("strength") ? Math.min(100, Math.max(0, Number(q.get("strength")) || 0)) : 50;
+  state.view = q.get("view") === "auto" ? "auto" : "manual";
+  state.pick = q.get("pick") != null && q.get("pick") !== "" ? Number(q.get("pick")) : null;
+  const w = (q.get("w") || "").split(",").map(Number); state.w = w.length === 3 && w.every((x) => x >= 0 && x <= 2) ? w : [1, 1, 1];
+  state.cmode = q.get("cmode") === "lighten" ? "lighten" : "average";
+  state.cstr = q.get("cstr") ? Math.min(100, Math.max(0, Number(q.get("cstr")) || 0)) : 50;
+  const sp = Number(q.get("split")); if (q.get("split") != null && sp >= 0 && sp <= 1) [cmpB, cmpC, cmpA].forEach((c) => c.split = sp);
   const start = q.get("tab");
-  show([...TABS.map((t) => t.k), "blend"].includes(start) ? start : "color", false);
+  show([...TABS.map((t) => t.k), "rgb", "blend"].includes(start) ? start : "color", false);
 }
 window.addEventListener("hashchange", fromHash);
 fromHash();

@@ -1,0 +1,200 @@
+{
+ "full": {
+  "recipe": "HaLRGB",
+  "label": "HaLRGB \u00b7 scale 1.55",
+  "reason": "L, R, G, B and Ha: Ha into red and into luminance (Ha SNR 2280 vs color 1287); HaLRGB \u00b7 scale 1.55 is closest to 5 reference images of M42 (best match on channels).",
+  "summary": "L, R, G, B and Ha: Ha into red and into luminance.",
+  "score": 41,
+  "target": "M42",
+  "compared": 5,
+  "provider": "fixture",
+  "best": 2,
+  "candidates": [
+   {
+    "label": "HaLRGB \u00b7 scale 0.62",
+    "recipe": "HaLRGB",
+    "score": 34,
+    "params": {
+     "scale": 0.62,
+     "lines": [
+      "Ha\u2192R",
+      "OIII\u2192G+B"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   },
+   {
+    "label": "HaLRGB \u00b7 scale 1.04",
+    "recipe": "HaLRGB",
+    "score": 38,
+    "params": {
+     "scale": 1.04,
+     "lines": [
+      "Ha\u2192R",
+      "OIII\u2192G+B"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   },
+   {
+    "label": "HaLRGB \u00b7 scale 1.55",
+    "recipe": "HaLRGB",
+    "score": 41,
+    "params": {
+     "scale": 1.55,
+     "lines": [
+      "Ha\u2192R",
+      "OIII\u2192G+B"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   }
+  ]
+ },
+ "noB": {
+  "recipe": "RGB+Ha+OIII",
+  "label": "RGB+Ha+OIII \u00b7 scale 1.33",
+  "reason": "Broadband color plus narrowband: each line into its matching channel (Ha SNR 2280 vs color 1872); RGB+Ha+OIII \u00b7 scale 1.33 is closest to 3 reference images of M42 (best match on channels).",
+  "summary": "Broadband color plus narrowband: each line into its matching channel.",
+  "score": 51,
+  "target": "M42",
+  "compared": 3,
+  "provider": "fixture",
+  "best": 2,
+  "candidates": [
+   {
+    "label": "RGB+Ha+OIII \u00b7 scale 0.53",
+    "recipe": "RGB+Ha+OIII",
+    "score": 30,
+    "params": {
+     "scale": 0.53,
+     "lines": [
+      "Ha\u2192R",
+      "OIII\u2192G+B"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   },
+   {
+    "label": "RGB+Ha+OIII \u00b7 scale 0.89",
+    "recipe": "RGB+Ha+OIII",
+    "score": 40,
+    "params": {
+     "scale": 0.89,
+     "lines": [
+      "Ha\u2192R",
+      "OIII\u2192G+B"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   },
+   {
+    "label": "RGB+Ha+OIII \u00b7 scale 1.33",
+    "recipe": "RGB+Ha+OIII",
+    "score": 51,
+    "params": {
+     "scale": 1.33,
+     "lines": [
+      "Ha\u2192R",
+      "OIII\u2192G+B"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   }
+  ]
+ },
+ "oscha": {
+  "recipe": "HaRGB",
+  "label": "HaRGB \u00b7 scale 0.89",
+  "reason": "Color plus Ha: continuum-subtracted Ha added to red (Ha SNR 2280 vs color 1872); HaRGB \u00b7 scale 0.89 is closest to 3 reference images of M42 (best match on saturation).",
+  "summary": "Color plus Ha: continuum-subtracted Ha added to red.",
+  "score": 64,
+  "target": "M42",
+  "compared": 3,
+  "provider": "fixture",
+  "best": 1,
+  "candidates": [
+   {
+    "label": "HaRGB \u00b7 scale 0.53",
+    "recipe": "HaRGB",
+    "score": 41,
+    "params": {
+     "scale": 0.53,
+     "lines": [
+      "Ha\u2192R"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   },
+   {
+    "label": "HaRGB \u00b7 scale 0.89",
+    "recipe": "HaRGB",
+    "score": 64,
+    "params": {
+     "scale": 0.89,
+     "lines": [
+      "Ha\u2192R"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   },
+   {
+    "label": "HaRGB \u00b7 scale 1.33",
+    "recipe": "HaRGB",
+    "score": 63,
+    "params": {
+     "scale": 1.33,
+     "lines": [
+      "Ha\u2192R"
+     ],
+     "continuum": "NBRGB q=bw/100nm"
+    }
+   }
+  ]
+ },
+ "nb": {
+  "recipe": "HOO",
+  "label": "HOO \u00b7 Ha 25% in green",
+  "reason": "Ha and OIII only, from mono Ha + OIII: bicolor HOO; HOO \u00b7 Ha 25% in green is closest to 2 reference images of M42 (best match on saturation).",
+  "summary": "Ha and OIII only, from mono Ha + OIII: bicolor HOO.",
+  "score": 65,
+  "target": "M42",
+  "compared": 2,
+  "provider": "fixture",
+  "best": 1,
+  "candidates": [
+   {
+    "label": "HOO \u00b7 Ha 0% in green",
+    "recipe": "HOO",
+    "score": 64,
+    "params": {
+     "ha_in_green": 0.0
+    }
+   },
+   {
+    "label": "HOO \u00b7 Ha 25% in green",
+    "recipe": "HOO",
+    "score": 65,
+    "params": {
+     "ha_in_green": 0.25
+    }
+   },
+   {
+    "label": "HOO \u00b7 Ha 40% in green",
+    "recipe": "HOO",
+    "score": 64,
+    "params": {
+     "ha_in_green": 0.4
+    }
+   },
+   {
+    "label": "Foraxx (HOO dynamic)",
+    "recipe": "Foraxx",
+    "score": 64,
+    "params": {
+     "dynamic": true
+    }
+   }
+  ]
+ }
+}
