@@ -1,0 +1,223 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=390">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico"><title>Star Party · Sky view (prototype)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#071018}
+body{width:390px;height:844px;color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.ph{position:relative;width:390px;height:844px;display:flex;flex-direction:column;padding:0 20px}
+.ph>*{flex-shrink:0}
+.sb{height:47px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;padding:0 8px}
+.top{height:52px;display:flex;align-items:center;justify-content:space-between;color:#8FA3B5;font-size:17px}
+.back{height:52px;min-width:88px;margin-left:-8px;padding:0 8px;display:flex;align-items:center;color:#8FA3B5;font-size:17px;font-weight:600;text-decoration:none}
+.live{font-size:12px;font-weight:700;color:#5CC9B5;border:1px solid #2A5A55;border-radius:999px;padding:3px 10px;display:flex;align-items:center;gap:6px}
+.live i{width:7px;height:7px;border-radius:50%;background:#5CC9B5;animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.3}}
+.party{font-size:15px;font-weight:600;color:#8FA3B5;line-height:21px}
+h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 4px}
+.small{font-size:13px;color:#8FA3B5;line-height:18px}
+.panel{display:flex;flex-direction:column;flex:1 1 auto !important;min-height:0;overflow-y:auto;scrollbar-width:none;padding-bottom:16px}
+.panel::-webkit-scrollbar{display:none}
+.panel>*{flex-shrink:0}
+.map{position:relative;width:350px;height:330px;border-radius:16px;overflow:hidden;background:#02050a;border:1px solid #1C2B3A;margin-top:8px;cursor:pointer;touch-action:none}
+.map canvas{position:absolute;inset:0;width:350px;height:330px}
+.map .cmp{position:absolute;right:8px;top:8px;font-size:11px;color:#8FA3B5;background:rgba(2,5,10,.7);padding:2px 7px;border-radius:999px}
+.map .smp{position:absolute;right:8px;bottom:8px;font-size:11px;font-weight:600;color:#B4C0CC;background:rgba(7,16,24,.72);padding:2px 8px;border-radius:999px}
+.map .scale{position:absolute;left:10px;bottom:10px;font-size:11px;color:#8FA3B5}
+.map .scale b{display:block;height:2px;background:#8FA3B5;margin-bottom:3px}
+.cov{display:flex;gap:6px;margin-top:10px}
+.cov div{flex:1;background:#0E1A26;border:1px solid #1C2B3A;border-radius:12px;padding:8px 10px}
+.cov b{display:block;font-size:17px}.cov span{font-size:11px;color:#8FA3B5;font-weight:600;letter-spacing:.3px}
+.lbt{font-size:13px;color:#8FA3B5;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin:14px 0 4px}
+.mem{display:flex;align-items:center;gap:10px;width:100%;min-height:58px;background:#0E1A26;border:1px solid #1C2B3A;border-radius:14px;padding:8px 12px;margin-top:6px;color:#E8EEF4;text-align:left;cursor:pointer;font:inherit}
+.mem.on{border-width:2px;padding:7px 11px}
+.mem .sw{width:16px;height:12px;border-radius:2px;border:2px solid;flex:none}
+.mem .sw.dash{border-style:dashed}
+.mem b{display:block;font-size:15px}.mem span{font-size:12px;color:#8FA3B5;line-height:16px}
+.mem .st{margin-left:auto;font-size:12px;font-weight:700;white-space:nowrap}
+.det{background:#0E1A26;border:2px solid;border-radius:16px;padding:10px 14px;margin-top:10px}
+.det b{font-size:17px}
+.det .g{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin-top:6px;font-size:13px}
+.det .g span:nth-child(odd){color:#8FA3B5}
+.credit{font-size:11px;color:#6E8293;line-height:15px;margin-top:12px}
+.tabs{height:83px;margin:0 -20px;border-top:1px solid #1C2B3A;display:flex;justify-content:space-around;padding-top:8px;background:#09131C}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:#8FA3B5;width:96px;height:60px;padding-top:4px}
+.tab svg{width:26px;height:26px}.tab.on{color:#E8A05A}
+.toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+[hidden]{display:none !important}
+</style></head>
+<body><div class="ph">
+<div class="sb"><span>9:58</span><span>●●● ▮</span></div>
+<div class="top"><a class="back" href="master.html">‹ Master</a><span class="live" id="live"><i></i>Live · updated 9:58 PM</span></div>
+<div class="panel">
+  <div class="party">Penobscot Bay Star Party</div>
+  <h1>Sky view · M42</h1>
+  <p class="small" id="sub">Everyone's field of view on the target. Tap a frame for the rig.</p>
+  <div class="map" id="map" role="img" aria-label="Sky map around M42 with each member's field of view">
+    <canvas id="cv" width="700" height="660"></canvas>
+    <span class="cmp">N ↑ · E ←</span><span class="scale" id="scale"><b></b>1°</span><span class="smp">Sample frames</span>
+  </div>
+  <div class="cov" id="cov"></div>
+  <div class="det" id="det" hidden></div>
+  <div class="lbt">Members</div>
+  <div id="mems"></div>
+  <div class="lbt" id="ovT">Overlap</div>
+  <p class="small" id="ov"></p>
+  <p class="credit" id="credit"></p>
+</div>
+<div class="tabs"><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</div></div>
+<div class="toast" id="toast"></div>
+</div>
+<script>
+// Prototype Sky view. Same geometry as backend/app/engine/sky.py: gnomonic projection, PA = image up, east of
+// north; image right = west. Frame size = scale x pixels (solved) or from the rig before a solve. Sample frames.
+const $ = (id) => document.getElementById(id);
+const RAD = Math.PI / 180, C0 = [83.8221, -5.3911];
+const COLORS = { justin: "#F2A541", amy: "#4FD1C5", bea: "#F472B6", dana: "#A78BFA" };
+const fovOf = (pix, wpx, hpx, efl) => [2 * Math.atan(wpx * pix / 1000 / (2 * efl)) / RAD, 2 * Math.atan(hpx * pix / 1000 / (2 * efl)) / RAD];
+const MEMBERS = [
+  { id: "justin", name: "Justin", rig: { name: "Backyard Newt", camera: "ZWO ASI2600MC Pro", telescope: "600 mm Newtonian (150 mm f/4)", scale: 1.293, px: [6248, 4176], efl: 600, pix: 3.76 },
+    solve: { source: "solved", via: "ASIAIR plate solve", ra: 83.835, dec: -5.42, pa: 0.4 } },
+  { id: "amy", name: "Amy", rig: { name: "80 mm refractor", camera: "ZWO ASI533MC Pro", telescope: "80 mm f/5 refractor", scale: 1.939, px: [3008, 3008], efl: 400, pix: 3.76 },
+    solve: { source: "solved", via: "astrometry.net (local)", ra: 83.74, dec: -5.17, pa: 37.0 } },
+  { id: "bea", name: "Bea", rig: { name: "EdgeHD 8 + 0.7×", camera: "ZWO ASI294MC Pro", telescope: "Celestron EdgeHD 8 · 0.7× reducer", scale: 0.671, px: [4144, 2822], efl: 1422, pix: 4.63 },
+    solve: { source: "estimated", via: "mount pointing + rig scale", ra: 83.86, dec: -5.36, pa: 0 } },
+  { id: "dana", name: "Dana", rig: null, solve: null },
+];
+let STARS = [], CREDIT = "", sel = null, phase = "start";
+function project(ra, dec) { const a = ra * RAD, d = dec * RAD, a0 = C0[0] * RAD, d0 = C0[1] * RAD;
+  const c = Math.sin(d0) * Math.sin(d) + Math.cos(d0) * Math.cos(d) * Math.cos(a - a0);
+  return [Math.cos(d) * Math.sin(a - a0) / c / RAD, (Math.cos(d0) * Math.sin(d) - Math.sin(d0) * Math.cos(d) * Math.cos(a - a0)) / c / RAD]; }
+function frameOf(m) {
+  if (!m.solve) return null;
+  const [w, h] = fovOf(m.rig.pix, m.rig.px[0], m.rig.px[1], m.rig.efl), pa = m.solve.pa * RAD;
+  const [cx, cy] = project(m.solve.ra, m.solve.dec), up = [Math.sin(pa), Math.cos(pa)], rt = [-Math.cos(pa), Math.sin(pa)];
+  const pts = [[1, 1], [1, -1], [-1, -1], [-1, 1]].map(([u, l]) => [cx + up[0] * h / 2 * u - rt[0] * w / 2 * l, cy + up[1] * h / 2 * u - rt[1] * w / 2 * l]);
+  return { m, w, h, pts, source: m.solve.source };
+}
+// tangent-plane polygon maths (Sutherland–Hodgman), as in the backend
+const area = (p) => Math.abs(p.reduce((s, a, i) => { const b = p[(i + 1) % p.length]; return s + a[0] * b[1] - b[0] * a[1]; }, 0)) / 2;
+function clip(subject, clipPoly) {
+  let out = subject; const ccw = clipPoly.reduce((s, a, i) => { const b = clipPoly[(i + 1) % clipPoly.length]; return s + a[0] * b[1] - b[0] * a[1]; }, 0) > 0;
+  for (let i = 0; i < clipPoly.length && out.length; i++) {
+    const A = clipPoly[i], B = clipPoly[(i + 1) % clipPoly.length], inp = out; out = [];
+    const side = (P) => { const v = (B[0] - A[0]) * (P[1] - A[1]) - (B[1] - A[1]) * (P[0] - A[0]); return ccw ? v >= 0 : v <= 0; };
+    const cross = (P, Q) => { const d = (P[0] - Q[0]) * (A[1] - B[1]) - (P[1] - Q[1]) * (A[0] - B[0]); const t = ((P[0] - A[0]) * (A[1] - B[1]) - (P[1] - A[1]) * (A[0] - B[0])) / d; return [P[0] + t * (Q[0] - P[0]), P[1] + t * (Q[1] - P[1])]; };
+    inp.forEach((P, j) => { const Q = inp[(j + inp.length - 1) % inp.length]; if (side(P)) { if (!side(Q)) out.push(cross(Q, P)); out.push(P); } else if (side(Q)) out.push(cross(Q, P)); });
+  }
+  return out;
+}
+function inside(pt, p) { let o = false; for (let i = 0, j = p.length - 1; i < p.length; j = i++) { const [xi, yi] = p[i], [xj, yj] = p[j]; if ((yi > pt[1]) !== (yj > pt[1]) && pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi) o = !o; } return o; }
+function analyse(frames) {
+  const pairs = [];
+  for (let i = 0; i < frames.length; i++) for (let j = i + 1; j < frames.length; j++) {
+    const a = frames[i], b = frames[j], inter = clip(a.pts, b.pts), ov = inter.length > 2 ? area(inter) : 0;
+    pairs.push({ a: a.m.name, b: b.m.name, pct: 100 * ov / Math.min(area(a.pts), area(b.pts)), sq: ov });
+  }
+  let un = 0, all = 0; const xs = frames.flatMap((f) => f.pts.map((p) => p[0])), ys = frames.flatMap((f) => f.pts.map((p) => p[1]));
+  if (frames.length) { const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), n = 160, cell = (x1 - x0) * (y1 - y0) / n / n;
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { const pt = [x0 + (i + .5) * (x1 - x0) / n, y0 + (j + .5) * (y1 - y0) / n]; const k = frames.filter((f) => inside(pt, f.pts)).length; if (k) un += cell; if (k === frames.length) all += cell; } }
+  return { pairs, union: un, all };
+}
+const sq = (x) => x < 1 ? `${Math.round(x * 3600)}′²` : `${x.toFixed(2)}°²`;
+const cv = $("cv"), ctx = cv.getContext("2d"), S = 2, Wc = 350, Hc = 330;
+let K = 92, OX = 0, OY = 0; // px per degree and view center (tangent plane), fitted to every frame
+const toScr = ([x, y]) => [Wc / 2 - (x - OX) * K, Hc / 2 - (y - OY) * K + 6];
+function fit() {
+  const pts = MEMBERS.map(frameOf).filter(Boolean).flatMap((f) => f.pts);
+  if (!pts.length) return;
+  const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+  OX = (Math.min(...xs) + Math.max(...xs)) / 2; OY = (Math.min(...ys) + Math.max(...ys)) / 2;
+  K = Math.min((Wc - 24) / (Math.max(...xs) - Math.min(...xs)), (Hc - 56) / (Math.max(...ys) - Math.min(...ys)));
+}
+function draw() {
+  fit();
+  ctx.setTransform(S, 0, 0, S, 0, 0); ctx.clearRect(0, 0, Wc, Hc);
+  // faint grid every 1°
+  ctx.strokeStyle = "rgba(143,163,181,.08)"; ctx.lineWidth = 1;
+  for (let g = -4; g <= 4; g++) { const a = toScr([g, -4]), b = toScr([g, 4]); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); const c = toScr([-4, g]), d = toScr([4, g]); ctx.beginPath(); ctx.moveTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.stroke(); }
+  // M42 / M43 glow (schematic, not an image)
+  const [mx, my] = toScr(project(83.8221, -5.3911));
+  let g = ctx.createRadialGradient(mx, my, 0, mx, my, 0.55 * K); g.addColorStop(0, "rgba(240,120,170,.38)"); g.addColorStop(.5, "rgba(200,90,140,.14)"); g.addColorStop(1, "rgba(200,90,140,0)");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(mx, my, 0.55 * K, 0.45 * K, -0.4, 0, 7); ctx.fill();
+  const [nx, ny] = toScr(project(83.8792, -5.27)); g = ctx.createRadialGradient(nx, ny, 0, nx, ny, 0.12 * K); g.addColorStop(0, "rgba(240,130,170,.3)"); g.addColorStop(1, "rgba(240,130,170,0)"); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(nx, ny, 0.12 * K, 0, 7); ctx.fill();
+  // stars
+  const named = [];
+  for (const s of STARS) { const [x, y] = toScr(project(s[0], s[1])); if (x < -4 || y < -4 || x > Wc + 4 || y > Hc + 4) continue;
+    const r = Math.max(0.6, Math.min(3.6, 3.9 - 0.33 * s[2])); ctx.fillStyle = `rgba(232,238,247,${Math.min(1, 1.25 - s[2] / 12)})`; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+    if (s[3] && s[2] < 5.4) named.push([s, x, y, r]); }
+  // labels: brightest first, skip any that would collide (Trapezium area is crowded)
+  ctx.fillStyle = "rgba(240,170,200,.9)"; ctx.font = "600 11px Inter, sans-serif";
+  const boxes = [[mx - 12, my + 0.5 * K, 30, 16], [nx + 6, ny - 18, 30, 16]];
+  ctx.fillText("M42", mx - 10, my + 0.5 * K + 12); ctx.fillText("M43", nx + 8, ny - 6);
+  const hit = (b) => boxes.some((o) => b[0] < o[0] + o[2] && o[0] < b[0] + b[2] && b[1] < o[1] + o[3] && o[1] < b[1] + b[3]);
+  ctx.font = "10px Inter, sans-serif"; ctx.fillStyle = "rgba(143,163,181,.85)";
+  for (const [s, x, y, r] of named.sort((a, b) => a[0][2] - b[0][2])) { const w = ctx.measureText(s[3]).width, bx = [x + r + 2, y - 8, w + 3, 13];
+    if (hit(bx)) continue; boxes.push(bx); ctx.fillText(s[3], x + r + 3, y + 3); }
+  // frames: pending (dashed) under solved
+  const frames = MEMBERS.map(frameOf).filter(Boolean).sort((a, b) => (a.source === "solved") - (b.source === "solved"));
+  for (const f of frames) {
+    const pts = f.pts.map(toScr), col = COLORS[f.m.id], on = sel === f.m.id;
+    ctx.save(); ctx.setLineDash(f.source === "solved" ? [] : [6, 4]); ctx.lineWidth = on ? 3 : 2; ctx.strokeStyle = col;
+    ctx.fillStyle = col + (on ? "26" : "10"); ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // up tick on the top edge: shows rotation
+    const t0 = pts[0], t1 = pts[1], mxp = [(t0[0] + t1[0]) / 2, (t0[1] + t1[1]) / 2], ux = (pts[0][0] - pts[3][0]), uy = (pts[0][1] - pts[3][1]), ul = Math.hypot(ux, uy);
+    ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(mxp[0], mxp[1]); ctx.lineTo(mxp[0] + ux / ul * 7, mxp[1] + uy / ul * 7); ctx.stroke();
+    const top = pts.reduce((a, p) => p[1] < a[1] ? p : a, pts[0]);
+    const label = f.m.name + (f.source === "solved" ? "" : " · pending solve");
+    ctx.font = "700 12px Inter, sans-serif"; const tw = ctx.measureText(label).width;
+    const lx = Math.min(Wc - tw - 10, Math.max(4, top[0] - tw / 2)), ly = Math.max(14, top[1] - 6);
+    ctx.fillStyle = "rgba(2,5,10,.78)"; ctx.fillRect(lx - 4, ly - 12, tw + 8, 16); ctx.fillStyle = col; ctx.fillText(label, lx, ly);
+    ctx.restore();
+  }
+  $("scale").querySelector("b").style.width = K + "px";
+  return frames;
+}
+function render() {
+  const frames = draw(), solved = frames.filter((f) => f.source === "solved"), a = analyse(frames);
+  $("cov").innerHTML = [[`${solved.length} of ${MEMBERS.length}`, "SOLVED"], [sq(a.union), "COVERED"], [sq(a.all), `ALL ${frames.length} OVERLAP`]].map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join("");
+  $("mems").innerHTML = MEMBERS.map((m) => { const f = frameOf(m), col = COLORS[m.id];
+    const st = !m.solve ? "Waiting" : m.solve.source === "solved" ? "Solved" : "Pending solve";
+    const line = m.rig ? `${m.rig.name} · ${f ? `${(f.w * 60).toFixed(0)}′×${(f.h * 60).toFixed(0)}′ · ${m.rig.scale.toFixed(2)}″/px` : ""}` : "No subs or rig yet";
+    return `<button class="mem${sel === m.id ? " on" : ""}" type="button" data-m="${m.id}" style="${sel === m.id ? `border-color:${col}` : ""}"><span class="sw${m.solve && m.solve.source === "solved" ? "" : " dash"}" style="border-color:${col}"></span><span><b>${m.name}</b><span>${line}</span></span><span class="st" style="color:${m.solve ? col : "#8FA3B5"}">${st}</span></button>`; }).join("");
+  $("mems").querySelectorAll("[data-m]").forEach((b) => b.onclick = () => pick(b.dataset.m));
+  $("ov").innerHTML = a.pairs.map((p) => `${p.a} ↔ ${p.b}: ${p.pct.toFixed(0)}% of the smaller frame (${sq(p.sq)})`).join("<br>");
+  const m = MEMBERS.find((x) => x.id === sel), det = $("det");
+  det.hidden = !m;
+  if (m) { const f = frameOf(m);
+    det.style.borderColor = COLORS[m.id];
+    det.innerHTML = `<b>${m.name}${m.rig ? " · " + m.rig.name : ""}</b><div class="g">` + (m.rig ? `<span>Camera</span><span>${m.rig.camera}</span><span>Scope</span><span>${m.rig.telescope}</span><span>Scale</span><span>${m.rig.scale.toFixed(2)}″/px</span>` : `<span>Rig</span><span>Not set yet</span>`) +
+      (f ? `<span>Field</span><span>${(f.w * 60).toFixed(0)}′ × ${(f.h * 60).toFixed(0)}′</span><span>Rotation</span><span>${m.solve.source === "solved" ? `PA ${m.solve.pa.toFixed(1)}°` : "unknown until solved (shown 0°)"}</span><span>Frame</span><span>${m.solve.source === "solved" ? "Solved · " + m.solve.via : "Pending solve · " + m.solve.via}</span>` : `<span>Frame</span><span>Waiting for a first sub</span>`) + "</div>";
+  }
+  $("credit").textContent = CREDIT + " Map drawn by Star Party; no third-party renderer code. Sample frames for 3 members.";
+  sync();
+}
+function pick(id) { sel = sel === id ? null : id; render(); }
+$("map").onclick = (e) => {
+  const r = cv.getBoundingClientRect(), pt = [e.clientX - r.left, e.clientY - r.top];
+  const hits = MEMBERS.map(frameOf).filter(Boolean).filter((f) => inside(pt, f.pts.map(toScr))).sort((a, b) => a.w * a.h - b.w * b.h);
+  sel = hits[0] ? hits[0].m.id : null; render();
+};
+function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2200); }
+// live: after a few seconds Bea's first sub plate-solves and her dashed frame snaps to the solved one
+function solveBea() { const b = MEMBERS.find((m) => m.id === "bea"); b.solve = { source: "solved", via: "astrometry.net (local)", ra: 83.83, dec: -5.40, pa: 352.5 }; phase = "solved"; $("live").lastChild.textContent = "Live · updated 9:59 PM"; render(); }
+function sync() {
+  const p = new URLSearchParams(); if (sel) p.set("sel", sel); if (phase === "solved") p.set("state", "solved");
+  history.replaceState(null, "", "#" + p.toString());
+  if (window.parent !== window) window.parent.postMessage({ type: "st-master-tab", tab: "sky", hash: location.hash.slice(1), label: phase === "solved" ? "Sky view · all solved" : sel ? "Sky view · frame details" : "Sky view · M42",
+    caption: phase === "solved" ? "Live update: Bea's first sub plate-solved, so her dashed rig-sized frame snapped to the solved position and rotation. Coverage and overlap update. Sample frames." :
+      sel ? "Tap a frame (or a member) for that member's rig: camera, scope, scale, field, rotation and whether the frame is solved. Sample frames." :
+      "Sky view: a star map centered on M42 with each member's field of view, color-coded, rotated and sized from their plate solve. Bea hasn't solved yet, so her frame is dashed, sized from her rig at the mount's pointing. Sample frames for 3 members." }, "*");
+}
+fetch("sky/stars_m42.json").then((r) => r.json()).then((d) => { STARS = d.stars; CREDIT = d.credit; init(); });
+function init() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  sel = MEMBERS.some((m) => m.id === p.get("sel")) ? p.get("sel") : null;
+  if (p.get("state") === "solved") solveBea(); else render();
+  if (p.get("live") === "1" && phase !== "solved") setTimeout(() => { solveBea(); toast("Bea's frame plate-solved"); }, 3500);
+}
+window.addEventListener("hashchange", () => { const p = new URLSearchParams(location.hash.slice(1)); const s = MEMBERS.some((m) => m.id === p.get("sel")) ? p.get("sel") : null; if (s !== sel) { sel = s; render(); } });
+</script>
+</body></html>

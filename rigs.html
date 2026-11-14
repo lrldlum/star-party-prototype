@@ -1,0 +1,239 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=390">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico"><title>Star Party · Profile rigs (prototype)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#071018}
+body{width:390px;height:844px;color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.ph{position:relative;width:390px;height:844px;display:flex;flex-direction:column;padding:0 20px}
+.ph>*{flex-shrink:0}
+.sb{height:47px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;padding:0 8px}
+.top{height:52px;display:flex;align-items:center;justify-content:space-between;color:#8FA3B5;font-size:17px}
+.back{height:52px;min-width:88px;margin-left:-8px;padding:0 8px;display:flex;align-items:center;color:#8FA3B5;font-size:17px;font-weight:600;background:none;border:0;cursor:pointer;font-family:inherit}
+h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 6px}
+.muted{color:#8FA3B5;font-size:15px;line-height:21px}
+.small{font-size:13px;color:#8FA3B5;line-height:18px}
+.panel{display:flex;flex-direction:column;flex:1 1 auto !important;min-height:0;overflow-y:auto;scrollbar-width:none;padding-bottom:16px}
+.panel::-webkit-scrollbar{display:none}
+.panel>*{flex-shrink:0}
+.head{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.h2{font-size:20px;font-weight:700}
+.add{height:44px;border-radius:22px;background:#E8A05A;color:#1A1006;border:0;font:700 15px Inter,-apple-system,sans-serif;padding:0 16px;cursor:pointer}
+.card{background:#0E1A26;border:1px solid #1C2B3A;border-radius:16px;padding:12px 14px;margin-top:10px}
+.card.def{border-color:#E8A05A}
+.card .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card b.n{font-size:17px}
+.pill{font-size:12px;font-weight:700;color:#E8A05A;border:1px solid #5A4126;border-radius:999px;padding:2px 9px}
+.stats{display:grid;grid-template-columns:1.05fr .85fr .85fr 1.4fr;gap:6px;margin-top:10px}
+.stat{background:#0B141E;border-radius:10px;padding:7px 6px;min-width:0}
+.stat b{display:block;font-size:14px;letter-spacing:-.2px;white-space:nowrap}
+.stat span{font-size:11px;color:#8FA3B5;font-weight:600}
+.acts{display:flex;gap:16px;margin-top:4px}
+.linkb{background:none;border:0;color:#5CC9B5;font:600 15px Inter,-apple-system,sans-serif;height:44px;cursor:pointer;padding:0 2px}
+.linkb.del{color:#F08A8A}
+.lbt{font-size:13px;color:#8FA3B5;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin:12px 0 5px}
+.in{width:100%;height:48px;border-radius:12px;border:1px solid #1C2B3A;background:#0B141E;color:#E8EEF4;font:500 16px Inter,-apple-system,sans-serif;padding:0 12px}
+.in.err{border-color:#B65454}
+.grid{display:flex;gap:8px}.grid>div{flex:1;min-width:0}
+.pick{display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left}
+.pick span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pick em{font-style:normal;color:#5CC9B5;font-weight:600;font-size:15px;flex:none;margin-left:8px}
+.results{background:#0E1A26;border:1px solid #1C2B3A;border-radius:12px;margin-top:6px;padding:6px}
+.hit{display:block;width:100%;text-align:left;background:none;border:0;color:#E8EEF4;min-height:48px;padding:6px 8px;border-radius:8px;cursor:pointer;font:inherit}
+.hit:hover,.hit.on{background:#13283A}
+.hit b{display:block;font-size:15px}.hit span{font-size:12px;color:#8FA3B5}
+.seg{display:flex;background:#0B141E;border:1px solid #1C2B3A;border-radius:14px;padding:4px;margin-top:8px}
+.seg button{flex:1 1 0;height:44px;border:0;border-radius:10px;font:600 15px Inter,-apple-system,sans-serif;color:#8FA3B5;background:transparent;cursor:pointer}
+.seg button.on{background:#E8A05A;color:#1A1006}
+.comp .k{font-size:12px;font-weight:700;letter-spacing:.8px;color:#E8A05A;text-transform:uppercase}
+.err-t{color:#F08A8A;font-size:12px;margin-top:3px}
+.primary{height:56px;border-radius:28px;background:#E8A05A;color:#1A1006;font:700 17px Inter,-apple-system,sans-serif;border:0;cursor:pointer;width:100%;margin-top:14px}
+.primary:disabled{opacity:.5}
+.sample{display:inline-block;font-size:11px;font-weight:700;color:#B4C0CC;border:1px solid #33404D;border-radius:999px;padding:1px 8px;vertical-align:3px;margin-left:6px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#0E1A26;border:1px solid #1C2B3A;border-radius:14px;padding:10px 12px;margin-top:8px;color:#E8EEF4;cursor:pointer;font:inherit;min-height:64px}
+.opt.on{border-color:#E8A05A;background:#1A1408}
+.opt .rd{width:20px;height:20px;border-radius:50%;border:2px solid #8FA3B5;flex:none}
+.opt.on .rd{border-color:#E8A05A;background:radial-gradient(#E8A05A 45%,transparent 50%)}
+.opt b{display:block;font-size:16px}.opt span{font-size:13px;color:#8FA3B5}
+.tabs{height:83px;margin:0 -20px;border-top:1px solid #1C2B3A;display:flex;justify-content:space-around;padding-top:8px;background:#09131C}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:#8FA3B5;width:96px;height:60px;padding-top:4px}
+.tab svg{width:26px;height:26px}.tab.on{color:#E8A05A}
+.dlg{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9}
+.dlg .box{background:#0E1A26;border:1px solid #1C2B3A;border-radius:18px;padding:18px;width:320px}
+.dlg h3{font-size:19px}.dlg .btns{display:flex;gap:10px;margin-top:14px}
+.dlg button{flex:1;height:48px;border-radius:24px;font:700 16px Inter,-apple-system,sans-serif;cursor:pointer}
+.dlg .c{background:transparent;border:1px solid #1C2B3A;color:#5CC9B5}.dlg .d{background:#B65454;border:0;color:#fff}
+.toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+[hidden]{display:none !important}
+</style></head>
+<body><div class="ph">
+<div class="sb"><span>9:58</span><span>●●● ▮</span></div>
+<div class="top"><button class="back" id="back" type="button">‹ Profile</button><span class="small">Sample data</span></div>
+<div class="panel" id="list">
+  <h1>Profile</h1>
+  <div class="head"><span class="h2">Rigs</span><button class="add" id="new" type="button">+ New rig</button></div>
+  <p class="small" style="margin-top:6px">Your gear is private. Party members only see a rig's name, camera, scope and field of view on frames you shoot.</p>
+  <div id="cards"></div>
+</div>
+<div class="panel" id="edit" hidden>
+  <h1 id="eT">Edit rig</h1>
+  <div class="lbt">Rig name</div><input class="in" id="fName" aria-label="Rig name">
+  <div class="lbt">Camera</div>
+  <button class="in pick" id="pCam" type="button"><span id="pCamT"></span><em>Search</em></button>
+  <div id="rCam" hidden></div>
+  <div class="seg" id="color" role="radiogroup" aria-label="Camera type"><button type="button" data-c="osc">One-shot color</button><button type="button" data-c="mono">Mono</button></div>
+  <div class="grid" style="margin-top:2px"><div><div class="lbt">Pixel µm</div><input class="in" id="fPix" inputmode="decimal"></div><div><div class="lbt">Width px</div><input class="in" id="fW" inputmode="numeric"></div><div><div class="lbt">Height px</div><input class="in" id="fH" inputmode="numeric"></div></div>
+  <div class="lbt">Telescope</div>
+  <button class="in pick" id="pTel" type="button"><span id="pTelT"></span><em>Search</em></button>
+  <div id="rTel" hidden></div>
+  <div class="grid"><div><div class="lbt">Aperture mm</div><input class="in" id="fAp" inputmode="numeric"><div class="err-t" id="eAp"></div></div><div><div class="lbt">Focal length mm</div><input class="in" id="fFl" inputmode="numeric"><div class="err-t" id="eFl"></div></div></div>
+  <div class="grid"><div><div class="lbt">Mount</div><button class="in pick" id="pMount" type="button"><span id="pMountT"></span><em>›</em></button><div id="rMount" hidden></div></div></div>
+  <div class="lbt">Reducer / flattener</div>
+  <div class="seg" id="red" role="radiogroup" aria-label="Reducer"><button type="button" data-f="1">None</button><button type="button" data-f="0.8">0.8×</button><button type="button" data-f="0.75">0.75×</button><button type="button" data-f="0.63">0.63×</button></div>
+  <div class="lbt">Binning</div>
+  <div class="seg" id="bin" role="radiogroup" aria-label="Binning"><button type="button" data-b="1">1×1</button><button type="button" data-b="2">2×2</button><button type="button" data-b="3">3×3</button><button type="button" data-b="4">4×4</button></div>
+  <div class="card comp"><div class="k">Computed</div><div class="stats" id="cStats"></div><p class="small" id="cLine" style="margin-top:6px"></p></div>
+  <button class="primary" id="save" type="button">Save rig</button>
+</div>
+<div class="panel" id="join" hidden>
+  <p class="small" style="margin-top:2px;font-weight:600">Penobscot Bay Star Party</p>
+  <h1>Join M42</h1>
+  <p class="muted">Which rig are you shooting with? Your subs and masters record it, and stacking and plate solving use its scale.</p>
+  <div id="jOpts" role="radiogroup" aria-label="Rig for this party"></div>
+  <button class="linkb" id="jNew" type="button">+ Add another rig</button>
+  <button class="primary" id="jGo" type="button">Join with Backyard Newt</button>
+</div>
+<div class="tabs"><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</div><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</div></div>
+<div class="dlg" id="dlg" hidden><div class="box"><h3 id="dT">Delete rig?</h3><p class="muted" style="margin-top:6px">Subs and masters you already shot keep their rig details.</p><div class="btns"><button class="c" id="dNo" type="button">Cancel</button><button class="d" id="dYes" type="button">Delete</button></div></div></div>
+<div class="toast" id="toast"></div>
+</div>
+<script>
+// Prototype: rigs live in memory (real app: /api/me/rigs, backend/app/rigs.py). Optics use the same formulas:
+// EFL = focal x reducer, f/ = EFL / aperture, scale = 206.265 x pixel x bin / EFL, FOV = 2 atan(sensor / 2 EFL).
+const PRESETS = {"camera": [{"model": "ZWO ASI2600MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 6248, "height_px": 4176}, {"model": "ZWO ASI2600MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 6248, "height_px": 4176}, {"model": "ZWO ASI533MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 3008, "height_px": 3008}, {"model": "ZWO ASI533MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 3008, "height_px": 3008}, {"model": "ZWO ASI294MC Pro", "color": "osc", "pixel_um": 4.63, "width_px": 4144, "height_px": 2822}, {"model": "ZWO ASI294MM Pro", "color": "mono", "pixel_um": 2.315, "width_px": 8288, "height_px": 5644}, {"model": "ZWO ASI183MM Pro", "color": "mono", "pixel_um": 2.4, "width_px": 5496, "height_px": 3672}, {"model": "ZWO ASI183MC Pro", "color": "osc", "pixel_um": 2.4, "width_px": 5496, "height_px": 3672}, {"model": "ZWO ASI1600MM Pro", "color": "mono", "pixel_um": 3.8, "width_px": 4656, "height_px": 3520}, {"model": "ZWO ASI071MC Pro", "color": "osc", "pixel_um": 4.78, "width_px": 4944, "height_px": 3284}, {"model": "ZWO ASI6200MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 9576, "height_px": 6388}, {"model": "ZWO ASI6200MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 9576, "height_px": 6388}, {"model": "ZWO ASI585MC Pro", "color": "osc", "pixel_um": 2.9, "width_px": 3840, "height_px": 2160}, {"model": "ZWO ASI678MC", "color": "osc", "pixel_um": 2.0, "width_px": 3840, "height_px": 2160}, {"model": "QHY268M", "color": "mono", "pixel_um": 3.76, "width_px": 6280, "height_px": 4210}, {"model": "QHY268C", "color": "osc", "pixel_um": 3.76, "width_px": 6280, "height_px": 4210}, {"model": "Player One Poseidon-C Pro", "color": "osc", "pixel_um": 3.76, "width_px": 6244, "height_px": 4168}, {"model": "Canon EOS Ra", "color": "osc", "pixel_um": 5.36, "width_px": 6720, "height_px": 4480}, {"model": "Nikon Z6 (astro modified)", "color": "osc", "pixel_um": 5.9, "width_px": 6048, "height_px": 4024}], "telescope": [{"model": "Justin's 600 mm Newtonian (150 mm f/4)", "aperture_mm": 150, "focal_mm": 600}, {"model": "80 mm f/5 refractor", "aperture_mm": 80, "focal_mm": 400}, {"model": "William Optics RedCat 51", "aperture_mm": 51, "focal_mm": 250}, {"model": "William Optics Zenithstar 61", "aperture_mm": 61, "focal_mm": 360}, {"model": "William Optics Zenithstar 73", "aperture_mm": 73, "focal_mm": 430}, {"model": "Askar FRA400", "aperture_mm": 72, "focal_mm": 400}, {"model": "Askar 107PHQ", "aperture_mm": 107, "focal_mm": 749}, {"model": "Sky-Watcher Esprit 100ED", "aperture_mm": 100, "focal_mm": 550}, {"model": "Sky-Watcher Evostar 72ED", "aperture_mm": 72, "focal_mm": 420}, {"model": "Sky-Watcher Quattro 200P", "aperture_mm": 200, "focal_mm": 800}, {"model": "Sky-Watcher 200PDS", "aperture_mm": 200, "focal_mm": 1000}, {"model": "Celestron EdgeHD 8", "aperture_mm": 203, "focal_mm": 2032}, {"model": "Celestron EdgeHD 11", "aperture_mm": 280, "focal_mm": 2800}, {"model": "Celestron RASA 8", "aperture_mm": 203, "focal_mm": 400}, {"model": "Takahashi FSQ-106EDX4", "aperture_mm": 106, "focal_mm": 530}, {"model": "Explore Scientific ED102", "aperture_mm": 102, "focal_mm": 714}], "mount": [{"model": "ZWO AM5"}, {"model": "ZWO AM3"}, {"model": "Sky-Watcher EQ6-R Pro"}, {"model": "Sky-Watcher HEQ5 Pro"}, {"model": "Sky-Watcher Star Adventurer GTi"}, {"model": "iOptron CEM40"}, {"model": "iOptron CEM26"}, {"model": "iOptron GEM28"}, {"model": "Celestron CGEM II"}, {"model": "Celestron AVX"}, {"model": "Rainbow Astro RST-135"}], "reducer": [{"model": "None", "factor": 1.0}, {"model": "0.8x reducer / flattener", "factor": 0.8}, {"model": "0.79x reducer / flattener", "factor": 0.79}, {"model": "0.72x reducer", "factor": 0.72}, {"model": "0.7x reducer", "factor": 0.7}, {"model": "Celestron 0.7x EdgeHD reducer", "factor": 0.7}, {"model": "0.63x SCT reducer", "factor": 0.63}, {"model": "Coma corrector (1.0x)", "factor": 1.0}, {"model": "Field flattener (1.0x)", "factor": 1.0}, {"model": "2x Barlow", "factor": 2.0}]};
+const $ = (id) => document.getElementById(id);
+let RIGS = [
+  {id:1, name:"Backyard Newt", def:true, camera:{model:"ZWO ASI2600MC Pro", color:"osc", pixel_um:3.76, width_px:6248, height_px:4176}, telescope:{model:"Justin's 600 mm Newtonian (150 mm f/4)", aperture_mm:150, focal_mm:600}, mount:"ZWO AM5", reducer:1, binning:1},
+  {id:2, name:"Grab-and-go RedCat", def:false, camera:{model:"ZWO ASI533MC Pro", color:"osc", pixel_um:3.76, width_px:3008, height_px:3008}, telescope:{model:"William Optics RedCat 51", aperture_mm:51, focal_mm:250}, mount:"Sky-Watcher Star Adventurer GTi", reducer:1, binning:1},
+  {id:3, name:"Mono narrowband", def:false, camera:{model:"ZWO ASI2600MM Pro", color:"mono", pixel_um:3.76, width_px:6248, height_px:4176}, telescope:{model:"80 mm f/6 refractor", aperture_mm:80, focal_mm:480}, mount:"ZWO AM5", reducer:0.8, binning:2},
+];
+let nextId = 4, cur = null, open = null, q = "", joinPick = null;
+function optics(r) {
+  const c = r.camera, t = r.telescope;
+  if (!(c.pixel_um >= 0.5 && c.pixel_um <= 30 && c.width_px > 0 && c.height_px > 0 && t.aperture_mm >= 10 && t.aperture_mm <= 2000 && t.focal_mm >= 20 && t.focal_mm <= 20000)) return null;
+  const efl = t.focal_mm * r.reducer, scale = 206.265 * c.pixel_um * r.binning / efl;
+  const deg = (mm) => 2 * Math.atan(mm / (2 * efl)) * 180 / Math.PI;
+  const fw = deg(c.width_px * c.pixel_um / 1000), fh = deg(c.height_px * c.pixel_um / 1000);
+  return { efl, f: efl / t.aperture_mm, scale, fw, fh };
+}
+const fov = (o) => o.fw * 60 >= 120 ? `${o.fw.toFixed(2)}° × ${o.fh.toFixed(2)}°` : `${(o.fw * 60).toFixed(0)}′ × ${(o.fh * 60).toFixed(0)}′`;
+const fovS = (o) => `${(o.fw * 60).toFixed(0)}′×${(o.fh * 60).toFixed(0)}′`;
+const statsHtml = (o) => o ? [[`${o.efl.toFixed(0)} mm`, "FOCAL"], [`f/${o.f.toFixed(1)}`, "F-RATIO"], [`${o.scale.toFixed(2)}″`, "PER PIXEL"], [fovS(o), "FIELD"]].map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("") : "";
+const sub = (r) => `${r.camera.model} · ${r.telescope.model}${r.reducer !== 1 ? ` · ${r.reducer}×` : ""}${r.binning > 1 ? ` · bin ${r.binning}` : ""}`;
+function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1600); }
+function renderList() {
+  $("cards").innerHTML = RIGS.map((r) => { const o = optics(r); return `<div class="card${r.def ? " def" : ""}"><button class="linkb" style="all:unset;display:block;width:100%;cursor:pointer" data-edit="${r.id}" aria-label="Edit ${r.name}">
+    <div class="row"><b class="n">${r.name}</b>${r.def ? '<span class="pill">Default</span>' : ""}</div><p class="small" style="margin-top:3px">${sub(r)}</p><div class="stats">${statsHtml(o)}</div></button>
+    <div class="acts">${r.def ? "" : `<button class="linkb" data-def="${r.id}">Make default</button>`}<button class="linkb" data-dup="${r.id}">Duplicate</button><button class="linkb del" data-del="${r.id}">Delete</button></div></div>`; }).join("");
+  $("cards").querySelectorAll("[data-edit]").forEach((b) => b.onclick = () => go("edit", +b.dataset.edit));
+  $("cards").querySelectorAll("[data-def]").forEach((b) => b.onclick = () => { RIGS.forEach((r) => r.def = r.id === +b.dataset.def); RIGS.sort((a, b) => b.def - a.def); renderList(); toast("Default rig updated"); });
+  $("cards").querySelectorAll("[data-dup]").forEach((b) => b.onclick = () => { const s = RIGS.find((r) => r.id === +b.dataset.dup); RIGS.push({ ...structuredClone(s), id: nextId++, def: false, name: "Copy of " + s.name }); renderList(); toast("Duplicated"); });
+  $("cards").querySelectorAll("[data-del]").forEach((b) => b.onclick = () => askDelete(+b.dataset.del));
+}
+function askDelete(id) { const r = RIGS.find((x) => x.id === id); $("dT").textContent = `Delete ${r.name}?`; $("dlg").hidden = false; $("dYes").onclick = () => { const was = r.def; RIGS = RIGS.filter((x) => x.id !== id); if (was && RIGS[0]) RIGS[0].def = true; $("dlg").hidden = true; renderList(); toast("Rig deleted"); sync(); }; }
+$("dNo").onclick = () => $("dlg").hidden = true;
+function results(kind, el) {
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  const hits = PRESETS[kind].filter((p) => words.every((w) => p.model.toLowerCase().includes(w))).slice(0, 5);
+  el.innerHTML = `<div class="results"><input class="in" id="q" placeholder="${kind === "camera" ? "Search cameras, e.g. 2600MC" : kind === "telescope" ? "Search scopes, e.g. Newtonian" : "Search mounts"}" value="${q.replace(/"/g, "&quot;")}" aria-label="Search ${kind} presets">` +
+    hits.map((h) => `<button class="hit" type="button" data-m="${h.model.replace(/"/g, "&quot;")}"><b>${h.model}</b><span>${kind === "camera" ? `${h.color.toUpperCase()} · ${h.pixel_um} µm · ${h.width_px}×${h.height_px}` : kind === "telescope" ? `${h.aperture_mm} mm · ${h.focal_mm} mm · f/${(h.focal_mm / h.aperture_mm).toFixed(1)}` : ""}</span></button>`).join("") +
+    `<p class="small" style="padding:6px 8px">${hits.length ? "" : "No preset matches. "}Not listed? Type your own values below.</p></div>`;
+  const inp = el.querySelector("#q"); inp.oninput = () => { q = inp.value; results(kind, el); el.querySelector("#q").focus(); const v = el.querySelector("#q"); v.setSelectionRange(v.value.length, v.value.length); };
+  el.querySelectorAll(".hit").forEach((b) => b.onclick = () => { const p = PRESETS[kind].find((x) => x.model === b.dataset.m);
+    if (kind === "camera") cur.camera = { model: p.model, color: p.color, pixel_um: p.pixel_um, width_px: p.width_px, height_px: p.height_px };
+    if (kind === "telescope") cur.telescope = { model: p.model, aperture_mm: p.aperture_mm, focal_mm: p.focal_mm };
+    if (kind === "mount") cur.mount = p.model;
+    open = null; q = ""; renderEdit(); sync(); });
+}
+function renderEdit() {
+  const r = cur; $("fName").value = r.name;
+  $("pCamT").textContent = r.camera.model || "Search camera presets…"; $("pTelT").textContent = r.telescope.model || "Search telescope presets…"; $("pMountT").textContent = r.mount || "Mount";
+  [...$("color").children].forEach((b) => b.classList.toggle("on", b.dataset.c === r.camera.color));
+  [...$("red").children].forEach((b) => b.classList.toggle("on", +b.dataset.f === r.reducer));
+  [...$("bin").children].forEach((b) => b.classList.toggle("on", +b.dataset.b === r.binning));
+  $("fPix").value = r.camera.pixel_um || ""; $("fW").value = r.camera.width_px || ""; $("fH").value = r.camera.height_px || "";
+  $("fAp").value = r.telescope.aperture_mm || ""; $("fFl").value = r.telescope.focal_mm || "";
+  $("rCam").hidden = open !== "camera"; $("rTel").hidden = open !== "telescope"; $("rMount").hidden = open !== "mount";
+  if (open === "camera") results("camera", $("rCam")); if (open === "telescope") results("telescope", $("rTel")); if (open === "mount") results("mount", $("rMount"));
+  paintComputed();
+}
+function paintComputed() {
+  const r = cur, o = optics(r);
+  const apE = r.telescope.aperture_mm && !(r.telescope.aperture_mm >= 10 && r.telescope.aperture_mm <= 2000) ? "Aperture (mm) must be between 10 and 2000" : "";
+  const flE = r.telescope.focal_mm && !(r.telescope.focal_mm >= 20 && r.telescope.focal_mm <= 20000) ? "Focal length (mm) must be between 20 and 20000" : "";
+  $("eAp").textContent = apE; $("eFl").textContent = flE; $("fAp").classList.toggle("err", !!apE); $("fFl").classList.toggle("err", !!flE);
+  $("cStats").innerHTML = statsHtml(o);
+  $("cLine").textContent = o ? `${(r.camera.width_px / r.binning) | 0} × ${(r.camera.height_px / r.binning) | 0} px after binning · plate-solve hint ${(o.scale * 0.9).toFixed(2)}–${(o.scale * 1.1).toFixed(2)}″/px` : "Fill in the camera and telescope to see focal length, f-ratio, arcsec per pixel and field of view.";
+  $("save").disabled = !o || !r.name.trim();
+}
+const num = (v) => v.trim() === "" ? 0 : Number(v.replace(",", "."));
+$("fName").oninput = (e) => { cur.name = e.target.value; paintComputed(); };
+$("fPix").oninput = (e) => { cur.camera.pixel_um = num(e.target.value); paintComputed(); };
+$("fW").oninput = (e) => { cur.camera.width_px = num(e.target.value); paintComputed(); };
+$("fH").oninput = (e) => { cur.camera.height_px = num(e.target.value); paintComputed(); };
+$("fAp").oninput = (e) => { cur.telescope.aperture_mm = num(e.target.value); paintComputed(); };
+$("fFl").oninput = (e) => { cur.telescope.focal_mm = num(e.target.value); paintComputed(); };
+[...$("color").children].forEach((b) => b.onclick = () => { cur.camera.color = b.dataset.c; renderEdit(); });
+[...$("red").children].forEach((b) => b.onclick = () => { cur.reducer = +b.dataset.f; renderEdit(); sync(); });
+[...$("bin").children].forEach((b) => b.onclick = () => { cur.binning = +b.dataset.b; renderEdit(); sync(); });
+$("pCam").onclick = () => { open = open === "camera" ? null : "camera"; q = ""; renderEdit(); sync(); };
+$("pTel").onclick = () => { open = open === "telescope" ? null : "telescope"; q = ""; renderEdit(); sync(); };
+$("pMount").onclick = () => { open = open === "mount" ? null : "mount"; q = ""; renderEdit(); };
+$("save").onclick = () => { const i = RIGS.findIndex((r) => r.id === cur.id); if (i >= 0) RIGS[i] = cur; else { cur.def = !RIGS.length; RIGS.push(cur); } go("list"); toast("Rig saved"); };
+$("new").onclick = () => go("new");
+$("back").onclick = () => go("list");
+function renderJoin() {
+  const pick = joinPick ?? (RIGS.find((r) => r.def) || RIGS[0]).id;
+  $("jOpts").innerHTML = RIGS.map((r) => { const o = optics(r); return `<button type="button" class="opt${r.id === pick ? " on" : ""}" role="radio" aria-checked="${r.id === pick}" data-j="${r.id}"><span class="rd"></span><span><b>${r.name}${r.def ? " · default" : ""}</b><span>${sub(r)}<br>${o ? `${o.scale.toFixed(2)}″/px · ${fov(o)}` : ""}</span></span></button>`; }).join("");
+  $("jOpts").querySelectorAll("[data-j]").forEach((b) => b.onclick = () => { joinPick = +b.dataset.j; renderJoin(); sync(); });
+  $("jGo").textContent = `Join with ${RIGS.find((r) => r.id === pick).name}`;
+}
+$("jNew").onclick = () => go("new");
+$("jGo").onclick = () => toast("Prototype · joins the party with this rig");
+let view = "list";
+function go(v, id) {
+  view = v; open = null; q = "";
+  if (v === "edit") cur = structuredClone(RIGS.find((r) => r.id === id) || RIGS[0]);
+  if (v === "new") cur = { id: nextId++, name: "", def: false, camera: { model: "", color: "osc", pixel_um: 0, width_px: 0, height_px: 0 }, telescope: { model: "", aperture_mm: 0, focal_mm: 0 }, mount: "", reducer: 1, binning: 1 };
+  $("list").hidden = v !== "list"; $("edit").hidden = !["edit", "new"].includes(v); $("join").hidden = v !== "join";
+  $("back").textContent = v === "join" ? "‹ Party" : v === "list" ? "‹ Tonight" : "‹ Profile";
+  $("eT").textContent = v === "new" ? "New rig" : "Edit rig"; $("save").textContent = v === "new" ? "Add rig" : "Save rig";
+  if (v === "list") renderList(); else if (v === "join") renderJoin(); else renderEdit();
+  sync();
+}
+const CAP = {
+  list: "Profile → Rigs: named rigs with camera, telescope, mount, reducer and binning; each shows effective focal length, f-ratio, arcsec per pixel and field of view. Make default, Duplicate, Delete. Sample data.",
+  edit: "Edit a rig: search camera and telescope presets (or type your own), OSC or mono, reducer and binning. The computed optics update live, with the plate-solve scale hint. Sample data.",
+  new: "New rig: start from a preset or custom values. Add rig stays off until the optics are valid; out-of-range values say why. Sample data.",
+  join: "Joining a party or target: pick which rig you're shooting with (the default is preselected). Subs and masters store it, so stacking and plate solving use its scale. Sample data.",
+};
+function sync() {
+  const p = new URLSearchParams({ view }); if (view === "edit") p.set("rig", cur.id); if (open) { p.set("search", open); if (q) p.set("q", q); }
+  if (view === "edit" && cur.reducer !== 1) p.set("red", cur.reducer); if (view === "edit" && cur.binning !== 1) p.set("bin", cur.binning);
+  if (view === "join" && joinPick) p.set("pick", joinPick);
+  history.replaceState(null, "", "#" + p.toString());
+  if (window.parent !== window) window.parent.postMessage({ type: "st-master-tab", tab: view, hash: location.hash.slice(1), label: { list: "Profile · Rigs", edit: "Edit rig", new: "New rig", join: "Join · choose a rig" }[view], caption: CAP[view] }, "*");
+}
+function fromHash() {
+  const p = new URLSearchParams(location.hash.slice(1)); const v = ["list", "edit", "new", "join"].includes(p.get("view")) ? p.get("view") : "list";
+  joinPick = p.get("pick") ? +p.get("pick") : null;
+  go(v, +p.get("rig") || 1);
+  if (v === "edit") { if (p.get("red")) cur.reducer = +p.get("red"); if (p.get("bin")) cur.binning = +p.get("bin"); if (p.get("search")) { open = p.get("search"); q = p.get("q") || ""; } renderEdit(); sync(); }
+  if (v === "new" && p.get("search")) { open = p.get("search"); q = p.get("q") || ""; renderEdit(); sync(); }
+}
+window.addEventListener("hashchange", fromHash);
+fromHash();
+</script>
+</body></html>
