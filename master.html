@@ -118,7 +118,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
 /* Blend manual: tighter rhythm (about 8px less per section) so Save + Share clear the tab bar */
 #mBody .cmp{margin-top:6px}
 #mBody .lblrow{margin-top:4px !important}
-#mBody input[type=range]{height:34px}
+#mBody input[type=range]{height:44px;margin:-5px 0}
 #mBody .seg{margin-top:4px}
 #mBody .hint{margin-top:4px}
 #mBody .btns,#pBody .btns{margin-top:8px}
@@ -141,12 +141,13 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
 #auto .btns{margin-top:10px}
 #rgb .hint{margin-top:4px}
 #rgb .wrow{height:32px}
-#rgb input[type=range]{height:34px}
+#rgb input[type=range]{height:44px;margin:-5px 0}
 #rgb .lblrow{margin-top:6px}
 #rgb .seg{margin-top:4px}
 #rgb .btns{margin-top:8px}
 .cands button{flex:1 1 0;min-width:0;height:52px;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:17px}
 .cands button .b{margin-left:0}
+.cands button .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .strip .tail{flex:none;width:72px;height:1px}
 </style></head>
 <body><div class="ph" id="ph">
@@ -225,7 +226,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
         <span class="div"></span><span class="knob">‹›</span>
       </div>
       <div class="lblrow" style="margin-top:4px"><span class="lbt">Ha in green</span><span class="val" id="pgv">20%</span></div>
-      <input type="range" id="pg" min="0" max="50" step="10" value="20" aria-label="How much Ha goes into green" style="height:34px">
+      <input type="range" id="pg" min="0" max="50" step="10" value="20" aria-label="How much Ha goes into green" style="height:44px">
       <p class="hint" id="phint" style="margin-top:4px"></p>
       <div class="btns"><button class="primary" id="psave" type="button">Save as HOO</button><button class="ghostb" id="pshare" type="button">Share</button></div>
     </div>
@@ -584,7 +585,7 @@ function renderAuto() {
   a.chips.forEach((x, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", i === pick);
     b.className = i === pick ? "on" : "";
     const name = x.label.replace(/^.* · scale /, "Ha ×").replace(/^HOO · Ha (\d+)% in green$/, "Ha $1% in G").replace(/^Foraxx.*$/, "Foraxx");
-    b.innerHTML = `<span>${i === 1 ? "✦ " : ""}${name}</span><span class="b ${x.band}">${x.band}</span>`;
+    b.innerHTML = `<span class="n">${name}</span><span class="b ${x.band}">${i === 1 ? "✦ " : ""}${x.band}</span>`;
     b.setAttribute("aria-label", `${x.label}, ${x.band} match${i === 1 ? ", recommended" : ""}`);
     b.onclick = () => { state.pick = i; renderAuto(); syncHash(); }; cands.appendChild(b); });
   $("apply").textContent = `Apply · save as ${c.recipe}`;
