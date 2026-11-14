@@ -46,13 +46,14 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 10px}
 .empty-card{height:210px;border:1px dashed #33404D;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 24px;gap:8px}
 .empty-card svg{width:40px;height:40px;color:#33404D}
 .empty-card h2{font-size:19px;line-height:24px}
+code{font:600 14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#E8EEF4;background:#13283A;border:1px solid #1C2B3A;border-radius:6px;padding:1px 6px;white-space:nowrap}
 .btns{display:flex;gap:10px;margin-top:14px}
 .primary{height:56px;border-radius:28px;background:#E8A05A;color:#1A1006;font:700 17px Inter,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;flex:1}
 .ghostb{height:56px;border-radius:28px;background:transparent;border:1px solid #1C2B3A;color:#5CC9B5;font:600 17px Inter,-apple-system,sans-serif;cursor:pointer;padding:0 18px}
 .seg{display:flex;background:#0B141E;border:1px solid #1C2B3A;border-radius:14px;padding:4px;margin-top:8px}
-.seg button{flex:1;height:48px;border:0;border-radius:10px;font:600 16px Inter,-apple-system,sans-serif;color:#8FA3B5;background:transparent;cursor:pointer}
+.seg button{flex:1 1 0;min-width:0;padding:0 6px;white-space:nowrap;height:48px;border:0;border-radius:10px;font:600 16px Inter,-apple-system,sans-serif;color:#8FA3B5;background:transparent;cursor:pointer}
 .seg button.on{background:#E8A05A;color:#1A1006}
-.cmp{position:relative;height:200px;border-radius:16px;overflow:hidden;margin-top:10px;background:#000;touch-action:none;cursor:ew-resize;box-shadow:0 0 28px rgba(200,110,150,.16)}
+.cmp{position:relative;height:178px;border-radius:16px;overflow:hidden;margin-top:10px;background:#000;touch-action:none;cursor:ew-resize;box-shadow:0 0 28px rgba(200,110,150,.16)}
 .cmp canvas{position:absolute;inset:0;width:100%;height:100%}
 .cmp .lbl{position:absolute;top:10px;font-size:12px;font-weight:700;background:rgba(7,16,24,.72);padding:3px 9px;border-radius:999px;pointer-events:none}
 .cmp .lbl.l{left:10px}.cmp .lbl.r{right:10px}
@@ -62,13 +63,13 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 10px}
 .lblrow{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}
 .lbt{font-size:13px;color:#8FA3B5;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
 .val{font-size:17px;font-weight:700;color:#E8A05A}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;margin-top:2px;cursor:pointer}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:40px;background:transparent;margin-top:0;cursor:pointer}
 input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#E8A05A var(--p,50%),#1C2B3A var(--p,50%))}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;border-radius:50%;background:#E8EEF4;border:3px solid #E8A05A;margin-top:-12px;box-shadow:0 2px 6px rgba(0,0,0,.5)}
 input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:#1C2B3A}
 input[type=range]::-moz-range-progress{height:8px;border-radius:4px;background:#E8A05A}
 input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#E8EEF4;border:3px solid #E8A05A}
-.hint{margin-top:8px;font-size:13px;color:#8FA3B5;line-height:18px;min-height:36px}
+.hint{margin-top:8px;font-size:13px;color:#8FA3B5;line-height:18px}
 .spacer{flex:1 1 auto}
 .tabs{height:83px;margin:0 -20px;border-top:1px solid #1C2B3A;display:flex;justify-content:space-around;padding-top:8px;background:#09131C}
 .tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:#8FA3B5;width:96px;height:60px;padding-top:4px}
@@ -79,7 +80,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
 </style></head>
 <body><div class="ph" id="ph">
 <div class="sb"><span>9:58</span><span>●●● ▮</span></div>
-<div class="top"><span class="back">‹ Live stack</span><span class="tr"><span class="stepn">Master</span><span class="menu" aria-label="Party menu">•••</span></span></div>
+<div class="top"><span class="back">‹ Live stack</span><span class="tr"><span class="menu" aria-label="Party menu">•••</span></span></div>
 <div class="party">Penobscot Bay Star Party</div>
 <h1>Master · M42</h1>
 <div class="strip" id="strip" role="tablist" aria-label="Master filters"></div>
@@ -109,7 +110,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
     <div class="stat"><b>0m</b><span>INTEGRATION</span></div>
     <div class="stat"><b>0</b><span>RIGS</span></div>
   </div>
-  <p class="small note">Subs are grouped by the FILTER card in their FITS header. One-shot-color subs go to Color.</p>
+  <p class="small note">Subs are grouped by the <code>FILTER</code> card in their FITS header. One-shot-color subs go to Color.</p>
 </div>
 
 <!-- blend -->
@@ -123,27 +124,28 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
     <span class="lbl l">Before</span><span class="lbl r">After</span><span class="sample">Sample data</span>
     <span class="div" id="div"></span><span class="knob" id="knob">‹›</span>
   </div>
-  <div class="lblrow"><span class="lbt">Strength</span><span class="val" id="sv">50%</span></div>
+  <div class="lblrow" style="margin-top:10px"><span class="lbt">Strength</span><span class="val" id="sv">50%</span></div>
   <input type="range" id="str" min="0" max="100" step="1" value="50" aria-label="Blend strength">
   <div class="lblrow" style="margin-top:2px"><span class="lbt">Blend mode</span><span class="small" id="base">Into the Color master</span></div>
   <div class="seg" id="modes"></div>
   <p class="hint" id="hint"></p>
+  <div class="btns"><button class="primary" id="save" type="button">Save as HaRGB</button><button class="ghostb" id="share2" type="button">Share</button></div>
 </div>
 
 <div class="spacer"></div>
 <div class="tabs"><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</div></div>
-<div class="toast" id="toast">Prototype · nothing is saved or downloaded</div>
+<div class="toast" id="toast">Prototype · saves a new FITS; nothing is saved here</div>
 </div>
 <script>
 // Mock data for the prototype. Real counts come from the party stack (GET /api/stacks/{id}/masters).
 const TABS = [
-  {k:"color", label:"Color", accent:"#E8A05A", subs:15, sec:2700, rigs:["JB","AD","BA","CY"], note:"One-shot-color subs (ASI2600MC and friends), debayered and stacked. Linear 32-bit FITS on the shared grid."},
-  {k:"L", label:"L", accent:"#E8EEF4", subs:24, sec:4320, rigs:["DM"], note:"Mono subs shot through L (luminance). Grouped by FILTER = L / Lum."},
+  {k:"color", label:"Color", accent:"#E8A05A", subs:15, sec:2700, rigs:["JB","AD","BA","CY","DM","EL"], note:"The same master as Live stack (6 rigs · 15 subs): one-shot-color subs, debayered and stacked. Mono filters have their own tabs."},
+  {k:"L", label:"L", accent:"#E8EEF4", subs:24, sec:4320, rigs:["DM"], note:"Mono subs shot through L (luminance) on Dana's second rig. Grouped by FILTER = L / Lum."},
   {k:"R", label:"R", accent:"#F2555A", subs:10, sec:1800, rigs:["DM"], note:"Mono subs shot through the red filter."},
-  {k:"G", label:"G", accent:"#5CC9B5", subs:10, sec:1800, rigs:["DM"], note:"Mono subs shot through the green filter."},
-  {k:"B", label:"B", accent:"#7FB8FF", subs:9, sec:1620, rigs:["DM"], note:"Mono subs shot through the blue filter."},
-  {k:"Ha", label:"Ha", accent:"#FF6B6B", subs:12, sec:3600, rigs:["AD","EL"], note:"Mono subs shot through Ha (7 nm and 3 nm). Picks up the faint outer hydrogen the color subs miss."},
-  {k:"OIII", label:"OIII", accent:"#4FD1E0", subs:8, sec:2400, rigs:["EL"], note:"Mono subs shot through OIII. Brightest in the core."},
+  {k:"G", label:"G", accent:"#62C46B", subs:10, sec:1800, rigs:["DM"], note:"Mono subs shot through the green filter."},
+  {k:"B", label:"B", accent:"#6C7CFF", subs:9, sec:1620, rigs:["DM"], note:"Mono subs shot through the blue filter."},
+  {k:"Ha", label:"Ha", accent:"#D21F6E", subs:12, sec:3600, rigs:["AD","EL"], note:"Mono subs shot through Ha (7 nm and 3 nm). Picks up the faint outer hydrogen the color subs miss."},
+  {k:"OIII", label:"OIII", accent:"#1FC8F0", subs:8, sec:2400, rigs:["EL"], note:"Mono subs shot through OIII. Brightest in the core."},
   {k:"SII", label:"SII", accent:"#F0B85A", subs:0, sec:0, rigs:[], note:""},
 ];
 const MODES = {
@@ -151,7 +153,7 @@ const MODES = {
      {k:"max",label:"Max",hint:"Max keeps whichever is brighter, red or Ha. Strongest nebula, can look punchy."},
      {k:"add",label:"Add",hint:"Add puts strength × Ha signal on top of red (sky removed first). Like R + k·Ha in PixelMath."}],
   L:[{k:"lighten",label:"Lighten",hint:"Lighten keeps the brighter of luminance and Ha. Color stays the same; detail comes from Ha."},
-     {k:"add",label:"Weighted add",hint:"Weighted add puts strength × Ha signal into luminance (sky removed first). Hue is kept."},
+     {k:"add",label:"Weighted",hint:"Weighted add puts strength × Ha signal into luminance (sky removed first). Hue is kept."},
      {k:"screen",label:"Screen",hint:"Screen lifts luminance softly where Ha is bright and never clips."}],
 };
 const $ = (id) => document.getElementById(id);
@@ -171,7 +173,8 @@ function show(k, user) {
   [...strip.children].forEach((c) => {
     const on = c.dataset.k === k; c.classList.toggle("on", on); c.setAttribute("aria-selected", on);
     if (on) { // keep the active chip in view without scrolling the page
-      const l = c.offsetLeft - 20, r = c.offsetLeft + c.offsetWidth + 20 - strip.clientWidth;
+      const PEEK = 44; // keep a peek of the neighbouring chips
+      const l = c.offsetLeft - PEEK, r = c.offsetLeft + c.offsetWidth + PEEK - strip.clientWidth;
       const want = strip.scrollLeft > l ? l : (strip.scrollLeft < r ? r : strip.scrollLeft);
       strip.scrollTo({ left: Math.max(0, want), behavior: user ? "smooth" : "auto" });
     }
@@ -190,11 +193,28 @@ function show(k, user) {
     $("dl").textContent = `Download ${t.label} FITS`;
   } else if (t) {
     $("eTitle").textContent = `No subs yet for ${t.label}`;
-    $("eBody").textContent = `Nobody at this party has shot ${t.label} yet. Mono subs with FILTER = ${t.label} will stack here.`;
+    $("eBody").innerHTML = `Nobody at this party has shot ${t.label} yet. Mono subs with <code>FILTER = ${t.label}</code> will stack here.`;
   }
   if (k === "blend") renderBlend();
-  history.replaceState(null, "", "#tab=" + k + (k === "blend" ? "&target=" + state.target : ""));
+  syncHash(k);
+  notify(k);
 }
+function syncHash(k) {
+  history.replaceState(null, "", "#tab=" + k + (k === "blend" ? `&target=${state.target}&mode=${state.mode}&strength=${state.strength}` : ""));
+}
+function notify(k) {
+  if (window.parent === window) return;
+  const t = TABS.find((x) => x.k === k);
+  window.parent.postMessage({ type: "st-master-tab", tab: k, target: state.target,
+    label: k === "blend" ? (state.target === "R" ? "Blend · Ha to Red" : "Blend · Ha to Lum") : `Master tabs · ${t.label}`,
+    caption: k === "blend" ? CAPS.blend[state.target] : (t.subs ? CAPS.chan(t) : CAPS.empty(t)) }, "*");
+}
+const CAPS = {
+  chan: (t) => `${t.label === "Color" ? "Color master (the same one Live stack shows)" : t.label + " master from the mono rigs"}: ${t.subs} subs, ${fmt(t.sec)} of integration, ${t.rigs.length} ${t.rigs.length === 1 ? "rig" : "rigs"}. Subs are grouped by the FITS FILTER header; one-shot-color subs go to Color. Sample data.`,
+  empty: (t) => `Nobody has shot ${t.label} yet, so the tab shows an empty state. Empty filter chips are dashed so they read at a glance.`,
+  blend: { R: "Blend Ha into the red channel of the Color master. Set the strength (0–100%), pick Screen, Max or Add, drag across the preview to compare, then save it as a new HaRGB FITS. Sample data.",
+           L: "Blend Ha into luminance with Lighten, Weighted add or Screen. Hue is kept; only brightness and detail come from Ha. The masters are never changed; the blend is saved as its own FITS. Sample data." },
+};
 // ---------------------------------------------------------------- blend (mock data, canvas)
 const state = { target: "R", mode: "screen", strength: 50, split: 0.5 };
 const imgs = {};
@@ -221,10 +241,11 @@ function renderBlend() {
   updateControls();
   if (!pix) { prep().then(renderBlend); return; }
   const { c, h, medR, medHa } = pix, s = state.strength / 100;
+  const HA_GAIN = 2.0; // sample data: the Ha master is stretched harder than the OSC, like a real Ha master
   const out = ctx.createImageData(700, 400), o = out.data;
   const medLum = (medR + median(c, 4, 1) + median(c, 4, 2)) / 3;
   for (let i = 0; i < c.length; i += 4) {
-    const r = c[i]/255, g = c[i+1]/255, b = c[i+2]/255, ha = h[i]/255;
+    const r = c[i]/255, g = c[i+1]/255, b = c[i+2]/255, ha = medHa + Math.max(0, h[i]/255 - medHa) * HA_GAIN;
     let R = r, G = g, B = b;
     if (state.target === "R") R = mix(r, ha, s, state.mode, medR, medHa);
     else {
@@ -250,28 +271,35 @@ function updateControls() {
   const modes = $("modes"); modes.innerHTML = "";
   MODES[state.target].forEach((m) => {
     const b = document.createElement("button"); b.type = "button"; b.textContent = m.label; b.className = m.k === state.mode ? "on" : "";
-    b.onclick = () => { state.mode = m.k; renderBlend(); }; modes.appendChild(b);
+    b.onclick = () => { state.mode = m.k; renderBlend(); syncHash("blend"); }; modes.appendChild(b);
   });
   $("hint").textContent = MODES[state.target].find((m) => m.k === state.mode).hint;
   $("base").textContent = state.target === "R" ? "Into red of the Color master" : "Into luminance of the Color master";
+  $("save").textContent = state.target === "R" ? "Save as HaRGB" : "Save as Ha-L RGB";
   $("sv").textContent = state.strength + "%";
   $("str").value = state.strength; $("str").style.setProperty("--p", state.strength + "%");
 }
-document.querySelectorAll("[data-target]").forEach((b) => b.onclick = () => { state.target = b.dataset.target; state.mode = MODES[state.target][0].k; renderBlend(); history.replaceState(null, "", "#tab=blend&target=" + state.target); });
+document.querySelectorAll("[data-target]").forEach((b) => b.onclick = () => { state.target = b.dataset.target; state.mode = MODES[state.target][0].k; renderBlend(); syncHash("blend"); notify("blend"); });
 let raf = 0;
 $("str").addEventListener("input", (e) => { state.strength = Number(e.target.value); $("sv").textContent = state.strength + "%"; e.target.style.setProperty("--p", state.strength + "%"); cancelAnimationFrame(raf); raf = requestAnimationFrame(renderBlend); });
+$("str").addEventListener("change", () => syncHash("blend"));
 const cmp = $("cmp");
 function drag(e) { const r = cmp.getBoundingClientRect(); state.split = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); draw(); }
 cmp.addEventListener("pointerdown", (e) => { cmp.setPointerCapture(e.pointerId); drag(e); });
 cmp.addEventListener("pointermove", (e) => { if (cmp.hasPointerCapture(e.pointerId)) drag(e); });
 function toast() { const t = $("toast"); t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1600); }
-$("dl").onclick = toast; $("share").onclick = toast;
+$("dl").onclick = toast; $("share").onclick = toast; $("save").onclick = toast; $("share2").onclick = toast;
 // deep links: #tab=Ha, #tab=blend&target=L&mode=add&strength=70
-const q = new URLSearchParams(location.hash.slice(1));
-if (q.get("target") === "L") { state.target = "L"; state.mode = "lighten"; }
-if (q.get("mode") && MODES[state.target].some((m) => m.k === q.get("mode"))) state.mode = q.get("mode");
-if (q.get("strength")) state.strength = Math.min(100, Math.max(0, Number(q.get("strength")) || 0));
-const start = q.get("tab");
-show([...TABS.map((t) => t.k), "blend"].includes(start) ? start : "color", false);
+function fromHash() {
+  const q = new URLSearchParams(location.hash.slice(1));
+  state.target = q.get("target") === "L" ? "L" : "R";
+  state.mode = MODES[state.target][0].k;
+  if (q.get("mode") && MODES[state.target].some((m) => m.k === q.get("mode"))) state.mode = q.get("mode");
+  state.strength = q.get("strength") ? Math.min(100, Math.max(0, Number(q.get("strength")) || 0)) : 50;
+  const start = q.get("tab");
+  show([...TABS.map((t) => t.k), "blend"].includes(start) ? start : "color", false);
+}
+window.addEventListener("hashchange", fromHash);
+fromHash();
 </script>
 </body></html>

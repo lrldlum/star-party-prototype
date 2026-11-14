@@ -26,7 +26,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     body {
-      padding: 16px 16px 108px;
+      padding: 16px 16px 32px;
       max-width: 480px;
       margin: 0 auto;
     }
@@ -106,13 +106,8 @@
       font-size: 1rem;
     }
     .bar {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-      background: rgba(11,16,32,0.96);
-      border-top: 1px solid var(--line);
+      max-width: 390px;
+      margin: 0 auto 16px;
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
@@ -137,12 +132,12 @@
   <h2 id="title"></h2>
   <p class="caption" id="caption"></p>
   <div class="phone" id="phone"><img id="screen" alt="" /><iframe id="live" title="Interactive screen" hidden></iframe></div>
-  <label for="list">Screen list</label>
-  <select id="list"></select>
   <div class="bar">
     <button class="back" id="back" type="button">Back</button>
     <button class="next" id="next" type="button">Next</button>
   </div>
+  <label for="list">Screen list</label>
+  <select id="list"></select>
   <script>
     const SCREENS = [
       {"id": "01_welcome", "title": "Welcome", "step": "Account", "caption": "Get started is the one primary action. I already have an account is the quiet alternative."},
@@ -206,7 +201,9 @@
         img.hidden = true;
         img.removeAttribute("src");
         live.hidden = false;
-        if (live.dataset.src !== s.live) { live.src = s.live; live.dataset.src = s.live; }
+        const loaded = live.dataset.src && live.contentWindow && live.contentWindow.location.pathname.endsWith(s.live.split("#")[0]);
+        if (loaded) live.contentWindow.location.hash = s.live.split("#")[1];
+        else { live.src = s.live; live.dataset.src = s.live; }
         live.title = "Interactive Star Party screen: " + s.title;
       } else {
         live.hidden = true;
@@ -218,7 +215,7 @@
       list.value = String(index);
       back.disabled = index === 0;
       next.disabled = index === SCREENS.length - 1;
-      window.scrollTo({ top: 0, behavior: "instant" });
+      if (!s.live) window.scrollTo({ top: 0, behavior: "instant" });
     }
     function go(delta) {
       const nextIndex = index + delta;
@@ -246,6 +243,14 @@
         go(dx < 0 ? 1 : -1);
       }
     }, { passive: true });
+    window.addEventListener("message", (e) => {
+      const d = e.data;
+      if (!d || d.type !== "st-master-tab" || e.source !== live.contentWindow || !SCREENS[index].live) return;
+      const match = SCREENS.findIndex((s) => s.live && (s.live === "master.html#tab=" + d.tab || (d.tab === "blend" && s.live === "master.html#tab=blend&target=" + d.target)));
+      if (match >= 0) { index = match; list.value = String(index); step.textContent = (index + 1) + " of " + SCREENS.length + " · " + SCREENS[index].step; back.disabled = index === 0; next.disabled = index === SCREENS.length - 1; }
+      title.textContent = d.label;
+      caption.textContent = d.caption;
+    });
     const hashId = location.hash.slice(1);
     const hashIndex = SCREENS.findIndex((s) => s.id === hashId || (hashId === "master" && s.id === "15a_master_color"));
     if (hashIndex >= 0) index = hashIndex;
