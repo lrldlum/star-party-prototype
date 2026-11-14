@@ -3,29 +3,30 @@
   "recipe": "HaRGB",
   "label": "HaRGB \u00b7 scale 1.45",
   "summary": "Ha added to red, continuum removed.",
-  "reason": "Ha added to red, continuum removed (Ha SNR 2280 vs color 1287); HaRGB \u00b7 scale 1.45 is closest to 3 reference images of M42 (also tried HaLRGB close, RGB+Ha+OIII close).",
-  "score": 64,
+  "reason": "Ha added to red, continuum removed (Ha SNR 2280 vs color 1287); HaRGB \u00b7 scale 1.45 is closest to 4 reference images of M42 (also tried HaLRGB close, RGB+Ha+OIII close).",
+  "score": 62,
   "band": "Good",
   "target": "M42",
-  "compared": 3,
+  "compared": 4,
   "provider": "fixture",
   "families": [
    {
     "recipe": "HaLRGB",
-    "score": 56,
+    "score": 53,
     "band": "Close"
    },
    {
     "recipe": "HaRGB",
-    "score": 64,
+    "score": 62,
     "band": "Good"
    },
    {
     "recipe": "RGB+Ha+OIII",
-    "score": 53,
+    "score": 43,
     "band": "Close"
    }
   ],
+  "before": "auto_full_base.png",
   "chips": [
    {
     "label": "HaRGB \u00b7 scale 1.04",
@@ -40,7 +41,7 @@
    {
     "label": "HaRGB \u00b7 scale 1.45",
     "recipe": "HaRGB",
-    "score": 64,
+    "score": 62,
     "band": "Good",
     "params": {
      "scale": 1.45,
@@ -50,7 +51,7 @@
    {
     "label": "HaRGB \u00b7 scale 2.07",
     "recipe": "HaRGB",
-    "score": 51,
+    "score": 50,
     "band": "Close",
     "params": {
      "scale": 2.07,
@@ -63,29 +64,30 @@
   "recipe": "HaRGB",
   "label": "HaRGB \u00b7 scale 1.24",
   "summary": "Ha added to red, continuum removed.",
-  "reason": "Ha added to red, continuum removed (Ha SNR 2280 vs color 1872); HaRGB \u00b7 scale 1.24 is closest to 3 reference images of M42 (also tried RGB+Ha+OIII good).",
-  "score": 65,
+  "reason": "Ha added to red, continuum removed (Ha SNR 2280 vs color 1872); HaRGB \u00b7 scale 1.24 is closest to 4 reference images of M42 (also tried RGB+Ha+OIII close).",
+  "score": 63,
   "band": "Good",
   "target": "M42",
-  "compared": 3,
+  "compared": 4,
   "provider": "fixture",
   "families": [
    {
     "recipe": "RGB+Ha+OIII",
-    "score": 61,
-    "band": "Good"
+    "score": 50,
+    "band": "Close"
    },
    {
     "recipe": "HaRGB",
-    "score": 65,
+    "score": 63,
     "band": "Good"
    }
   ],
+  "before": "auto_noB_base.png",
   "chips": [
    {
     "label": "HaRGB \u00b7 scale 0.89",
     "recipe": "HaRGB",
-    "score": 64,
+    "score": 62,
     "band": "Good",
     "params": {
      "scale": 0.89,
@@ -95,7 +97,7 @@
    {
     "label": "HaRGB \u00b7 scale 1.24",
     "recipe": "HaRGB",
-    "score": 65,
+    "score": 63,
     "band": "Good",
     "params": {
      "scale": 1.24,
@@ -105,7 +107,7 @@
    {
     "label": "HaRGB \u00b7 scale 1.78",
     "recipe": "HaRGB",
-    "score": 51,
+    "score": 50,
     "band": "Close",
     "params": {
      "scale": 1.78,
@@ -118,24 +120,25 @@
   "recipe": "HaRGB",
   "label": "HaRGB \u00b7 scale 1.24",
   "summary": "Ha added to red, continuum removed.",
-  "reason": "Ha added to red, continuum removed (Ha SNR 2280 vs color 1872); HaRGB \u00b7 scale 1.24 is closest to 3 reference images of M42.",
-  "score": 65,
+  "reason": "Ha added to red, continuum removed (Ha SNR 2280 vs color 1872); HaRGB \u00b7 scale 1.24 is closest to 4 reference images of M42.",
+  "score": 63,
   "band": "Good",
   "target": "M42",
-  "compared": 3,
+  "compared": 4,
   "provider": "fixture",
   "families": [
    {
     "recipe": "HaRGB",
-    "score": 65,
+    "score": 63,
     "band": "Good"
    }
   ],
+  "before": "auto_oscha_base.png",
   "chips": [
    {
     "label": "HaRGB \u00b7 scale 0.89",
     "recipe": "HaRGB",
-    "score": 64,
+    "score": 62,
     "band": "Good",
     "params": {
      "scale": 0.89,
@@ -145,7 +148,7 @@
    {
     "label": "HaRGB \u00b7 scale 1.24",
     "recipe": "HaRGB",
-    "score": 65,
+    "score": 63,
     "band": "Good",
     "params": {
      "scale": 1.24,
@@ -155,7 +158,7 @@
    {
     "label": "HaRGB \u00b7 scale 1.78",
     "recipe": "HaRGB",
-    "score": 51,
+    "score": 50,
     "band": "Close",
     "params": {
      "scale": 1.78,
@@ -181,6 +184,7 @@
     "band": "Good"
    }
   ],
+  "before": null,
   "chips": [
    {
     "label": "HOO \u00b7 Ha 10% in green",

@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=390">
 <meta name="robots" content="noindex, nofollow">
-<title>Star Party · Master tabs, RGB combine, Blend and Auto (prototype)</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico"><title>Star Party · Master tabs, RGB combine, Blend and Auto (prototype)</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#071018}
@@ -21,7 +21,7 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 10px}
 /* filter tab strip: 48px glove targets, scrolls sideways */
 .strip{display:flex;gap:8px;overflow-x:auto;margin:0 -20px;padding:0 20px 2px;scrollbar-width:none;scroll-padding:0 20px}
 .strip::-webkit-scrollbar{display:none}
-.chip{flex:none;height:48px;min-width:52px;padding:0 14px;border-radius:24px;border:1px solid #1C2B3A;background:#0E1A26;color:#E8EEF4;font:600 16px Inter,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.chip{flex:none;height:48px;min-width:52px;padding:0 14px;border-radius:24px;border:1px solid #24384B;background:transparent;color:#E8EEF4;font:600 16px Inter,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
 .chip i{width:8px;height:8px;border-radius:50%;flex:none}
 .chip.empty{background:transparent;border-style:dashed;color:#8FA3B5}
 .chip.empty i{opacity:.35}
@@ -142,6 +142,12 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
 #rgb .hint{margin-top:4px}
 #rgb .wrow{height:32px}
 #rgb input[type=range]{height:44px;margin:-5px 0}
+input[type=range]:disabled{cursor:not-allowed}
+input[type=range]:disabled::-webkit-slider-runnable-track{background:#1C2B3A}
+input[type=range]:disabled::-webkit-slider-thumb{background:#2A3846;border-color:#3A4A5A;box-shadow:none}
+input[type=range]:disabled::-moz-range-progress{background:#1C2B3A}
+input[type=range]:disabled::-moz-range-thumb{background:#2A3846;border-color:#3A4A5A}
+.lblrow.off .lbt,.lblrow.off .val{color:#5D6F80}
 #rgb .lblrow{margin-top:6px}
 #rgb .seg{margin-top:4px}
 #rgb .btns{margin-top:8px}
@@ -404,7 +410,7 @@ const CAPS = {
 // ---------------------------------------------------------------- image data (mock, canvas)
 const W = 700, H = 400, N = W * H;
 const IM = {};
-function load(name) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = `master/${name}.jpg`; }); }
+function load(name) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = /\.(png|jpg)$/.test(name) ? `master/${name}` : `master/${name}.jpg`; }); }
 function read(im) { const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"); x.drawImage(im, 0, 0, W, H); return x.getImageData(0, 0, W, H).data; }
 function plane(d, off) { const p = new Float32Array(N); for (let i = 0, j = off; i < N; i++, j += 4) p[i] = d[j] / 255; return p; }
 function stats(p) { // median and 99.5th percentile via a 1024-bin histogram
@@ -591,10 +597,11 @@ function renderAuto() {
   $("apply").textContent = `Apply · save as ${c.recipe}`;
   $("tweak").textContent = "Tweak";
   $("aBefore").textContent = has("color") ? "Color" : "Ha";
-  const key = autoKey() + pick, bk = has("color") ? "color" : "Ha";
+  // Before = the engine's base render with the same display curve as After (After >= Before), else the raw master
+  const key = autoKey() + pick, bk = a.before || (has("color") ? "color" : "Ha");
   const show = () => { cmpA.before = AIMG[bk]; cmpA.after = AIMG[key]; cmpA.draw(); };
   const need = [];
-  if (!AIMG[key]) need.push(load(`auto_${autoKey()}_${pick}`).then((im) => { AIMG[key] = toCanvasImg(im); }));
+  if (!AIMG[key]) need.push(load(`auto_${autoKey()}_${pick}.png`).then((im) => { AIMG[key] = toCanvasImg(im); }));
   if (!AIMG[bk]) need.push(load(bk).then((im) => { AIMG[bk] = toCanvasImg(im); }));
   if (need.length) Promise.all(need).then(show); else show();
 }
@@ -620,7 +627,8 @@ function renderPalette() {
     (k) => { state.pal = k; renderPalette(); syncHash(); notify(); });
   const hoo = pal === "HOO";
   $("pg").disabled = !hoo; $("pg").value = state.hig; $("pg").style.setProperty("--p", (state.hig * 2) + "%");
-  $("pgv").textContent = hoo ? state.hig + "%" : "auto";
+  $("pgv").textContent = hoo ? state.hig + "%" : "auto"; $("pgv").parentElement.classList.toggle("off", !hoo);
+  $("pg").setAttribute("aria-valuetext", hoo ? state.hig + "%" : "auto (set per pixel by Foraxx)");
   $("phint").textContent = hoo ? "R = Ha, B = OIII, G = OIII with some Ha mixed in." : "Foraxx sets the mix per pixel from Ha and OIII brightness. SII is off: no SII subs yet.";
   $("pAfter").textContent = pal; $("psave").textContent = `Save as ${pal}`;
   const name = hoo ? `pal_${autoKey()}_HOO_${state.hig}` : `pal_${autoKey()}_Foraxx`;
