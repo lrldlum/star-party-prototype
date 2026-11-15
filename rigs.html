@@ -1,12 +1,14 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=390">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico"><title>Star Party · Profile rigs (prototype)</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Star Party"><title>Star Party · Profile rigs (prototype)</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#071018}
-body{width:390px;height:844px;color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
-.ph{position:relative;width:390px;height:844px;display:flex;flex-direction:column;padding:0 20px}
+body{color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.ph{display:flex;flex-direction:column}
 .ph>*{flex-shrink:0}
 .sb{height:47px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;padding:0 8px}
 .top{height:52px;display:flex;align-items:center;justify-content:space-between;color:#8FA3B5;font-size:17px}
@@ -68,7 +70,9 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 6px}
 .toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
 [hidden]{display:none !important}
-</style></head>
+</style>
+<link rel="stylesheet" href="phone.css">
+</head>
 <body><div class="ph">
 <div class="sb"><span>9:58</span><span>●●● ▮</span></div>
 <div class="top"><button class="back" id="back" type="button">‹ Profile</button><span class="small">Sample data</span></div>
@@ -106,14 +110,14 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 6px}
   <button class="linkb" id="jNew" type="button">+ Add another rig</button>
   <button class="primary" id="jGo" type="button">Join with Backyard Newt</button>
 </div>
-<div class="tabs"><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</div><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</div></div>
-<div class="dlg" id="dlg" hidden><div class="box"><h3 id="dT">Delete rig?</h3><p class="muted" style="margin-top:6px">Subs and masters you already shot keep their rig details.</p><div class="btns"><button class="c" id="dNo" type="button">Cancel</button><button class="d" id="dYes" type="button">Delete</button></div></div></div>
+<nav class="tabs" aria-label="Main"><a class="tab" href="master.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</a><a class="tab" href="rigs.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</a><a class="tab on" href="rigs.html#view=list" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</a></nav>
+<div class="dlg" id="dlg" hidden role="dialog" aria-modal="true" aria-labelledby="dT"><div class="box"><h3 id="dT">Delete rig?</h3><p class="muted" style="margin-top:6px">Subs and masters you already shot keep their rig details.</p><div class="btns"><button class="c" id="dNo" type="button">Cancel</button><button class="d" id="dYes" type="button">Delete</button></div></div></div>
 <div class="toast" id="toast"></div>
 </div>
 <script>
 // Prototype: rigs live in memory (real app: /api/me/rigs, backend/app/rigs.py). Optics use the same formulas:
 // EFL = focal x reducer, f/ = EFL / aperture, scale = 206.265 x pixel x bin / EFL, FOV = 2 atan(sensor / 2 EFL).
-const PRESETS = {"camera": [{"model": "ZWO ASI2600MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 6248, "height_px": 4176}, {"model": "ZWO ASI2600MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 6248, "height_px": 4176}, {"model": "ZWO ASI533MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 3008, "height_px": 3008}, {"model": "ZWO ASI533MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 3008, "height_px": 3008}, {"model": "ZWO ASI294MC Pro", "color": "osc", "pixel_um": 4.63, "width_px": 4144, "height_px": 2822}, {"model": "ZWO ASI294MM Pro", "color": "mono", "pixel_um": 2.315, "width_px": 8288, "height_px": 5644}, {"model": "ZWO ASI183MM Pro", "color": "mono", "pixel_um": 2.4, "width_px": 5496, "height_px": 3672}, {"model": "ZWO ASI183MC Pro", "color": "osc", "pixel_um": 2.4, "width_px": 5496, "height_px": 3672}, {"model": "ZWO ASI1600MM Pro", "color": "mono", "pixel_um": 3.8, "width_px": 4656, "height_px": 3520}, {"model": "ZWO ASI071MC Pro", "color": "osc", "pixel_um": 4.78, "width_px": 4944, "height_px": 3284}, {"model": "ZWO ASI6200MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 9576, "height_px": 6388}, {"model": "ZWO ASI6200MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 9576, "height_px": 6388}, {"model": "ZWO ASI585MC Pro", "color": "osc", "pixel_um": 2.9, "width_px": 3840, "height_px": 2160}, {"model": "ZWO ASI678MC", "color": "osc", "pixel_um": 2.0, "width_px": 3840, "height_px": 2160}, {"model": "QHY268M", "color": "mono", "pixel_um": 3.76, "width_px": 6280, "height_px": 4210}, {"model": "QHY268C", "color": "osc", "pixel_um": 3.76, "width_px": 6280, "height_px": 4210}, {"model": "Player One Poseidon-C Pro", "color": "osc", "pixel_um": 3.76, "width_px": 6244, "height_px": 4168}, {"model": "Canon EOS Ra", "color": "osc", "pixel_um": 5.36, "width_px": 6720, "height_px": 4480}, {"model": "Nikon Z6 (astro modified)", "color": "osc", "pixel_um": 5.9, "width_px": 6048, "height_px": 4024}], "telescope": [{"model": "Justin's 600 mm Newtonian (150 mm f/4)", "aperture_mm": 150, "focal_mm": 600}, {"model": "80 mm f/5 refractor", "aperture_mm": 80, "focal_mm": 400}, {"model": "William Optics RedCat 51", "aperture_mm": 51, "focal_mm": 250}, {"model": "William Optics Zenithstar 61", "aperture_mm": 61, "focal_mm": 360}, {"model": "William Optics Zenithstar 73", "aperture_mm": 73, "focal_mm": 430}, {"model": "Askar FRA400", "aperture_mm": 72, "focal_mm": 400}, {"model": "Askar 107PHQ", "aperture_mm": 107, "focal_mm": 749}, {"model": "Sky-Watcher Esprit 100ED", "aperture_mm": 100, "focal_mm": 550}, {"model": "Sky-Watcher Evostar 72ED", "aperture_mm": 72, "focal_mm": 420}, {"model": "Sky-Watcher Quattro 200P", "aperture_mm": 200, "focal_mm": 800}, {"model": "Sky-Watcher 200PDS", "aperture_mm": 200, "focal_mm": 1000}, {"model": "Celestron EdgeHD 8", "aperture_mm": 203, "focal_mm": 2032}, {"model": "Celestron EdgeHD 11", "aperture_mm": 280, "focal_mm": 2800}, {"model": "Celestron RASA 8", "aperture_mm": 203, "focal_mm": 400}, {"model": "Takahashi FSQ-106EDX4", "aperture_mm": 106, "focal_mm": 530}, {"model": "Explore Scientific ED102", "aperture_mm": 102, "focal_mm": 714}], "mount": [{"model": "ZWO AM5"}, {"model": "ZWO AM3"}, {"model": "Sky-Watcher EQ6-R Pro"}, {"model": "Sky-Watcher HEQ5 Pro"}, {"model": "Sky-Watcher Star Adventurer GTi"}, {"model": "iOptron CEM40"}, {"model": "iOptron CEM26"}, {"model": "iOptron GEM28"}, {"model": "Celestron CGEM II"}, {"model": "Celestron AVX"}, {"model": "Rainbow Astro RST-135"}], "reducer": [{"model": "None", "factor": 1.0}, {"model": "0.8x reducer / flattener", "factor": 0.8}, {"model": "0.79x reducer / flattener", "factor": 0.79}, {"model": "0.72x reducer", "factor": 0.72}, {"model": "0.7x reducer", "factor": 0.7}, {"model": "Celestron 0.7x EdgeHD reducer", "factor": 0.7}, {"model": "0.63x SCT reducer", "factor": 0.63}, {"model": "Coma corrector (1.0x)", "factor": 1.0}, {"model": "Field flattener (1.0x)", "factor": 1.0}, {"model": "2x Barlow", "factor": 2.0}]};
+const PRESETS = {"camera": [{"model": "ZWO ASI2600MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 6248, "height_px": 4176}, {"model": "ZWO ASI2600MC Pro Duo", "color": "osc", "pixel_um": 3.76, "width_px": 6248, "height_px": 4176}, {"model": "ZWO ASI2600MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 6248, "height_px": 4176}, {"model": "ZWO ASI533MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 3008, "height_px": 3008}, {"model": "ZWO ASI533MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 3008, "height_px": 3008}, {"model": "ZWO ASI294MC Pro", "color": "osc", "pixel_um": 4.63, "width_px": 4144, "height_px": 2822}, {"model": "ZWO ASI294MM Pro", "color": "mono", "pixel_um": 2.315, "width_px": 8288, "height_px": 5644}, {"model": "ZWO ASI183MM Pro", "color": "mono", "pixel_um": 2.4, "width_px": 5496, "height_px": 3672}, {"model": "ZWO ASI183MC Pro", "color": "osc", "pixel_um": 2.4, "width_px": 5496, "height_px": 3672}, {"model": "ZWO ASI1600MM Pro", "color": "mono", "pixel_um": 3.8, "width_px": 4656, "height_px": 3520}, {"model": "ZWO ASI071MC Pro", "color": "osc", "pixel_um": 4.78, "width_px": 4944, "height_px": 3284}, {"model": "ZWO ASI6200MM Pro", "color": "mono", "pixel_um": 3.76, "width_px": 9576, "height_px": 6388}, {"model": "ZWO ASI6200MC Pro", "color": "osc", "pixel_um": 3.76, "width_px": 9576, "height_px": 6388}, {"model": "ZWO ASI585MC Pro", "color": "osc", "pixel_um": 2.9, "width_px": 3840, "height_px": 2160}, {"model": "ZWO ASI678MC", "color": "osc", "pixel_um": 2.0, "width_px": 3840, "height_px": 2160}, {"model": "QHY268M", "color": "mono", "pixel_um": 3.76, "width_px": 6280, "height_px": 4210}, {"model": "QHY268C", "color": "osc", "pixel_um": 3.76, "width_px": 6280, "height_px": 4210}, {"model": "Player One Poseidon-C Pro", "color": "osc", "pixel_um": 3.76, "width_px": 6244, "height_px": 4168}, {"model": "Canon EOS Ra", "color": "osc", "pixel_um": 5.36, "width_px": 6720, "height_px": 4480}, {"model": "Nikon Z6 (astro modified)", "color": "osc", "pixel_um": 5.9, "width_px": 6048, "height_px": 4024}], "telescope": [{"model": "Justin's 600 mm Newtonian (150 mm f/4)", "aperture_mm": 150, "focal_mm": 600}, {"model": "80 mm f/5 refractor", "aperture_mm": 80, "focal_mm": 400}, {"model": "William Optics RedCat 51", "aperture_mm": 51, "focal_mm": 250}, {"model": "William Optics Zenithstar 61", "aperture_mm": 61, "focal_mm": 360}, {"model": "William Optics Zenithstar 73", "aperture_mm": 73, "focal_mm": 430}, {"model": "Askar FRA400", "aperture_mm": 72, "focal_mm": 400}, {"model": "Askar 107PHQ", "aperture_mm": 107, "focal_mm": 749}, {"model": "Sky-Watcher Esprit 100ED", "aperture_mm": 100, "focal_mm": 550}, {"model": "Sky-Watcher Evostar 72ED", "aperture_mm": 72, "focal_mm": 420}, {"model": "Sky-Watcher Quattro 200P", "aperture_mm": 200, "focal_mm": 800}, {"model": "Sky-Watcher 200PDS", "aperture_mm": 200, "focal_mm": 1000}, {"model": "Celestron EdgeHD 8", "aperture_mm": 203, "focal_mm": 2032}, {"model": "Celestron EdgeHD 11", "aperture_mm": 280, "focal_mm": 2800}, {"model": "Celestron RASA 8", "aperture_mm": 203, "focal_mm": 400}, {"model": "Celestron C6-A", "aperture_mm": 150, "focal_mm": 1500}, {"model": "Takahashi FSQ-106EDX4", "aperture_mm": 106, "focal_mm": 530}, {"model": "Explore Scientific ED102", "aperture_mm": 102, "focal_mm": 714}], "mount": [{"model": "ZWO AM5"}, {"model": "ZWO AM3"}, {"model": "Sky-Watcher EQ6-R Pro"}, {"model": "Sky-Watcher HEQ5 Pro"}, {"model": "Sky-Watcher Star Adventurer GTi"}, {"model": "iOptron CEM40"}, {"model": "iOptron CEM26"}, {"model": "iOptron GEM28"}, {"model": "Celestron CGEM II"}, {"model": "Celestron AVX"}, {"model": "Rainbow Astro RST-135"}], "reducer": [{"model": "None", "factor": 1.0}, {"model": "0.8x reducer / flattener", "factor": 0.8}, {"model": "0.79x reducer / flattener", "factor": 0.79}, {"model": "0.72x reducer", "factor": 0.72}, {"model": "0.7x reducer", "factor": 0.7}, {"model": "Celestron 0.7x EdgeHD reducer", "factor": 0.7}, {"model": "0.63x SCT reducer", "factor": 0.63}, {"model": "Coma corrector (1.0x)", "factor": 1.0}, {"model": "Field flattener (1.0x)", "factor": 1.0}, {"model": "2x Barlow", "factor": 2.0}]};
 const $ = (id) => document.getElementById(id);
 let RIGS = [
   {id:1, name:"Backyard Newt", def:true, camera:{model:"ZWO ASI2600MC Pro", color:"osc", pixel_um:3.76, width_px:6248, height_px:4176}, telescope:{model:"Justin's 600 mm Newtonian (150 mm f/4)", aperture_mm:150, focal_mm:600}, mount:"ZWO AM5", reducer:1, binning:1},
@@ -135,6 +139,10 @@ const statsHtml = (o) => o ? [[`${o.efl.toFixed(0)} mm`, "FOCAL"], [`f/${o.f.toF
 const sub = (r) => `${r.camera.model} · ${r.telescope.model}${r.reducer !== 1 ? ` · ${r.reducer}×` : ""}${r.binning > 1 ? ` · bin ${r.binning}` : ""}`;
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1600); }
 function renderList() {
+  if (!RIGS.length) {
+    $("cards").innerHTML = `<div class="card" id="emptyRigs"><p class="muted" style="margin:8px 0 4px">No rigs yet.</p><p class="small">Add a camera and telescope so stacking and plate solving can use the right scale.</p></div>`;
+    return;
+  }
   $("cards").innerHTML = RIGS.map((r) => { const o = optics(r); return `<div class="card${r.def ? " def" : ""}"><button class="linkb" style="all:unset;display:block;width:100%;cursor:pointer" data-edit="${r.id}" aria-label="Edit ${r.name}">
     <div class="row"><b class="n">${r.name}</b>${r.def ? '<span class="pill">Default</span>' : ""}</div><p class="small" style="margin-top:3px">${sub(r)}</p><div class="stats">${statsHtml(o)}</div></button>
     <div class="acts">${r.def ? "" : `<button class="linkb" data-def="${r.id}">Make default</button>`}<button class="linkb" data-dup="${r.id}">Duplicate</button><button class="linkb del" data-del="${r.id}">Delete</button></div></div>`; }).join("");
@@ -143,7 +151,7 @@ function renderList() {
   $("cards").querySelectorAll("[data-dup]").forEach((b) => b.onclick = () => { const s = RIGS.find((r) => r.id === +b.dataset.dup); RIGS.push({ ...structuredClone(s), id: nextId++, def: false, name: "Copy of " + s.name }); renderList(); toast("Duplicated"); });
   $("cards").querySelectorAll("[data-del]").forEach((b) => b.onclick = () => askDelete(+b.dataset.del));
 }
-function askDelete(id) { $("toast").classList.remove("show"); clearTimeout(toast.t); const r = RIGS.find((x) => x.id === id); $("dT").textContent = `Delete ${r.name}?`; $("dlg").hidden = false; $("dYes").onclick = () => { const was = r.def; RIGS = RIGS.filter((x) => x.id !== id); if (was && RIGS[0]) RIGS[0].def = true; $("dlg").hidden = true; renderList(); toast("Rig deleted"); sync(); }; }
+function askDelete(id) { $("toast").classList.remove("show"); clearTimeout(toast.t); const r = RIGS.find((x) => x.id === id); if (!r) return; $("dT").textContent = `Delete ${r.name}?`; $("dlg").hidden = false; $("dNo").focus(); $("dYes").onclick = () => { const was = r.def; RIGS = RIGS.filter((x) => x.id !== id); if (was && RIGS[0]) RIGS[0].def = true; $("dlg").hidden = true; renderList(); toast("Rig deleted"); sync(); }; }
 $("dNo").onclick = () => $("dlg").hidden = true;
 function results(kind, el) {
   const words = q.toLowerCase().split(/\s+/).filter(Boolean);
@@ -194,8 +202,15 @@ $("pTel").onclick = () => { open = open === "telescope" ? null : "telescope"; q 
 $("pMount").onclick = () => { open = open === "mount" ? null : "mount"; q = ""; renderEdit(); };
 $("save").onclick = () => { const i = RIGS.findIndex((r) => r.id === cur.id); if (i >= 0) RIGS[i] = cur; else { cur.def = !RIGS.length; RIGS.push(cur); } go("list"); toast("Rig saved"); };
 $("new").onclick = () => go("new");
-$("back").onclick = () => go("list");
+$("back").onclick = () => { if (view === "list") location.href = "master.html"; else go("list"); };
 function renderJoin() {
+  $("jNew").textContent = RIGS.length ? "+ Add another rig" : "+ Add a rig";
+  if (!RIGS.length) {
+    $("jOpts").innerHTML = `<p class="muted" id="joinEmpty" style="margin-top:12px">Add a rig first, then come back to pick it when you join. Stacking and plate solving need its scale.</p>`;
+    $("jGo").disabled = true; $("jGo").textContent = "Add a rig first";
+    return;
+  }
+  $("jGo").disabled = false;
   const pick = joinPick ?? (RIGS.find((r) => r.def) || RIGS[0]).id;
   $("jOpts").innerHTML = RIGS.map((r) => { const o = optics(r); return `<button type="button" class="opt${r.id === pick ? " on" : ""}" role="radio" aria-checked="${r.id === pick}" data-j="${r.id}"><span class="rd"></span><span><b>${r.name}${r.def ? " · default" : ""}</b><span>${sub(r)}<br>${o ? `${o.scale.toFixed(2)}″/px · ${fov(o)}` : ""}</span></span></button>`; }).join("");
   $("jOpts").querySelectorAll("[data-j]").forEach((b) => b.onclick = () => { joinPick = +b.dataset.j; renderJoin(); sync(); });
@@ -237,5 +252,6 @@ function fromHash() {
 window.addEventListener("hashchange", fromHash);
 fromHash();
 </script>
+<script src="phone.js"></script>
 <script src="scrollhint.js"></script>
 </body></html>

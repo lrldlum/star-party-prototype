@@ -27,7 +27,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     body {
-      padding: 16px 16px 32px;
+      padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(32px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
       max-width: 480px;
       margin: 0 auto;
     }
@@ -128,7 +128,7 @@
 </head>
 <body>
   <h1>Star Party — app prototype (draft)</h1>
-  <p class="banner"><strong>Design prototype.</strong> This is a clickable walkthrough of the approved screens, not the working app yet. Nothing here is signed in, hosted, or connected to a live stack.</p>
+  <p class="banner"><strong>Design prototype.</strong> This is a clickable walkthrough of the approved screens, not the working app yet. Nothing here is signed in, hosted, or connected to a live stack. A browser also cannot reach an ASIAIR over SMB; Send to ASIAIR in these screens is a walkthrough only.</p>
   <p class="step" id="step"></p>
   <h2 id="title"></h2>
   <p class="caption" id="caption"></p>
@@ -235,6 +235,7 @@
       back.disabled = index === 0;
       next.disabled = index === SCREENS.length - 1;
       if (!s.live) window.scrollTo({ top: 0, behavior: "instant" });
+      if (location.hash.slice(1) !== s.id) history.replaceState(null, "", "#" + s.id);
     }
     function go(delta) {
       const nextIndex = index + delta;
@@ -272,13 +273,18 @@
         for (const [k, v] of want) if (k !== "sample" && got.get(k) !== v) return -1; return [...want].length; };
       let best = fits(SCREENS[index]), match = best >= 0 ? index : -1;
       SCREENS.forEach((sc, i) => { const f = fits(sc); if (f > best) { best = f; match = i; } });
-      if (match >= 0) { index = match; list.value = String(index); step.textContent = (index + 1) + " of " + SCREENS.length + " · " + SCREENS[index].step; back.disabled = index === 0; next.disabled = index === SCREENS.length - 1; }
+      if (match >= 0) { index = match; list.value = String(index); step.textContent = (index + 1) + " of " + SCREENS.length + " · " + SCREENS[index].step; back.disabled = index === 0; next.disabled = index === SCREENS.length - 1; if (location.hash.slice(1) !== SCREENS[index].id) history.replaceState(null, "", "#" + SCREENS[index].id); }
       title.textContent = d.label;
       caption.textContent = d.caption;
     });
     const hashId = location.hash.slice(1);
     const hashIndex = SCREENS.findIndex((s) => s.id === hashId || (hashId === "master" && s.id === "15a_master_color"));
     if (hashIndex >= 0) index = hashIndex;
+    window.addEventListener("hashchange", () => {
+      const id = location.hash.slice(1);
+      const i = SCREENS.findIndex((s) => s.id === id || (id === "master" && s.id === "15a_master_color"));
+      if (i >= 0 && i !== index) { index = i; render(); }
+    });
     render();
   </script>
 </body>

@@ -1,12 +1,14 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=390">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico"><title>Star Party · Master tabs, RGB combine, Blend and Auto (prototype)</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Star Party"><title>Star Party · Master tabs, RGB combine, Blend and Auto (prototype)</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#071018}
-body{width:390px;height:844px;color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
-.ph{position:relative;width:390px;height:844px;display:flex;flex-direction:column;padding:0 20px}
+body{color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.ph{display:flex;flex-direction:column}
 .ph>*{flex-shrink:0}
 .sb{height:47px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;padding:0 8px}
 .top{height:52px;display:flex;align-items:center;justify-content:space-between;color:#8FA3B5;font-size:17px}
@@ -198,7 +200,9 @@ a.primary{text-decoration:none}
 .fmt .fb>b>span{font-size:15px;color:inherit;line-height:inherit}
 .fmt b .sz{font-style:normal;font-weight:600;font-size:14px;color:#8FA3B5;white-space:nowrap}
 .sheet .sample-pill{flex:none;white-space:nowrap;display:inline-block;font-size:11px;font-weight:700;color:#B4C0CC;border:1px solid #33404D;border-radius:999px;padding:0 7px;margin-right:6px;vertical-align:1px}
-</style></head>
+</style>
+<link rel="stylesheet" href="phone.css">
+</head>
 <body><div class="ph" id="ph">
 <div class="sb"><span>9:58</span><span>●●● ▮</span></div>
 <div class="top"><span class="back">‹ Live stack</span><span class="tr"><a class="ib" id="skyBtn" style="text-decoration:none" href="sky.html" aria-label="Sky view: everyone's field of view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="6" width="11" height="8" rx="1" transform="rotate(-12 9.5 10)"/><rect x="9" y="10" width="11" height="8" rx="1" transform="rotate(8 14.5 14)"/></svg>Sky</a><button class="ib" id="allBtn" type="button" aria-label="Download all masters and saved products as a zip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>All</button><span class="menu" aria-label="Party menu" style="width:40px">•••</span></span></div>
@@ -319,7 +323,7 @@ a.primary{text-decoration:none}
   </div>
 </div>
 
-<div class="tabs"><div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</div><div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</div></div>
+<nav class="tabs" aria-label="Main"><a class="tab on" href="master.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</a><a class="tab" href="rigs.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</a><a class="tab" href="rigs.html#view=list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</a></nav>
 <div class="scrim" id="scrim" hidden></div>
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="shT">
   <div class="grab"></div><button class="x" id="shX" type="button" aria-label="Close">✕</button>
@@ -330,12 +334,12 @@ a.primary{text-decoration:none}
   <div class="btns"><a class="primary" id="shDl" href="#" download>Download</a><button class="ghostb" id="shShare" type="button">Share</button></div>
   <p class="small" id="shNote" style="margin-top:6px"></p>
   <hr>
-  <div class="lblrow" style="margin-top:10px"><span class="lbt">Send to my ASIAIR</span><span class="small">Simulated · sample</span></div>
+  <div class="lblrow" style="margin-top:10px"><span class="lbt">Send to my ASIAIR</span><span class="small">Browser preview</span></div>
   <p class="small" id="sendWhere" style="margin-top:4px"></p>
   <div class="seg" id="store" role="radiogroup" aria-label="ASIAIR storage"><button type="button" data-s="emmc" class="on">Internal (eMMC)</button><button type="button" data-s="usb">USB / SD</button></div>
   <button class="send" id="sendBtn" type="button">Send FITS to ASIAIR</button>
-  <div class="bar" id="sendBar" hidden><i></i></div>
-  <div class="res" id="sendRes" hidden></div>
+  <div class="bar" id="sendBar" hidden role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+  <div class="res" id="sendRes" hidden role="status" aria-live="polite"></div>
 </div>
 <div class="toast" id="toast">Prototype · saves a new FITS; nothing is saved here</div>
 </div>
@@ -755,6 +759,7 @@ function comps(el) {
 function openSheet(item, keepSend) {
   dl.item = item; if (!keepSend) { dl.send = null; clearInterval(dl.timer); }
   $("sheet").hidden = $("scrim").hidden = false; paintSheet(); syncHash(); notify();
+  if (!keepSend) $("shX").focus();
 }
 function closeSheet() { dl.item = null; dl.send = null; clearInterval(dl.timer); $("sheet").hidden = $("scrim").hidden = true; syncHash(); notify(); }
 function paintSheet() {
@@ -774,16 +779,16 @@ function paintSheet() {
   if (file) { a.href = `master/dl/${encodeURIComponent(file)}`; a.setAttribute("download", file); a.removeAttribute("aria-disabled"); a.style.opacity = ""; a.textContent = all ? "Download all (zip)" : `Download ${f.k.toUpperCase()}`; }
   else { a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); a.style.opacity = ".5"; a.textContent = "Download"; }
   $("shNote").textContent = file ? `${file} · tiny sample file, not a real master` : `No sample file for ${dlLabel(dl.item)} in the prototype; the app saves it on the party stack.`;
-  $("sendWhere").innerHTML = `${all ? `All ${sum.n} FITS (masters, composite and saved products)` : "The FITS master"} → <code>StarParty/Penobscot_Bay/M42/</code> on your own ASIAIR. Never overwrites: a taken name gets _2. Phone must be on your ASIAIR's Wi-Fi.`;
+  $("sendWhere").innerHTML = `${all ? `All ${sum.n} FITS (masters, composite and saved products)` : "The FITS master"} would go to <code>StarParty/Penobscot_Bay/M42/</code> on your own ASIAIR. Never overwrites: a taken name gets _2. Phone must be on your ASIAIR's Wi-Fi.<br><br>This browser preview only walks through the send. Safari and Chrome cannot write to an ASIAIR; the native app does the real copy over SMB.`;
   [...$("store").children].forEach((b) => b.classList.toggle("on", b.dataset.s === dl.store));
   const s = dl.send, btn = $("sendBtn"), bar = $("sendBar"), res = $("sendRes");
-  bar.hidden = s !== "progress"; bar.firstElementChild.style.width = dl.pct + "%";
+  bar.hidden = s !== "progress"; bar.firstElementChild.style.width = dl.pct + "%"; bar.setAttribute("aria-valuenow", String(dl.pct)); bar.setAttribute("aria-label", s === "progress" ? `Sending ${dl.pct}%` : "Send progress");
   btn.disabled = s === "progress";
   btn.textContent = s === "progress" ? `Sending… ${dl.pct}%` : s === "done" ? "Send again" : `Send ${all ? "all FITS" : "FITS"} to ASIAIR · ${dl.store === "usb" ? "USB / SD" : "eMMC"}`;
   res.hidden = !s || s === "progress"; res.className = "res " + (s === "done" ? "ok" : "err");
   if (s === "done") {
     const names = items.map((id) => { const n = ON_ASIAIR.has(astName(id, 1)) ? 2 : 1; return { id, n, name: astName(id, n) }; });
-    res.innerHTML = `✓ Sent ${names.length} file${names.length > 1 ? "s" : ""} to ${dl.store === "usb" ? "USB Images" : "EMMC Images"}/StarParty/Penobscot_Bay/M42/` +
+    res.innerHTML = `Simulated — nothing was written to an ASIAIR.<br>Would have sent ${names.length} file${names.length > 1 ? "s" : ""} to ${dl.store === "usb" ? "USB Images" : "EMMC Images"}/StarParty/Penobscot_Bay/M42/` +
       names.slice(0, 3).map((x) => `<br><code>${x.name}</code>${x.n > 1 ? " · a file with that name was already there, kept as is" : ""}`).join("") + (names.length > 3 ? `<br>+ ${names.length - 3} more` : "");
   } else if (s === "nospace") res.innerHTML = `Not enough space on your ASIAIR: needs ${sizeOf(items, "fits")}, ${all ? "1.1 GB" : "48 MB"} free. Nothing was written. Free some space in the ASIAIR app, or send to USB / SD.`;
   else if (s === "offline") res.innerHTML = "Join your ASIAIR's Wi-Fi (ASIAIR_…) to send masters to it. Nothing was sent.";
@@ -843,5 +848,6 @@ function fromHash() {
 window.addEventListener("hashchange", fromHash);
 fromHash();
 </script>
+<script src="phone.js"></script>
 <script src="scrollhint.js"></script>
 </body></html>
