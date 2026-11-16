@@ -53,9 +53,9 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 4px}
 .toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
 [hidden]{display:none !important}
-.map-msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px;font-size:14px;font-weight:600;color:#8FA3B5;background:rgba(2,5,10,.55);z-index:2;gap:10px}
+.map-msg{display:flex;align-items:flex-start;justify-content:flex-start;flex-direction:column;text-align:left;padding:10px 12px;margin-top:8px;font-size:14px;font-weight:600;color:#8FA3B5;background:#0E1A26;border:1px solid #1C2B3A;border-radius:14px;gap:8px}
 .map-msg[hidden]{display:none !important}
-.map-msg button{height:44px;padding:0 16px;border-radius:22px;border:1px solid #1C2B3A;background:#0E1A26;color:#5CC9B5;font:600 15px Inter,-apple-system,sans-serif;cursor:pointer}
+.map-msg button{height:44px;padding:0 16px;border-radius:22px;border:1px solid #1C2B3A;background:#0B141E;color:#5CC9B5;font:600 15px Inter,-apple-system,sans-serif;cursor:pointer}
 </style>
 <link rel="stylesheet" href="phone.css">
 </head>
@@ -69,8 +69,8 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 4px}
   <div class="map" id="map" role="img" aria-label="Sky map around M42 with each member's field of view">
     <canvas id="cv" width="700" height="660"></canvas>
     <span class="cmp">N ↑ · E ←</span><span class="scale" id="scale"><b></b>1°</span><span class="smp">Sample frames</span>
-    <div class="map-msg" id="mapMsg" role="status">Loading star catalog…</div>
   </div>
+  <div class="map-msg" id="mapMsg" role="status">Loading star catalog…</div>
   <div class="cov" id="cov"></div>
   <div class="det" id="det" hidden></div>
   <div class="lbt" id="memT">Members</div>

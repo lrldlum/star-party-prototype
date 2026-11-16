@@ -1,0 +1,169 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Star Party"><title>Star Party · Live stack (prototype)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#071018}
+body{color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.ph{display:flex;flex-direction:column}
+.ph>*{flex-shrink:0}
+.sb{height:47px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;padding:0 8px}
+.top{height:52px;display:flex;align-items:center;justify-content:space-between;color:#8FA3B5;font-size:17px}
+.back{height:52px;min-width:72px;margin-left:-8px;padding:0 8px;display:flex;align-items:center;color:#8FA3B5;font-size:17px;font-weight:600;text-decoration:none}
+.tr{display:flex;align-items:center;gap:6px}
+.ib{height:44px;min-width:44px;padding:0 10px;border-radius:22px;border:1px solid #1C2B3A;background:transparent;color:#5CC9B5;font:600 15px Inter,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-decoration:none}
+.menu{width:40px;height:52px;display:flex;align-items:center;justify-content:center;color:#E8EEF4;font-size:22px;font-weight:700;background:none;border:0;cursor:pointer;font-family:inherit}
+.party{font-size:15px;font-weight:600;color:#8FA3B5;line-height:21px}
+h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 8px}
+.small{font-size:13px;color:#8FA3B5;line-height:18px}
+.muted{color:#8FA3B5;font-size:15px;line-height:21px}
+.panel{display:flex;flex-direction:column;flex:1 1 auto !important;min-height:0;overflow-y:auto;scrollbar-width:none;padding-bottom:16px}
+.panel::-webkit-scrollbar{display:none}
+.panel>*{flex-shrink:0}
+.prev{height:180px;border-radius:16px;overflow:hidden;position:relative;background:#000 center/cover;box-shadow:0 0 28px rgba(200,110,150,.16)}
+.prev.uncal::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 48% 42%,transparent 38%,rgba(0,0,0,.55) 100%);pointer-events:none}
+.prev .upd{position:absolute;right:10px;top:10px;font-size:12px;font-weight:700;color:#E8EEF4;background:rgba(7,16,24,.72);padding:3px 8px;border-radius:999px}
+.flat-badge{position:absolute;left:10px;bottom:10px;z-index:2;font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;max-width:calc(100% - 20px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.flat-badge.ok{color:#BDEFE5;background:rgba(7,16,24,.82);border:1px solid #2A5A55}
+.flat-badge.warn{color:#F0D2A8;background:rgba(26,16,6,.88);border:1px solid #5A4126}
+.flat-badge.prog{color:#E8EEF4;background:rgba(7,16,24,.82);border:1px solid #1C2B3A}
+.rigline{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:15px;font-weight:600}
+.rigline i{width:8px;height:8px;border-radius:50%;background:#5CC9B5;flex:none}
+.status{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-top:8px}
+.status a,.status button{background:none;border:0;color:#5CC9B5;font:600 15px Inter,-apple-system,sans-serif;cursor:pointer;padding:0;text-decoration:none;white-space:nowrap}
+.chat{margin-top:14px}
+.chat .sys{font-size:13px;color:#5CC9B5;line-height:18px;margin-bottom:12px}
+.chat .msg{margin-bottom:12px}
+.chat .who{font-size:13px;color:#8FA3B5;font-weight:600}
+.chat .txt{font-size:16px;line-height:22px;margin-top:2px}
+.composer{display:flex;gap:8px;margin-top:8px;align-items:center}
+.composer .in{flex:1;height:48px;border-radius:24px;border:1px solid #1C2B3A;background:#0B141E;color:#8FA3B5;font:500 16px Inter,-apple-system,sans-serif;padding:0 16px}
+.composer .send{height:48px;min-width:88px;border-radius:24px;border:0;background:#E8A05A;color:#1A1006;font:700 16px Inter,-apple-system,sans-serif;cursor:pointer}
+.bar{height:6px;border-radius:3px;background:#1C2B3A;overflow:hidden;margin-top:8px}.bar i{display:block;height:6px;background:#5CC9B5;width:0}
+.cmp{position:relative;height:180px;border-radius:16px;overflow:hidden;margin-top:0;background:#000;touch-action:none;user-select:none}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cmp .after-clip{position:absolute;inset:0;z-index:2;overflow:hidden;width:50%}
+.cmp .lbl{position:absolute;bottom:8px;z-index:3;font-size:11px;font-weight:700;color:#E8EEF4;background:rgba(7,16,24,.72);padding:2px 8px;border-radius:999px}
+.cmp .lbl.l{left:8px}.cmp .lbl.r{right:8px}
+.cmp .div{position:absolute;top:0;bottom:0;width:2px;background:#E8EEF4;z-index:4;left:50%;margin-left:-1px}
+.cmp .knob{position:absolute;top:50%;left:50%;z-index:5;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;background:#E8EEF4;color:#071018;font:700 14px/36px Inter,sans-serif;text-align:center}
+.honest{font-size:11px;color:#6E8293;line-height:15px;margin-top:10px}
+.warn{margin-top:8px;font-size:13px;color:#F0D2A8;line-height:18px}
+.tabs{height:83px;margin:0 -20px;border-top:1px solid #1C2B3A;display:flex;justify-content:space-around;padding-top:8px;background:#09131C}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:#8FA3B5;width:96px;height:60px;padding-top:4px;text-decoration:none}
+.tab svg{width:26px;height:26px}.tab.on{color:#E8A05A}
+.toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100% - 24px);text-align:center}
+.toast.show{opacity:1}
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);z-index:20}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:#0E1A26;border:1px solid #1C2B3A;border-radius:22px 22px 0 0;padding:10px 20px max(26px, calc(16px + var(--sab, 0px)));}
+.sheet .grab{width:44px;height:5px;border-radius:3px;background:#24384B;margin:0 auto 10px}
+.sheet h2{font-size:19px;line-height:24px}
+.sheet .item{display:block;width:100%;text-align:left;background:#0E1A26;border:1px solid #1C2B3A;border-bottom:0;padding:14px 14px;color:#E8EEF4;font:600 17px Inter,-apple-system,sans-serif;cursor:pointer;text-decoration:none}
+.sheet .item:first-of-type{border-radius:14px 14px 0 0}
+.sheet .item:last-of-type{border-bottom:1px solid #1C2B3A;border-radius:0 0 14px 14px}
+.sheet .item.danger{color:#F08A8A}
+.sheet .cancel{display:block;width:100%;margin-top:12px;height:48px;border:0;background:none;color:#5CC9B5;font:600 17px Inter,-apple-system,sans-serif;cursor:pointer}
+[hidden]{display:none !important}
+</style>
+<link rel="stylesheet" href="phone.css">
+</head>
+<body><div class="ph">
+<div class="sb"><span>9:58</span><span>●●● ▮</span></div>
+<div class="top"><span class="back">Tonight</span><span class="tr"><a class="ib" id="masterBtn" href="master.html">Master</a><button class="menu" id="menuBtn" type="button" aria-label="Party menu">•••</button></span></div>
+<div class="panel" id="panel"></div>
+<nav class="tabs" aria-label="Main"><a class="tab on" href="live.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</a><a class="tab" href="rigs.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</a><a class="tab" href="rigs.html#view=list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</a></nav>
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="menuT">
+  <div class="grab"></div>
+  <h2 id="menuT">Penobscot Bay Star Party</h2>
+  <p class="small" style="margin:4px 0 12px">6 members · 7 rigs · hosted by Ada</p>
+  <a class="item" id="menuFlats" href="flats.html">Flats…</a>
+  <a class="item" href="sky.html">Sky view</a>
+  <a class="item" href="master.html">Master</a>
+  <button class="item danger" type="button" id="menuLeave">Leave party</button>
+  <button class="cancel" type="button" id="shX">Cancel</button>
+</div>
+<div class="toast" id="toast"></div>
+</div>
+<script src="flats.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { mode: "after", lib: "nov8", restack: null, split: 0.5, pct: 63 };
+function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1800); }
+function hrefs() {
+  const q = FLATS.qs(state);
+  $("masterBtn").href = "master.html#tab=color" + (q ? "&" + q.slice(1) : "");
+  $("menuFlats").href = "flats.html" + q;
+}
+function sync() {
+  history.replaceState(null, "", FLATS.qs(state) || "#");
+  hrefs();
+  if (window.parent !== window) {
+    const b = FLATS.badge(state.mode, state.restack, state.lib);
+    window.parent.postMessage({ type: "st-master-tab", tab: "live", hash: location.hash.slice(1), label: "Live stack · " + (b ? b.text : "M42"), caption: (b ? b.detail + " " : "") + FLATS.HONEST }, "*");
+  }
+}
+function wireCmp() {
+  const box = $("cmpF"); if (!box) return;
+  const clip = $("clip"), div = $("div"), knob = $("knob");
+  const set = (p) => { state.split = Math.max(0.06, Math.min(0.94, p)); const pct = (state.split * 100).toFixed(2) + "%"; clip.style.width = pct; div.style.left = pct; knob.style.left = pct; };
+  set(state.split);
+  const fromEvent = (e) => { const r = box.getBoundingClientRect(); const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left; set(x / r.width); };
+  box.addEventListener("pointerdown", (e) => { box.setPointerCapture(e.pointerId); fromEvent(e); });
+  box.addEventListener("pointermove", (e) => { if (e.buttons) fromEvent(e); });
+}
+function render() {
+  const b = FLATS.badge(state.mode, state.restack, state.lib);
+  const uncal = state.mode === "after" && state.restack !== "done";
+  const showCmp = state.restack === "done";
+  const flatsLink = "flats.html" + FLATS.qs(state);
+  const addLink = "flats.html" + FLATS.qs({ mode: "after", view: "session" });
+  const preview = showCmp ? `<div class="cmp" id="cmpF" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Before and after flats. Drag to compare.">
+      <img src="master/color.jpg" alt="">
+      <div class="after-clip" id="clip"><img src="master/color.jpg" alt=""></div>
+      <span class="lbl l">Uncalibrated</span><span class="lbl r">Calibrated</span>
+      <span class="div" id="div"></span><span class="knob" id="knob">‹›</span>
+    </div>` : `<div class="prev${uncal ? " uncal" : ""}" role="img" aria-label="Live Color master of M42${uncal ? ", uncalibrated preview" : ""}" style="background-image:url(master/color.jpg)">
+      <span class="upd">${state.restack === "progress" ? "Re-stacking" : "Updated 9:58 PM"}</span>
+      ${b ? `<span class="flat-badge ${b.tone}" id="flatBadge">${b.text}</span>` : ""}
+    </div>`;
+  const action = state.mode === "after" && !state.restack ? `<a href="${addLink}">Add flats</a>` : (state.restack === "done" ? `<span class="small">Calibrated</span>` : `<a href="${flatsLink}">Flats</a>`);
+  $("panel").innerHTML = `<div class="party">Penobscot Bay Star Party</div>
+    <h1>Live stack · M42</h1>
+    ${preview}
+    ${state.restack === "progress" ? `<div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${state.pct}" aria-label="Re-stack progress"><i style="width:${state.pct}%"></i></div>` : ""}
+    <div class="rigline"><i></i> Your rig · Backyard Newt · 4 subs in · connected</div>
+    <div class="status"><p class="small" id="flatDetail">${b ? b.detail : ""}</p>${action}</div>
+    <p class="small" style="margin-top:10px">6 rigs · 15 subs in the master</p>
+    <div class="chat">
+      <p class="sys">Be kind. Long-press a message to report or block.</p>
+      <div class="msg"><div class="who">Ada · 9:50 PM</div><div class="txt">Guiding under an arcsecond. Sending lights.</div></div>
+      <div class="msg"><div class="who">Bao · 9:50 PM</div><div class="txt">Three more subs coming.</div></div>
+    </div>
+    <div class="composer"><div class="in">Message the party</div><button class="send" type="button" id="send">Send</button></div>
+    <p class="honest">${FLATS.HONEST}</p>`;
+  const send = $("send"); if (send) send.onclick = () => toast("Prototype · nothing is sent here");
+  if (showCmp) wireCmp();
+  hrefs(); sync();
+}
+function openMenu() { $("sheet").hidden = $("scrim").hidden = false; $("shX").focus(); }
+function closeMenu() { $("sheet").hidden = $("scrim").hidden = true; }
+$("menuBtn").onclick = openMenu; $("shX").onclick = closeMenu; $("scrim").onclick = closeMenu;
+$("menuLeave").onclick = () => { closeMenu(); toast("Prototype · leaves the party"); };
+function fromHash() {
+  const p = FLATS.parse(location.hash);
+  state.mode = p.mode || "after";
+  state.lib = p.lib || "nov8";
+  state.restack = p.restack;
+  if (state.restack === "progress") state.pct = 63;
+  render();
+}
+window.addEventListener("hashchange", fromHash);
+fromHash();
+</script>
+<script src="phone.js"></script>
+<script src="scrollhint.js"></script>
+</body></html>

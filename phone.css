@@ -82,6 +82,12 @@ a.tab.on { color: #E8A05A; }
   text-align: center;
   box-sizing: border-box;
 }
+/* When the top inset is a Dynamic Island (~59px), the column is shorter.
+   Shrink the Color preview a little so Download/Share stay a few px above the tab bar.
+   0 when --sat is 0 or 47px, so 390×844 and prior 47px inset shots stay unchanged. */
+.sky {
+  height: calc(210px - 2 * max(0px, var(--sat) - 47px));
+}
 /* On short phones, keep the last lines (body copy, "bin 2") above the "More below" fade. */
 @media (max-height: 720px) {
   .panel { padding-bottom: 36px; }

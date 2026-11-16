@@ -12,9 +12,9 @@ body{color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .ph>*{flex-shrink:0}
 .sb{height:47px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;padding:0 8px}
 .top{height:52px;display:flex;align-items:center;justify-content:space-between;color:#8FA3B5;font-size:17px}
-.back{height:52px;min-width:88px;margin-left:-8px;padding:0 8px;display:flex;align-items:center;color:#8FA3B5;font-size:17px;font-weight:600}
+.back{height:52px;min-width:88px;margin-left:-8px;padding:0 8px;display:flex;align-items:center;color:#8FA3B5;font-size:17px;font-weight:600;text-decoration:none}
 .stepn{font-size:13px;letter-spacing:1px;color:#8FA3B5;font-weight:700;text-transform:uppercase;white-space:nowrap}
-.menu{width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:#E8EEF4;font-size:22px;font-weight:700}
+.menu{width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:#E8EEF4;font-size:22px;font-weight:700;background:none;border:0;cursor:pointer;font-family:inherit;padding:0}
 .tr{display:flex;align-items:center;gap:4px}
 .party{font-size:15px;font-weight:600;color:#8FA3B5;line-height:21px}
 h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 10px}
@@ -205,19 +205,32 @@ a.primary{text-decoration:none}
 .fmt .fb>b>span{font-size:15px;color:inherit;line-height:inherit}
 .fmt b .sz{font-style:normal;font-weight:600;font-size:14px;color:#8FA3B5;white-space:nowrap}
 .sheet .sample-pill{flex:none;white-space:nowrap;display:inline-block;font-size:11px;font-weight:700;color:#B4C0CC;border:1px solid #33404D;border-radius:999px;padding:0 7px;margin-right:6px;vertical-align:1px}
+.sky .flat-badge{position:absolute;left:10px;bottom:10px;z-index:2;font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;max-width:calc(100% - 20px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sky .flat-badge.ok{color:#BDEFE5;background:rgba(7,16,24,.82);border:1px solid #2A5A55}
+.sky .flat-badge.warn{color:#F0D2A8;background:rgba(26,16,6,.88);border:1px solid #5A4126}
+.sky .flat-badge.prog{color:#E8EEF4;background:rgba(7,16,24,.82);border:1px solid #1C2B3A}
+.sky.uncal::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 48% 42%,transparent 38%,rgba(0,0,0,.55) 100%);pointer-events:none}
+.menu-sheet{position:absolute;left:0;right:0;bottom:0;z-index:23;background:#0E1A26;border:1px solid #1C2B3A;border-radius:22px 22px 0 0;padding:10px 20px max(26px, calc(16px + var(--sab, 0px)));}
+.menu-sheet .grab{width:44px;height:5px;border-radius:3px;background:#24384B;margin:0 auto 10px}
+.menu-sheet h2{font-size:19px;line-height:24px}
+.menu-sheet .item{display:block;width:100%;text-align:left;background:#0E1A26;border:1px solid #1C2B3A;border-bottom:0;padding:14px 14px;color:#E8EEF4;font:600 17px Inter,-apple-system,sans-serif;cursor:pointer;text-decoration:none}
+.menu-sheet .item:first-of-type{border-radius:14px 14px 0 0}
+.menu-sheet .item:last-of-type{border-bottom:1px solid #1C2B3A;border-radius:0 0 14px 14px}
+.menu-sheet .cancel{display:block;width:100%;margin-top:12px;height:48px;border:0;background:none;color:#5CC9B5;font:600 17px Inter,-apple-system,sans-serif;cursor:pointer}
+#menuScrim{z-index:22}
 </style>
 <link rel="stylesheet" href="phone.css">
 </head>
 <body><div class="ph" id="ph">
 <div class="sb"><span>9:58</span><span>●●● ▮</span></div>
-<div class="top"><span class="back">‹ Live stack</span><span class="tr"><a class="ib" id="skyBtn" style="text-decoration:none" href="sky.html" aria-label="Sky view: everyone's field of view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="6" width="11" height="8" rx="1" transform="rotate(-12 9.5 10)"/><rect x="9" y="10" width="11" height="8" rx="1" transform="rotate(8 14.5 14)"/></svg>Sky</a><button class="ib" id="allBtn" type="button" aria-label="Download all masters and saved products as a zip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>All</button><span class="menu" aria-label="Party menu" style="width:40px">•••</span></span></div>
+<div class="top"><a class="back" id="liveBack" href="live.html">‹ Live stack</a><span class="tr"><a class="ib" id="skyBtn" style="text-decoration:none" href="sky.html" aria-label="Sky view: everyone's field of view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="6" width="11" height="8" rx="1" transform="rotate(-12 9.5 10)"/><rect x="9" y="10" width="11" height="8" rx="1" transform="rotate(8 14.5 14)"/></svg>Sky</a><button class="ib" id="allBtn" type="button" aria-label="Download all masters and saved products as a zip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>All</button><button class="menu" id="menuBtn" type="button" aria-label="Party menu" style="width:40px">•••</button></span></div>
 <div class="party">Penobscot Bay Star Party</div>
 <h1>Master · M42</h1>
 <div class="strip" id="strip" role="tablist" aria-label="Master filters"></div>
 
 <!-- channel view -->
 <div class="panel" id="chan">
-  <div class="sky" id="sky" role="img"><span class="tag" id="tag"><i></i><span></span></span><span class="upd">Updated 9:57 PM</span></div>
+  <div class="sky" id="sky" role="img"><span class="tag" id="tag"><i></i><span></span></span><span class="upd">Updated 9:57 PM</span><span class="flat-badge" id="flatBadge" hidden></span></div>
   <div class="stats">
     <div class="stat"><b id="sSubs">0</b><span>SUBS</span></div>
     <div class="stat"><b id="sTime">0m</b><span>INTEGRATION</span></div>
@@ -225,6 +238,7 @@ a.primary{text-decoration:none}
   </div>
   <div class="who" id="who"></div>
   <p class="small note" id="note"></p>
+  <p class="small" id="flatLine" hidden></p>
   <div class="btns"><button class="primary" id="dl" type="button">Download FITS</button><button class="ghostb" id="share" type="button">Share</button></div>
 </div>
 
@@ -352,9 +366,21 @@ a.primary{text-decoration:none}
     <div class="res" id="sendRes" hidden role="status" aria-live="polite"></div>
   </div>
 </div>
+<div class="scrim" id="menuScrim" hidden></div>
+<div class="menu-sheet" id="menu" hidden role="dialog" aria-modal="true" aria-labelledby="menuT">
+  <div class="grab"></div>
+  <h2 id="menuT">Penobscot Bay Star Party</h2>
+  <p class="small" style="margin:4px 0 12px">6 members · 7 rigs</p>
+  <a class="item" id="menuFlats" href="flats.html">Flats…</a>
+  <a class="item" href="sky.html">Sky view</a>
+  <a class="item" href="live.html">Live stack</a>
+  <button class="item" type="button" id="menuLeave" style="border-bottom:1px solid #1C2B3A;border-radius:0 0 14px 14px;color:#F08A8A">Leave party</button>
+  <button class="cancel" type="button" id="menuX">Cancel</button>
+</div>
 <div class="toast" id="toast">Prototype · saves a new FITS; nothing is saved here</div>
 </div>
 <script src="roster.js"></script>
+<script src="flats.js"></script>
 <script>
 // Mock data for the prototype. Real counts come from the party stack (GET /api/stacks/{id}/masters).
 const BASE_TABS = [
@@ -393,7 +419,7 @@ const has = (k) => !!TABS.find((t) => t.k === k && t.subs);
 const strip = $("strip");
 const BLEND_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>';
 const state = { tab: "color", sample: "full", src: "Ha", target: "R", mode: "screen", strength: 50, view: "manual",
-                w: [1, 1, 1], cmode: "average", cstr: 50, pick: null, pal: null, hig: 20 };
+                w: [1, 1, 1], cmode: "average", cstr: 50, pick: null, pal: null, hig: 20, flats: null, flatLib: "nov8", restack: null };
 const missingRGB = () => ["R","G","B"].filter((k) => !has(k));
 function buildStrip() {
   strip.innerHTML = "";
@@ -458,7 +484,21 @@ function show(k, user) {
   $("eComps").hidden = !rgbOff; if (rgbOff) comps($("eComps")); if (k === "rgb" && !rgbOff) comps($("comps"));
   if (k === "rgb" && !rgbOff) renderCombine();
   if (k === "blend") renderBlendPanel();
+  paintFlats();
   syncHash(); notify();
+}
+function flatsQS() { return FLATS.qs({ mode: state.flats, lib: state.flatLib, restack: state.restack }); }
+function paintFlats() {
+  const badge = $("flatBadge"), line = $("flatLine"), sky = $("sky"), back = $("liveBack"), mf = $("menuFlats");
+  const b = state.flats ? FLATS.badge(state.flats, state.restack, state.flatLib) : null;
+  const q = flatsQS();
+  if (back) back.href = "live.html" + (q || "");
+  if (mf) mf.href = "flats.html" + (q || "");
+  if (!badge) return;
+  if (!b || $("chan").hidden) { badge.hidden = true; if (line) line.hidden = true; if (sky) sky.classList.remove("uncal"); return; }
+  badge.hidden = false; badge.className = "flat-badge " + b.tone; badge.textContent = b.text;
+  if (line) { line.hidden = false; line.innerHTML = b.detail + (state.flats === "after" && !state.restack ? ` <a href="flats.html${q}" style="color:#5CC9B5;font-weight:600;text-decoration:none">Add flats</a>` : ` <a href="flats.html${q}" style="color:#5CC9B5;font-weight:600;text-decoration:none">Change</a>`); }
+  if (sky) sky.classList.toggle("uncal", state.flats === "after" && state.restack !== "done");
 }
 function syncHash() {
   const q = new URLSearchParams({ tab: state.tab });
@@ -466,6 +506,9 @@ function syncHash() {
   if (state.tab === "blend") { q.set("view", state.view); if (state.view === "manual" && (state.pal || !baseAvailable())) { q.set("pal", state.pal || "HOO"); q.set("hig", state.hig); } else if (state.view === "manual") { q.set("src", state.src); q.set("target", state.target); q.set("mode", state.mode); q.set("strength", state.strength); } else if (state.pick != null) q.set("pick", state.pick); }
   if (state.tab === "rgb") { q.set("w", state.w.join(",")); q.set("cmode", state.cmode); q.set("cstr", state.cstr); }
   if (dl.item) { q.set("sheet", dl.item); if (dl.fmt !== "fits") q.set("fmt", dl.fmt); if (dl.store !== "emmc") q.set("store", dl.store); if (dl.send && dl.send !== "progress") q.set("send", dl.send); }
+  if (state.flats) q.set("flats", state.flats);
+  if (state.flats === "library" && state.flatLib) q.set("lib", state.flatLib);
+  if (state.restack) q.set("restack", state.restack);
   history.replaceState(null, "", "#" + q.toString().replace(/%2C/g, ","));
 }
 function notify() {
@@ -477,6 +520,10 @@ function notify() {
   else if (k === "blend") { label = `Blend · ${state.src} to ${state.target === "L" ? "Lum" : state.target}`; caption = CAPS.blend(); }
   else if (k === "rgb") { label = missingRGB().length ? "RGB combine · missing channel" : "RGB combine"; caption = missingRGB().length ? CAPS.rgbOff() : CAPS.rgb; }
   else { label = `Master tabs · ${t.label}`; caption = t.subs ? CAPS.chan(t) : CAPS.empty(t); }
+  if (state.flats && t && t.subs) {
+    const b = FLATS.badge(state.flats, state.restack, state.flatLib);
+    if (b) { label = `Master · ${b.text}`; caption = b.detail + " " + (typeof FLATS !== "undefined" ? FLATS.HONEST : "Simulated."); }
+  }
   if (dl.item) { const all = dl.item === "all"; label = dl.send && dl.send !== "progress" ? `Send to ASIAIR · ${{done:"sent",nospace:"no space",offline:"not on its Wi-Fi",nousb:"no USB drive",lost:"connection lost"}[dl.send]}` : all ? "Download all (zip)" : `Download · ${dlLabel(dl.item)}`;
     caption = CAPS.sheet(all); }
   window.parent.postMessage({ type: "st-master-tab", tab: k, hash: location.hash.slice(1), label, caption }, "*");
@@ -853,10 +900,17 @@ function fromHash() {
   dl.store = q.get("store") === "usb" ? "usb" : "emmc";
   const sh = q.get("sheet");
   dl.item = null;
+  state.flats = ["before","library","after"].includes(q.get("flats")) ? q.get("flats") : null;
+  state.flatLib = q.get("lib") || "nov8";
+  state.restack = ["progress","done"].includes(q.get("restack")) ? q.get("restack") : null;
   show([...TABS.map((t) => t.k), "rgb", "blend"].includes(start) ? start : "color", false);
   if (sh) { dl.send = ["done","nospace","offline","nousb","lost"].includes(q.get("send")) ? q.get("send") : null; openSheet(sh, true); }
   else if (!$("sheet").hidden) { $("sheet").hidden = $("scrim").hidden = true; dl.send = null; }
 }
+$("menuBtn").onclick = () => { $("menu").hidden = $("menuScrim").hidden = false; $("menuX").focus(); };
+$("menuX").onclick = $("menuScrim").onclick = () => { $("menu").hidden = $("menuScrim").hidden = true; };
+$("menuLeave").onclick = () => { $("menu").hidden = $("menuScrim").hidden = true; toast("Prototype · leaves the party"); };
+
 window.addEventListener("hashchange", fromHash);
 fromHash();
 </script>

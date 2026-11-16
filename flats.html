@@ -1,0 +1,255 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Star Party"><title>Star Party · Flats (prototype)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#071018}
+body{color:#E8EEF4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.ph{display:flex;flex-direction:column}
+.ph>*{flex-shrink:0}
+.sb{height:47px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;padding:0 8px}
+.top{height:52px;display:flex;align-items:center;justify-content:space-between;color:#8FA3B5;font-size:17px}
+.back{height:52px;min-width:88px;margin-left:-8px;padding:0 8px;display:flex;align-items:center;color:#8FA3B5;font-size:17px;font-weight:600;text-decoration:none;background:none;border:0;cursor:pointer;font-family:inherit}
+.party{font-size:15px;font-weight:600;color:#8FA3B5;line-height:21px}
+h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 6px}
+.muted{color:#8FA3B5;font-size:15px;line-height:21px}
+.small{font-size:13px;color:#8FA3B5;line-height:18px}
+.panel{display:flex;flex-direction:column;flex:1 1 auto !important;min-height:0;overflow-y:auto;scrollbar-width:none;padding-bottom:16px}
+.panel::-webkit-scrollbar{display:none}
+.panel>*{flex-shrink:0}
+.lbt{font-size:13px;color:#8FA3B5;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin:14px 0 6px}
+.opt{display:block;width:100%;text-align:left;background:#0E1A26;border:1px solid #1C2B3A;border-radius:16px;padding:12px 14px;margin-top:8px;color:#E8EEF4;cursor:pointer;font:inherit;min-height:64px}
+.opt.on{border-color:#E8A05A;background:#1A1408}
+.opt .hd{display:flex;align-items:center;gap:12px}
+.opt .rd{width:20px;height:20px;border-radius:50%;border:2px solid #8FA3B5;flex:none}
+.opt.on .rd{border-color:#E8A05A;background:radial-gradient(#E8A05A 45%,transparent 50%)}
+.opt b{display:block;font-size:16px;line-height:22px}
+.opt .lead{display:block;font-size:13px;color:#8FA3B5;line-height:18px;margin-top:6px;padding-left:32px}
+.warn{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid #5A4126;background:rgba(232,160,90,.08);color:#F0D2A8;font-size:13px;line-height:18px}
+.okbox{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid #2A5A55;background:rgba(92,201,181,.08);color:#BDEFE5;font-size:13px;line-height:18px}
+.okbox b,.warn b{display:block;font-size:13px;margin-bottom:2px}
+.card{background:#0E1A26;border:1px solid #1C2B3A;border-radius:16px;padding:12px 14px;margin-top:8px}
+.card .row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.card b.n{font-size:16px}
+.pill{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.pill.ok{color:#5CC9B5;border:1px solid #2A5A55}
+.pill.warn{color:#E8A05A;border:1px solid #5A4126}
+.pill.prog{color:#8FA3B5;border:1px solid #1C2B3A}
+.linkb{background:none;border:0;color:#5CC9B5;font:600 15px Inter,-apple-system,sans-serif;height:44px;cursor:pointer;padding:0 2px}
+.primary{height:56px;border-radius:28px;background:#E8A05A;color:#1A1006;font:700 17px Inter,-apple-system,sans-serif;border:0;cursor:pointer;width:100%;margin-top:14px;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.ghostb{height:48px;border-radius:24px;border:1px solid #1C2B3A;background:transparent;color:#5CC9B5;font:600 16px Inter,-apple-system,sans-serif;cursor:pointer;width:100%;margin-top:8px}
+.hit{display:block;width:100%;text-align:left;background:#0E1A26;border:1px solid #1C2B3A;border-radius:14px;padding:10px 12px;margin-top:8px;color:#E8EEF4;cursor:pointer;font:inherit;min-height:64px}
+.hit.on{border-color:#E8A05A;background:#1A1408}
+.hit b{display:block;font-size:15px}
+.hit span{font-size:12px;color:#8FA3B5;line-height:16px}
+.honest{font-size:11px;color:#6E8293;line-height:15px;margin-top:14px}
+.bar{height:6px;border-radius:3px;background:#1C2B3A;overflow:hidden;margin-top:10px}.bar i{display:block;height:6px;background:#5CC9B5;width:0}
+.cmp{position:relative;height:180px;border-radius:16px;overflow:hidden;margin-top:10px;background:#000;touch-action:none;user-select:none}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cmp .before{z-index:1}
+.cmp .after-clip{position:absolute;inset:0;z-index:2;overflow:hidden;width:50%}
+.cmp .lbl{position:absolute;bottom:8px;z-index:3;font-size:11px;font-weight:700;color:#E8EEF4;background:rgba(7,16,24,.72);padding:2px 8px;border-radius:999px}
+.cmp .lbl.l{left:8px}.cmp .lbl.r{right:8px}
+.cmp .div{position:absolute;top:0;bottom:0;width:2px;background:#E8EEF4;z-index:4;left:50%;margin-left:-1px}
+.cmp .knob{position:absolute;top:50%;left:50%;z-index:5;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;background:#E8EEF4;color:#071018;font:700 14px/36px Inter,sans-serif;text-align:center}
+.vignette{filter:none}
+.vignette-wrap{position:relative}
+.vignette-wrap::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 48% 42%,transparent 38%,rgba(0,0,0,.55) 100%);pointer-events:none}
+.sample{display:inline-block;font-size:11px;font-weight:700;color:#B4C0CC;border:1px solid #33404D;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:3px}
+.tabs{height:83px;margin:0 -20px;border-top:1px solid #1C2B3A;display:flex;justify-content:space-around;padding-top:8px;background:#09131C}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:#8FA3B5;width:96px;height:60px;padding-top:4px;text-decoration:none}
+.tab svg{width:26px;height:26px}.tab.on{color:#E8A05A}
+.toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100% - 24px);text-align:center}
+.toast.show{opacity:1}
+[hidden]{display:none !important}
+</style>
+<link rel="stylesheet" href="phone.css">
+</head>
+<body><div class="ph">
+<div class="sb"><span>9:58</span><span>●●● ▮</span></div>
+<div class="top"><button class="back" id="back" type="button">‹ Live stack</button><span class="small">Sample data</span></div>
+<div class="panel" id="panel"></div>
+<nav class="tabs" aria-label="Main"><a class="tab on" href="live.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M18 2.5v4M16 4.5h4"/></svg>Tonight</a><a class="tab" href="rigs.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5 16 7l2.2 4.2-12.5 6.5z"/><path d="M18.2 6l1.6-.8 1.4 2.7-1.6.8"/><path d="M11 15.6 8 21.5M12.6 14.8 16 21.5"/></svg>Gear</a><a class="tab" href="rigs.html#view=list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>Profile</a></nav>
+<div class="toast" id="toast"></div>
+</div>
+<script src="roster.js"></script>
+<script src="flats.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { view: "session", mode: "after", lib: "nov8", restack: null, who: null, pct: 0, timer: 0, split: 0.5 };
+function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1800); }
+function go(extra) {
+  Object.assign(state, extra);
+  if (state.mode !== "library") state.lib = state.lib || "nov8";
+  sync(); render();
+}
+function sync() {
+  history.replaceState(null, "", FLATS.qs(state));
+  if (window.parent !== window) {
+    const label = titleOf();
+    window.parent.postMessage({ type: "st-master-tab", tab: "flats", hash: location.hash.slice(1), label, caption: captionOf() }, "*");
+  }
+}
+function titleOf() {
+  if (state.view === "library") return "Flats · library";
+  if (state.view === "rigs") return state.who ? "Flats · one rig" : "Flats · each rig";
+  if (state.view === "restack") return state.restack === "done" ? "Flats · re-stack done" : "Flats · re-stacking";
+  return "Flats · " + (FLATS.MODES[state.mode] ? FLATS.MODES[state.mode].short : "tonight");
+}
+function captionOf() {
+  if (state.view === "restack" && state.restack === "done") return "Re-stack finished (simulated): the uncalibrated live master was replaced with a calibrated one. Drag to compare before and after. This preview is not a real calibration.";
+  if (state.view === "restack") return "The app is re-stacking raw subs with the new flats and will replace the live master when it finishes. Simulated; the native app does the real calibration.";
+  if (state.view === "library") return "Library flats are matched by scope, camera, filter, and the focus / rotation note. Pick a set to apply, or swap in a fresher one, which re-stacks. Sample data.";
+  if (state.view === "rigs") return "Each member's rig can use a different flats method. The live stack badge follows the combined status; your rig uses tonight's default until you change it. Sample data.";
+  const m = FLATS.MODES[state.mode];
+  return (m ? m.lead : "Pick how flats are applied tonight.") + " All three methods are available per session and per rig. Sample data.";
+}
+function backTo() {
+  const q = FLATS.qs({ mode: state.mode, lib: state.lib, restack: state.restack === "done" ? "done" : null });
+  return "live.html" + q;
+}
+$("back").onclick = () => {
+  if (state.view === "library" || state.view === "rigs" || state.view === "restack") { go({ view: "session", who: null, restack: state.restack === "progress" ? null : state.restack }); return; }
+  location.href = backTo();
+};
+function modeCard(k) {
+  const m = FLATS.MODES[k], on = state.mode === k && state.view === "session";
+  return `<button type="button" class="opt${state.mode === k ? " on" : ""}" role="radio" aria-checked="${state.mode === k}" data-mode="${k}"><span class="hd"><span class="rd"></span><b>${m.title}</b></span><span class="lead">${m.lead}</span></button>`;
+}
+function sessionBody() {
+  const m = FLATS.MODES[state.mode], lib = FLATS.libById(state.lib), b = FLATS.badge(state.mode, state.restack, state.lib);
+  let extra = "";
+  if (state.mode === "before") extra = `<div class="warn" id="flatWarn"><b>Keep the optical train still</b>${m.warn}</div>`;
+  if (state.mode === "library") extra = `<div class="okbox" id="libApplied"><b>Library set applied · ${lib.date}</b>${FLATS.libLine(lib)}. ${lib.n} flats · ${lib.temp}.</div>
+    <button class="ghostb" type="button" id="browse">Browse or swap library sets</button>`;
+  if (state.mode === "after" && state.restack !== "done") extra = `<div class="warn" id="flatWarn"><b>${b.text}</b>${b.detail}</div>
+    <button class="primary" type="button" id="addFlats">Add flats and re-stack</button>`;
+  if (state.mode === "after" && state.restack === "done") extra = `<div class="okbox"><b>${b.text}</b>${b.detail}</div>
+    <button class="ghostb" type="button" id="seeCompare">View before / after</button>`;
+  return `<div class="party">Penobscot Bay Star Party</div>
+    <h1>Flats · M42</h1>
+    <p class="muted">How flats are applied to your rig tonight. Every member can pick a different method.</p>
+    <div class="lbt">Tonight's method</div>
+    ${["before","library","after"].map(modeCard).join("")}
+    ${extra}
+    <button class="linkb" type="button" id="seeRigs">Each rig in this party ›</button>
+    <p class="honest">${FLATS.HONEST}</p>`;
+}
+function libraryBody() {
+  const cur = state.lib;
+  return `<div class="party">Penobscot Bay Star Party</div>
+    <h1>Flat library</h1>
+    <p class="muted">Sets that match your Backyard Newt · ASI2600MC Pro · Color. Check the focus / rotation note before you apply one.</p>
+    ${FLATS.LIBS.filter((l) => l.camera.includes("2600MC") && l.filter.startsWith("Color")).map((l) => `<button type="button" class="hit${l.id === cur ? " on" : ""}" data-lib="${l.id}"><b>${l.date}${l.id === cur ? " · applied" : ""}</b><span>${l.n} flats · ${l.temp}<br>${l.note}</span></button>`).join("")}
+    <p class="small" style="margin-top:10px">A fresher set (closer focus, same rotation) usually calibrates better. Applying a different set re-stacks the master. Simulated.</p>
+    <button class="primary" type="button" id="applyLib"${state.lib ? "" : " disabled"}>Apply this set and re-stack</button>
+    <p class="honest">${FLATS.HONEST}</p>`;
+}
+function rigsBody() {
+  const who = state.who ? SAMPLE_ROSTER.find((r) => r.id === state.who) : null;
+  if (who) {
+    const d = FLATS.RIG_DEFAULTS[who.id] || { mode: "after" };
+    const mode = state.whoMode || d.mode;
+    const lib = d.lib ? FLATS.libById(d.lib) : null;
+    return `<div class="party">${who.tag || who.name} · ${who.rig.name}</div>
+      <h1>Flats for this rig</h1>
+      <p class="muted">${who.rig.camera} · ${who.rig.telescope}</p>
+      <div class="lbt">Method</div>
+      ${["before","library","after"].map(modeCard).join("")}
+      ${mode === "library" && lib ? `<div class="okbox"><b>Library set · ${lib.date}</b>${FLATS.libLine(lib)}</div>` : ""}
+      ${mode === "after" ? `<button class="primary" type="button" id="addFlats">Add flats and re-stack</button>` : ""}
+      ${mode === "before" ? `<div class="warn"><b>Keep the optical train still</b>${FLATS.MODES.before.warn}</div>` : ""}
+      <p class="honest">${FLATS.HONEST}</p>`;
+  }
+  return `<div class="party">Penobscot Bay Star Party</div>
+    <h1>Flats · each rig</h1>
+    <p class="muted">A member with two rigs (Dana) can use a different method on each. Sample data.</p>
+    ${SAMPLE_ROSTER.map((r) => {
+      const d = FLATS.RIG_DEFAULTS[r.id] || { mode: "after" };
+      const b = FLATS.badge(d.mode, null, d.lib);
+      const lib = d.lib ? FLATS.libById(d.lib) : null;
+      return `<button type="button" class="hit" data-who="${r.id}"><span class="row" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b class="n">${r.tag || r.name}</b><span class="pill ${b.tone}">${b.text.split(" · ")[0]}</span></span>
+        <span>${r.rig.name} · ${r.rig.camera}<br>${d.mode === "library" && lib ? lib.date + " · " + lib.note : (d.mode === "before" ? "Session flats, shot before her first sub" : "Raw subs kept · flats pending")}</span></button>`;
+    }).join("")}
+    <p class="honest">${FLATS.HONEST}</p>`;
+}
+function restackBody() {
+  const done = state.restack === "done";
+  const lib = FLATS.libById(state.lib);
+  return `<div class="party">Penobscot Bay Star Party</div>
+    <h1>${done ? "Master replaced" : "Re-stacking with flats"}</h1>
+    <p class="muted">${done ? "The uncalibrated live master was replaced with a calibrated stack. Drag to compare. Simulated — this preview is not a real calibration." : "Calibrating the kept raw subs and stacking them again. The live master will be replaced when this finishes. Simulated."}</p>
+    ${done ? `<div class="cmp" id="cmpF" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Before and after flats. Drag to compare.">
+        <img class="before" src="master/color.jpg" alt="">
+        <div class="after-clip" id="clip"><img src="master/color.jpg" alt=""></div>
+        <span class="lbl l">Uncalibrated</span><span class="lbl r">Calibrated</span>
+        <span class="div" id="div"></span><span class="knob" id="knob">‹›</span>
+      </div>
+      <div class="okbox"><b>${state.mode === "library" ? "Fresh library flats · " + lib.date : "Session flats added tonight"}</b>${state.mode === "library" ? FLATS.libLine(lib) : "Raw subs were kept. The new master is marked calibrated."}</div>
+      <a class="primary" href="live.html${FLATS.qs({ mode: state.mode, lib: state.lib, restack: "done" })}">Open the live stack</a>` :
+      `<div class="card"><div class="k" style="font-size:13px;font-weight:700;color:#5CC9B5">Re-stacking ${state.pct}%</div>
+        <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${state.pct}" aria-label="Re-stack progress"><i style="width:${state.pct}%"></i></div>
+        <p class="small" style="margin-top:8px">Applying flats to 15 raw subs · rebuilding the Color master.</p></div>`}
+    <p class="honest">${FLATS.HONEST}</p>`;
+}
+function wireCmp() {
+  const box = $("cmpF"); if (!box) return;
+  const clip = $("clip"), div = $("div"), knob = $("knob");
+  const set = (p) => { state.split = Math.max(0.06, Math.min(0.94, p)); const pct = (state.split * 100).toFixed(2) + "%"; clip.style.width = pct; div.style.left = pct; knob.style.left = pct; box.setAttribute("aria-valuenow", String(Math.round(state.split * 100))); };
+  set(state.split);
+  const fromEvent = (e) => { const r = box.getBoundingClientRect(); const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left; set(x / r.width); };
+  box.addEventListener("pointerdown", (e) => { box.setPointerCapture(e.pointerId); fromEvent(e); });
+  box.addEventListener("pointermove", (e) => { if (e.buttons) fromEvent(e); });
+}
+function startRestack() {
+  if (state.restack === "progress") return;
+  go({ view: "restack", restack: "progress", pct: 0 });
+  clearInterval(state.timer);
+  state.timer = setInterval(() => {
+    state.pct = Math.min(100, state.pct + 8);
+    if (state.pct >= 100) { clearInterval(state.timer); go({ view: "restack", restack: "done" }); return; }
+    const bar = $("bar"); if (bar) { bar.firstElementChild.style.width = state.pct + "%"; bar.setAttribute("aria-valuenow", String(state.pct)); }
+    const k = document.querySelector(".card .k"); if (k) k.textContent = `Re-stacking ${state.pct}%`;
+  }, 90);
+}
+function render() {
+  $("back").textContent = (state.view === "session") ? "‹ Live stack" : "‹ Flats";
+  const p = $("panel");
+  if (state.view === "library") p.innerHTML = libraryBody();
+  else if (state.view === "rigs") p.innerHTML = rigsBody();
+  else if (state.view === "restack") p.innerHTML = restackBody();
+  else p.innerHTML = sessionBody();
+  p.querySelectorAll("[data-mode]").forEach((b) => b.onclick = () => {
+    const mode = b.dataset.mode;
+    if (state.view === "rigs" && state.who) { /* per-rig pick in this prototype just walks the same session methods */ go({ mode, restack: null }); return; }
+    go({ mode, restack: null });
+  });
+  p.querySelectorAll("[data-lib]").forEach((b) => b.onclick = () => go({ lib: b.dataset.lib }));
+  p.querySelectorAll("[data-who]").forEach((b) => b.onclick = () => go({ view: "rigs", who: b.dataset.who, mode: (FLATS.RIG_DEFAULTS[b.dataset.who] || {}).mode }));
+  const browse = $("browse"); if (browse) browse.onclick = () => go({ view: "library" });
+  const add = $("addFlats"); if (add) add.onclick = startRestack;
+  const apply = $("applyLib"); if (apply) apply.onclick = () => startRestack();
+  const see = $("seeRigs"); if (see) see.onclick = () => go({ view: "rigs", who: null });
+  const cmp = $("seeCompare"); if (cmp) cmp.onclick = () => go({ view: "restack", restack: "done" });
+  if (state.view === "restack" && state.restack === "done") wireCmp();
+  sync();
+}
+function fromHash() {
+  const p = FLATS.parse(location.hash);
+  if (p.mode) state.mode = p.mode;
+  if (p.lib) state.lib = p.lib;
+  state.restack = p.restack;
+  state.view = ["session","library","rigs","restack"].includes(p.view) ? p.view : (p.restack ? "restack" : "session");
+  state.who = p.who;
+  if (state.restack === "progress" && !state.pct) state.pct = 63;
+  render();
+}
+window.addEventListener("hashchange", fromHash);
+fromHash();
+</script>
+<script src="phone.js"></script>
+<script src="scrollhint.js"></script>
+</body></html>
