@@ -90,6 +90,7 @@
       user-select: none;
       -webkit-user-drag: none;
     }
+    .phone img[hidden] { display: none !important; }
     label {
       display: block;
       font-size: 0.85rem;
@@ -219,6 +220,7 @@
       if (s.live) {
         img.hidden = true;
         img.removeAttribute("src");
+        img.alt = "";
         live.hidden = false;
         const loaded = live.dataset.src && live.contentWindow && live.contentWindow.location.pathname.endsWith(s.live.split("#")[0]);
         if (loaded) live.contentWindow.location.hash = s.live.split("#")[1];

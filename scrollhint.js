@@ -16,6 +16,6 @@
     new MutationObserver(() => requestAnimationFrame(upd)).observe(p, { childList: true, subtree: true, attributes: true, attributeFilter: ["hidden", "class", "style"] });
     upd();
   }
-  const go = () => document.querySelectorAll(".panel, .sheet").forEach(attach);
+  const go = () => document.querySelectorAll(".panel, .sheet-body").forEach(attach);
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", go); else go();
 })();

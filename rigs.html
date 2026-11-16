@@ -133,8 +133,10 @@ function optics(r) {
   const fw = deg(c.width_px * c.pixel_um / 1000), fh = deg(c.height_px * c.pixel_um / 1000);
   return { efl, f: efl / t.aperture_mm, scale, fw, fh };
 }
-const fov = (o) => o.fw * 60 >= 120 ? `${o.fw.toFixed(2)}° × ${o.fh.toFixed(2)}°` : `${(o.fw * 60).toFixed(0)}′ × ${(o.fh * 60).toFixed(0)}′`;
-const fovS = (o) => `${(o.fw * 60).toFixed(0)}′×${(o.fh * 60).toFixed(0)}′`;
+function fovParts(o) { const aw = Math.round(o.fw * 60), ah = Math.round(o.fh * 60);
+  return { aw, deg: `${(aw / 60).toFixed(2)}° × ${(ah / 60).toFixed(2)}°`, am: `${aw}′ × ${ah}′`, amS: `${aw}′×${ah}′` }; }
+const fov = (o) => { const p = fovParts(o); return p.aw >= 120 ? p.deg : p.am; };
+const fovS = (o) => fovParts(o).amS;
 const statsHtml = (o) => o ? [[`${o.efl.toFixed(0)} mm`, "FOCAL"], [`f/${o.f.toFixed(1)}`, "F-RATIO"], [`${o.scale.toFixed(2)}″`, "PER PIXEL"], [fovS(o), "FIELD"]].map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("") : "";
 const sub = (r) => `${r.camera.model} · ${r.telescope.model}${r.reducer !== 1 ? ` · ${r.reducer}×` : ""}${r.binning > 1 ? ` · bin ${r.binning}` : ""}`;
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1600); }
@@ -204,12 +206,14 @@ $("save").onclick = () => { const i = RIGS.findIndex((r) => r.id === cur.id); if
 $("new").onclick = () => go("new");
 $("back").onclick = () => { if (view === "list") location.href = "master.html"; else go("list"); };
 function renderJoin() {
-  $("jNew").textContent = RIGS.length ? "+ Add another rig" : "+ Add a rig";
   if (!RIGS.length) {
-    $("jOpts").innerHTML = `<p class="muted" id="joinEmpty" style="margin-top:12px">Add a rig first, then come back to pick it when you join. Stacking and plate solving need its scale.</p>`;
-    $("jGo").disabled = true; $("jGo").textContent = "Add a rig first";
+    $("jOpts").innerHTML = `<p class="muted" id="joinEmpty" style="margin-top:12px">Add a rig first, then come back to pick it when you join.</p>`;
+    $("jNew").hidden = true;
+    $("jGo").disabled = false; $("jGo").textContent = "+ Add a rig";
     return;
   }
+  $("jNew").hidden = false;
+  $("jNew").textContent = "+ Add another rig";
   $("jGo").disabled = false;
   const pick = joinPick ?? (RIGS.find((r) => r.def) || RIGS[0]).id;
   $("jOpts").innerHTML = RIGS.map((r) => { const o = optics(r); return `<button type="button" class="opt${r.id === pick ? " on" : ""}" role="radio" aria-checked="${r.id === pick}" data-j="${r.id}"><span class="rd"></span><span><b>${r.name}${r.def ? " · default" : ""}</b><span>${sub(r)}<br>${o ? `${o.scale.toFixed(2)}″/px · ${fov(o)}` : ""}</span></span></button>`; }).join("");
@@ -217,7 +221,7 @@ function renderJoin() {
   $("jGo").textContent = `Join with ${RIGS.find((r) => r.id === pick).name}`;
 }
 $("jNew").onclick = () => go("new");
-$("jGo").onclick = () => toast("Prototype · joins the party with this rig");
+$("jGo").onclick = () => { if (!RIGS.length) go("new"); else toast("Prototype · joins the party with this rig"); };
 let view = "list";
 function go(v, id) {
   view = v; open = null; q = "";

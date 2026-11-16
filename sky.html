@@ -22,8 +22,9 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 4px}
 .panel{display:flex;flex-direction:column;flex:1 1 auto !important;min-height:0;overflow-y:auto;scrollbar-width:none;padding-bottom:16px}
 .panel::-webkit-scrollbar{display:none}
 .panel>*{flex-shrink:0}
-.map{position:relative;width:350px;height:330px;border-radius:16px;overflow:hidden;background:#02050a;border:1px solid #1C2B3A;margin-top:8px;cursor:pointer;touch-action:none}
-.map canvas{position:absolute;inset:0;width:350px;height:330px}
+.map{position:relative;width:100%;max-width:350px;height:330px;border-radius:16px;overflow:hidden;background:#02050a;border:1px solid #1C2B3A;margin-top:8px;cursor:pointer;touch-action:none}
+.map canvas{position:absolute;top:0;left:0}
+@media (max-height:720px){.map{height:230px}}
 .map .cmp{position:absolute;right:8px;top:8px;font-size:11px;color:#8FA3B5;background:rgba(2,5,10,.7);padding:2px 7px;border-radius:999px}
 .map .smp{position:absolute;right:8px;bottom:8px;font-size:11px;font-weight:600;color:#B4C0CC;background:rgba(7,16,24,.72);padding:2px 8px;border-radius:999px}
 .map .scale{position:absolute;left:10px;bottom:10px;font-size:11px;color:#8FA3B5}
@@ -129,7 +130,19 @@ function analyse(frames) {
   return { pairs, union: un, all };
 }
 const sq = (x) => x < 1 ? `${Math.round(x * 3600)}′²` : `${x.toFixed(2)}°²`;
-const cv = $("cv"), ctx = cv.getContext("2d"), S = 2, Wc = 350, Hc = 330;
+const cv = $("cv"), ctx = cv.getContext("2d");
+let S = 2, Wc = 350, Hc = 330;
+function sizeCanvas() {
+  const map = $("map"), w = Math.max(1, map.offsetWidth), h = Math.max(1, map.offsetHeight);
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const bw = Math.round(w * dpr), bh = Math.round(h * dpr);
+  const same = w === Wc && h === Hc && dpr === S && cv.width === bw && cv.height === bh && cv.style.width === w + "px" && cv.style.height === h + "px";
+  Wc = w; Hc = h; S = dpr;
+  if (cv.width !== bw) cv.width = bw;
+  if (cv.height !== bh) cv.height = bh;
+  cv.style.width = w + "px"; cv.style.height = h + "px";
+  return !same;
+}
 let K = 92, OX = 0, OY = 0; // px per degree and view center (tangent plane), fitted to every frame
 const toScr = ([x, y]) => [Wc / 2 - (x - OX) * K, Hc / 2 - (y - OY) * K + 6];
 function fit() {
@@ -140,6 +153,7 @@ function fit() {
   K = Math.min((Wc - 24) / (Math.max(...xs) - Math.min(...xs)), (Hc - 56) / (Math.max(...ys) - Math.min(...ys)));
 }
 function draw() {
+  sizeCanvas();
   fit();
   ctx.setTransform(S, 0, 0, S, 0, 0); ctx.clearRect(0, 0, Wc, Hc);
   // faint grid every 1°
@@ -230,9 +244,10 @@ function sync() {
 function showMapMsg(html) { const el = $("mapMsg"); if (!el) return; if (!html) { el.hidden = true; el.innerHTML = ""; return; } el.hidden = false; el.innerHTML = html; }
 function loadStars() {
   showMapMsg("Loading star catalog…");
+  applyHash(); // honor #state=solved and draw the roster under the overlay; do not render/sync first or the hash is cleared
   return fetch("sky/stars_m42.json").then((r) => { if (!r.ok) throw new Error("star catalog " + r.status); return r.json(); })
     .then((d) => { STARS = d.stars; CREDIT = d.credit; showMapMsg(""); init(); })
-    .catch(() => { showMapMsg(`Couldn't load the star map. Check your connection and try again.<button type="button" id="retryStars">Try again</button>`); $("retryStars").onclick = loadStars; });
+    .catch(() => { showMapMsg(`Couldn't load the star map. Check your connection and try again.<button type="button" id="retryStars">Try again</button>`); $("retryStars").onclick = loadStars; applyHash(); });
 }
 function applyHash() {
   const p = new URLSearchParams(location.hash.slice(1));
@@ -244,10 +259,13 @@ function applyHash() {
 }
 function init() {
   applyHash();
+  render(); // always redraw once the catalog is in (applyHash may no-op if it already ran during load)
   const p = new URLSearchParams(location.hash.slice(1));
   if (p.get("live") === "1" && phase !== "solved") setTimeout(() => { if (phase !== "solved") { solveBea(); toast("Bea's frame plate-solved"); } }, 3500);
 }
 window.addEventListener("hashchange", applyHash);
+applyHash();
+new ResizeObserver(() => { if (sizeCanvas()) render(); }).observe($("map"));
 loadStars();
 </script>
 <script src="phone.js"></script>
