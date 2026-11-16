@@ -65,6 +65,31 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 6px}
 .toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#13283A;border:1px solid #2A5A55;color:#5CC9B5;font-size:14px;font-weight:600;padding:8px 14px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100% - 24px);text-align:center}
 .toast.show{opacity:1}
 [hidden]{display:none !important}
+
+.opt:not(.on) .lead{display:none}
+.opt:not(.on){min-height:44px;padding:10px 14px}
+.hit.rig{padding:5px 10px;min-height:0;margin-top:3px}
+.hit.rig .pill{font-size:10px;padding:1px 6px}
+.hit.rig span{font-size:11px;line-height:14px}
+.hit.rig b.n{font-size:15px;line-height:20px}
+.cmp .before-clip{position:absolute;inset:0;z-index:2;overflow:hidden;width:50%}
+.cmp .before-clip .vignette-wrap{position:absolute;left:0;top:0;bottom:0;height:100%}
+@media (max-height:720px){
+  h1{font-size:22px;line-height:26px;margin:0 0 2px}
+  .party{line-height:16px;font-size:13px}
+  .muted{font-size:13px;line-height:17px}
+  .muted .more{display:none}
+  .lbt{margin:6px 0 2px}
+  .opt{margin-top:4px}
+  .opt.on{padding:8px 12px}
+  .opt .lead{margin-top:2px;line-height:16px}
+  .warn,.okbox{margin-top:6px;padding:7px 10px}
+  .primary{margin-top:8px;height:48px}
+  .ghostb{margin-top:6px;height:40px}
+  .linkb{height:32px}
+  .honest{margin-top:6px}
+  .cta-clear{height:28px;flex-shrink:0}
+}
 </style>
 <link rel="stylesheet" href="phone.css">
 </head>
@@ -101,9 +126,9 @@ function titleOf() {
 }
 function captionOf() {
   if (state.view === "restack" && state.restack === "done") return "Re-stack finished (simulated): the uncalibrated live master was replaced with a calibrated one. Drag to compare before and after. This preview is not a real calibration.";
-  if (state.view === "restack") return "The app is re-stacking raw subs with the new flats and will replace the live master when it finishes. Simulated; the native app does the real calibration.";
-  if (state.view === "library") return "Library flats are matched by scope, camera, filter, and the focus / rotation note. Pick a set to apply, or swap in a fresher one, which re-stacks. Sample data.";
-  if (state.view === "rigs") return "Each member's rig can use a different flats method. The live stack badge follows the combined status; your rig uses tonight's default until you change it. Sample data.";
+  if (state.view === "restack") return "The app is re-stacking raw subs with the new flats and will replace the live master when this finishes. Simulated; the native app does the real calibration.";
+  if (state.view === "library") return "Library flats are matched by scope, camera, filter, binning, and the focus / rotation note. Pick a set to apply, or swap in a fresher one, which re-stacks. Sample data.";
+  if (state.view === "rigs") return "Each member's rig can use a different flats method. Changing a rig's method does not change tonight's session method. Sample data.";
   const m = FLATS.MODES[state.mode];
   return (m ? m.lead : "Pick how flats are applied tonight.") + " All three methods are available per session and per rig. Sample data.";
 }
@@ -115,9 +140,9 @@ $("back").onclick = () => {
   if (state.view === "library" || state.view === "rigs" || state.view === "restack") { go({ view: "session", who: null, restack: state.restack === "progress" ? null : state.restack }); return; }
   location.href = backTo();
 };
-function modeCard(k) {
-  const m = FLATS.MODES[k], on = state.mode === k && state.view === "session";
-  return `<button type="button" class="opt${state.mode === k ? " on" : ""}" role="radio" aria-checked="${state.mode === k}" data-mode="${k}"><span class="hd"><span class="rd"></span><b>${m.title}</b></span><span class="lead">${m.lead}</span></button>`;
+function modeCard(k, current) {
+  const m = FLATS.MODES[k], on = current === k;
+  return `<button type="button" class="opt${on ? " on" : ""}" role="radio" aria-checked="${on}" data-mode="${k}"><span class="hd"><span class="rd"></span><b>${m.title}</b></span><span class="lead">${m.lead}</span></button>`;
 }
 function sessionBody() {
   const m = FLATS.MODES[state.mode], lib = FLATS.libById(state.lib), b = FLATS.badge(state.mode, state.restack, state.lib);
@@ -131,48 +156,56 @@ function sessionBody() {
     <button class="ghostb" type="button" id="seeCompare">View before / after</button>`;
   return `<div class="party">Penobscot Bay Star Party</div>
     <h1>Flats · M42</h1>
-    <p class="muted">How flats are applied to your rig tonight. Every member can pick a different method.</p>
+    <p class="muted">How flats are applied to your rig tonight. <span class="more">Every member can pick a different method.</span></p>
     <div class="lbt">Tonight's method</div>
-    ${["before","library","after"].map(modeCard).join("")}
+    ${["before","library","after"].map((k) => modeCard(k, state.mode)).join("")}
     ${extra}
+    <div class="cta-clear" aria-hidden="true"></div>
     <button class="linkb" type="button" id="seeRigs">Each rig in this party ›</button>
     <p class="honest">${FLATS.HONEST}</p>`;
 }
 function libraryBody() {
   const cur = state.lib;
+  const want = FLATS.SESSION_MATCH;
+  const sets = FLATS.matchLib(want);
   return `<div class="party">Penobscot Bay Star Party</div>
     <h1>Flat library</h1>
-    <p class="muted">Sets that match your Backyard Newt · ASI2600MC Pro · Color. Check the focus / rotation note before you apply one.</p>
-    ${FLATS.LIBS.filter((l) => l.camera.includes("2600MC") && l.filter.startsWith("Color")).map((l) => `<button type="button" class="hit${l.id === cur ? " on" : ""}" data-lib="${l.id}"><b>${l.date}${l.id === cur ? " · applied" : ""}</b><span>${l.n} flats · ${l.temp}<br>${l.note}</span></button>`).join("")}
-    <p class="small" style="margin-top:10px">A fresher set (closer focus, same rotation) usually calibrates better. Applying a different set re-stacks the master. Simulated.</p>
+    <p class="muted">Sets that match your ${want.rig} · ${want.camera.replace("ZWO ","")} · ${want.filter} · bin ${want.bin}. Check the focus / rotation note before you apply one.</p>
+    ${sets.map((l) => `<button type="button" class="hit${l.id === cur ? " on" : ""}" data-lib="${l.id}"><b>${l.date}${l.id === cur ? " · applied" : ""}</b><span>${l.n} flats · ${l.temp} · bin ${l.bin}<br>${l.note}</span></button>`).join("")}
+    <p class="small" style="margin-top:10px">A fresher set (closer focus, same rotation and bin) usually calibrates better. Applying a different set re-stacks the master. Simulated.</p>
     <button class="primary" type="button" id="applyLib"${state.lib ? "" : " disabled"}>Apply this set and re-stack</button>
     <p class="honest">${FLATS.HONEST}</p>`;
 }
 function rigsBody() {
   const who = state.who ? SAMPLE_ROSTER.find((r) => r.id === state.who) : null;
   if (who) {
-    const d = FLATS.RIG_DEFAULTS[who.id] || { mode: "after" };
-    const mode = state.whoMode || d.mode;
+    const d = FLATS.getRig(who.id);
+    const mode = d.mode;
     const lib = d.lib ? FLATS.libById(d.lib) : null;
+    let extra = "";
+    if (mode === "library") {
+      extra = lib ? `<div class="okbox" id="libApplied"><b>Library set · ${lib.date}</b>${FLATS.libLine(lib)}</div>` : `<div class="okbox"><b>No library set for this rig yet</b>Matching uses camera, filter, binning, and the focus / rotation note. Sample data.</div>`;
+    }
+    if (mode === "after") extra = `<div class="warn" id="flatWarn"><b>Uncalibrated, flats pending</b>Raw subs are kept. Add flats to re-stack a calibrated master.</div>
+      <button class="primary" type="button" id="addFlats">Add flats and re-stack</button>`;
+    if (mode === "before") extra = `<div class="warn" id="flatWarn"><b>Keep the optical train still</b>${FLATS.MODES.before.warn}</div>`;
     return `<div class="party">${who.tag || who.name} · ${who.rig.name}</div>
       <h1>Flats for this rig</h1>
       <p class="muted">${who.rig.camera} · ${who.rig.telescope}</p>
       <div class="lbt">Method</div>
-      ${["before","library","after"].map(modeCard).join("")}
-      ${mode === "library" && lib ? `<div class="okbox"><b>Library set · ${lib.date}</b>${FLATS.libLine(lib)}</div>` : ""}
-      ${mode === "after" ? `<button class="primary" type="button" id="addFlats">Add flats and re-stack</button>` : ""}
-      ${mode === "before" ? `<div class="warn"><b>Keep the optical train still</b>${FLATS.MODES.before.warn}</div>` : ""}
+      ${["before","library","after"].map((k) => modeCard(k, mode)).join("")}
+      ${extra}
       <p class="honest">${FLATS.HONEST}</p>`;
   }
   return `<div class="party">Penobscot Bay Star Party</div>
     <h1>Flats · each rig</h1>
-    <p class="muted">A member with two rigs (Dana) can use a different method on each. Sample data.</p>
+    <p class="muted">Dana can use a different method on each of her two rigs. Sample data.</p>
     ${SAMPLE_ROSTER.map((r) => {
-      const d = FLATS.RIG_DEFAULTS[r.id] || { mode: "after" };
-      const b = FLATS.badge(d.mode, null, d.lib);
-      const lib = d.lib ? FLATS.libById(d.lib) : null;
-      return `<button type="button" class="hit" data-who="${r.id}"><span class="row" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b class="n">${r.tag || r.name}</b><span class="pill ${b.tone}">${b.text.split(" · ")[0]}</span></span>
-        <span>${r.rig.name} · ${r.rig.camera}<br>${d.mode === "library" && lib ? lib.date + " · " + lib.note : (d.mode === "before" ? "Session flats, shot before her first sub" : "Raw subs kept · flats pending")}</span></button>`;
+      const d = FLATS.getRig(r.id);
+      const b = FLATS.shortBadge(d.mode);
+      const cam = (r.rig.camera || "").split("·")[0].trim();
+      return `<button type="button" class="hit rig" data-who="${r.id}"><span class="row" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b class="n">${r.tag || r.name}</b><span class="pill ${b.tone}">${b.text}</span></span>
+        <span>${r.rig.name} · ${cam}<br>${FLATS.sessionLine(r, d)}</span></button>`;
     }).join("")}
     <p class="honest">${FLATS.HONEST}</p>`;
 }
@@ -183,8 +216,8 @@ function restackBody() {
     <h1>${done ? "Master replaced" : "Re-stacking with flats"}</h1>
     <p class="muted">${done ? "The uncalibrated live master was replaced with a calibrated stack. Drag to compare. Simulated — this preview is not a real calibration." : "Calibrating the kept raw subs and stacking them again. The live master will be replaced when this finishes. Simulated."}</p>
     ${done ? `<div class="cmp" id="cmpF" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Before and after flats. Drag to compare.">
-        <img class="before" src="master/color.jpg" alt="">
-        <div class="after-clip" id="clip"><img src="master/color.jpg" alt=""></div>
+        <img src="master/color.jpg" alt="">
+        <div class="before-clip" id="clip"><div class="vignette-wrap"><img src="master/color.jpg" alt=""></div></div>
         <span class="lbl l">Uncalibrated</span><span class="lbl r">Calibrated</span>
         <span class="div" id="div"></span><span class="knob" id="knob">‹›</span>
       </div>
@@ -195,18 +228,25 @@ function restackBody() {
         <p class="small" style="margin-top:8px">Applying flats to 15 raw subs · rebuilding the Color master.</p></div>`}
     <p class="honest">${FLATS.HONEST}</p>`;
 }
+function sizeCmpLayers() {
+  const box = $("cmpF"); if (!box) return;
+  const wrap = box.querySelector(".vignette-wrap");
+  if (wrap) wrap.style.width = box.clientWidth + "px";
+}
 function wireCmp() {
   const box = $("cmpF"); if (!box) return;
   const clip = $("clip"), div = $("div"), knob = $("knob");
   const set = (p) => { state.split = Math.max(0.06, Math.min(0.94, p)); const pct = (state.split * 100).toFixed(2) + "%"; clip.style.width = pct; div.style.left = pct; knob.style.left = pct; box.setAttribute("aria-valuenow", String(Math.round(state.split * 100))); };
   set(state.split);
+  sizeCmpLayers();
   const fromEvent = (e) => { const r = box.getBoundingClientRect(); const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left; set(x / r.width); };
   box.addEventListener("pointerdown", (e) => { box.setPointerCapture(e.pointerId); fromEvent(e); });
   box.addEventListener("pointermove", (e) => { if (e.buttons) fromEvent(e); });
+  window.addEventListener("resize", sizeCmpLayers);
 }
 function startRestack() {
   if (state.restack === "progress") return;
-  go({ view: "restack", restack: "progress", pct: 0 });
+  go({ view: "restack", who: null, restack: "progress", pct: 0 });
   clearInterval(state.timer);
   state.timer = setInterval(() => {
     state.pct = Math.min(100, state.pct + 8);
@@ -224,11 +264,16 @@ function render() {
   else p.innerHTML = sessionBody();
   p.querySelectorAll("[data-mode]").forEach((b) => b.onclick = () => {
     const mode = b.dataset.mode;
-    if (state.view === "rigs" && state.who) { /* per-rig pick in this prototype just walks the same session methods */ go({ mode, restack: null }); return; }
+    if (state.view === "rigs" && state.who) {
+      FLATS.setRig(state.who, { mode });
+      render();
+      sync();
+      return;
+    }
     go({ mode, restack: null });
   });
   p.querySelectorAll("[data-lib]").forEach((b) => b.onclick = () => go({ lib: b.dataset.lib }));
-  p.querySelectorAll("[data-who]").forEach((b) => b.onclick = () => go({ view: "rigs", who: b.dataset.who, mode: (FLATS.RIG_DEFAULTS[b.dataset.who] || {}).mode }));
+  p.querySelectorAll("[data-who]").forEach((b) => b.onclick = () => go({ view: "rigs", who: b.dataset.who }));
   const browse = $("browse"); if (browse) browse.onclick = () => go({ view: "library" });
   const add = $("addFlats"); if (add) add.onclick = startRestack;
   const apply = $("applyLib"); if (apply) apply.onclick = () => startRestack();
@@ -247,6 +292,7 @@ function fromHash() {
   if (state.restack === "progress" && !state.pct) state.pct = 63;
   render();
 }
+
 window.addEventListener("hashchange", fromHash);
 fromHash();
 </script>

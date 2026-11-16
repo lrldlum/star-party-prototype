@@ -33,6 +33,7 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 8px}
 .rigline{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:15px;font-weight:600}
 .rigline i{width:8px;height:8px;border-radius:50%;background:#5CC9B5;flex:none}
 .status{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-top:8px}
+@media (max-width:380px){.status{flex-direction:column;align-items:flex-start;gap:4px}}
 .status a,.status button{background:none;border:0;color:#5CC9B5;font:600 15px Inter,-apple-system,sans-serif;cursor:pointer;padding:0;text-decoration:none;white-space:nowrap}
 .chat{margin-top:14px}
 .chat .sys{font-size:13px;color:#5CC9B5;line-height:18px;margin-bottom:12px}
@@ -45,7 +46,10 @@ h1{font-size:28px;line-height:34px;font-weight:700;margin:2px 0 8px}
 .bar{height:6px;border-radius:3px;background:#1C2B3A;overflow:hidden;margin-top:8px}.bar i{display:block;height:6px;background:#5CC9B5;width:0}
 .cmp{position:relative;height:180px;border-radius:16px;overflow:hidden;margin-top:0;background:#000;touch-action:none;user-select:none}
 .cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.cmp .after-clip{position:absolute;inset:0;z-index:2;overflow:hidden;width:50%}
+.cmp .before-clip{position:absolute;inset:0;z-index:2;overflow:hidden;width:50%}
+.cmp .before-clip .vignette-wrap{position:absolute;left:0;top:0;bottom:0;height:100%}
+.vignette-wrap{position:relative}
+.vignette-wrap::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 48% 42%,transparent 38%,rgba(0,0,0,.55) 100%);pointer-events:none}
 .cmp .lbl{position:absolute;bottom:8px;z-index:3;font-size:11px;font-weight:700;color:#E8EEF4;background:rgba(7,16,24,.72);padding:2px 8px;border-radius:999px}
 .cmp .lbl.l{left:8px}.cmp .lbl.r{right:8px}
 .cmp .div{position:absolute;top:0;bottom:0;width:2px;background:#E8EEF4;z-index:4;left:50%;margin-left:-1px}
@@ -109,11 +113,14 @@ function sync() {
 function wireCmp() {
   const box = $("cmpF"); if (!box) return;
   const clip = $("clip"), div = $("div"), knob = $("knob");
+  const size = () => { const wrap = box.querySelector(".vignette-wrap"); if (wrap) wrap.style.width = box.clientWidth + "px"; };
   const set = (p) => { state.split = Math.max(0.06, Math.min(0.94, p)); const pct = (state.split * 100).toFixed(2) + "%"; clip.style.width = pct; div.style.left = pct; knob.style.left = pct; };
   set(state.split);
+  size();
   const fromEvent = (e) => { const r = box.getBoundingClientRect(); const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left; set(x / r.width); };
   box.addEventListener("pointerdown", (e) => { box.setPointerCapture(e.pointerId); fromEvent(e); });
   box.addEventListener("pointermove", (e) => { if (e.buttons) fromEvent(e); });
+  window.addEventListener("resize", size);
 }
 function render() {
   const b = FLATS.badge(state.mode, state.restack, state.lib);
@@ -123,14 +130,14 @@ function render() {
   const addLink = "flats.html" + FLATS.qs({ mode: "after", view: "session" });
   const preview = showCmp ? `<div class="cmp" id="cmpF" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Before and after flats. Drag to compare.">
       <img src="master/color.jpg" alt="">
-      <div class="after-clip" id="clip"><img src="master/color.jpg" alt=""></div>
+      <div class="before-clip" id="clip"><div class="vignette-wrap"><img src="master/color.jpg" alt=""></div></div>
       <span class="lbl l">Uncalibrated</span><span class="lbl r">Calibrated</span>
       <span class="div" id="div"></span><span class="knob" id="knob">‹›</span>
     </div>` : `<div class="prev${uncal ? " uncal" : ""}" role="img" aria-label="Live Color master of M42${uncal ? ", uncalibrated preview" : ""}" style="background-image:url(master/color.jpg)">
       <span class="upd">${state.restack === "progress" ? "Re-stacking" : "Updated 9:58 PM"}</span>
       ${b ? `<span class="flat-badge ${b.tone}" id="flatBadge">${b.text}</span>` : ""}
     </div>`;
-  const action = state.mode === "after" && !state.restack ? `<a href="${addLink}">Add flats</a>` : (state.restack === "done" ? `<span class="small">Calibrated</span>` : `<a href="${flatsLink}">Flats</a>`);
+  const action = state.mode === "after" && !state.restack ? `<a href="${addLink}">Add flats</a>` : (state.restack === "done" ? "" : `<a href="${flatsLink}">Flats</a>`);
   $("panel").innerHTML = `<div class="party">Penobscot Bay Star Party</div>
     <h1>Live stack · M42</h1>
     ${preview}

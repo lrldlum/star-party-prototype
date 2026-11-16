@@ -88,6 +88,12 @@ a.tab.on { color: #E8A05A; }
 .sky {
   height: calc(210px - 2 * max(0px, var(--sat) - 47px));
 }
+/* Extra Color preview shrink when the flats status line is showing, so Download/Share
+   stay at least 8px above the tab bar at a 59px top inset. Default Color (no flats
+   line) is unchanged, including 390×844 and the 47px inset shot. */
+.has-flats .sky {
+  height: calc(210px - 2 * max(0px, var(--sat) - 47px) - 28px);
+}
 /* On short phones, keep the last lines (body copy, "bin 2") above the "More below" fade. */
 @media (max-height: 720px) {
   .panel { padding-bottom: 36px; }

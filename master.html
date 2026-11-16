@@ -495,10 +495,11 @@ function paintFlats() {
   if (back) back.href = "live.html" + (q || "");
   if (mf) mf.href = "flats.html" + (q || "");
   if (!badge) return;
-  if (!b || $("chan").hidden) { badge.hidden = true; if (line) line.hidden = true; if (sky) sky.classList.remove("uncal"); return; }
+  if (!b || $("chan").hidden) { badge.hidden = true; if (line) line.hidden = true; if (sky) sky.classList.remove("uncal"); document.body.classList.remove("has-flats"); return; }
   badge.hidden = false; badge.className = "flat-badge " + b.tone; badge.textContent = b.text;
   if (line) { line.hidden = false; line.innerHTML = b.detail + (state.flats === "after" && !state.restack ? ` <a href="flats.html${q}" style="color:#5CC9B5;font-weight:600;text-decoration:none">Add flats</a>` : ` <a href="flats.html${q}" style="color:#5CC9B5;font-weight:600;text-decoration:none">Change</a>`); }
   if (sky) sky.classList.toggle("uncal", state.flats === "after" && state.restack !== "done");
+  document.body.classList.add("has-flats");
 }
 function syncHash() {
   const q = new URLSearchParams({ tab: state.tab });
